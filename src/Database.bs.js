@@ -3,8 +3,11 @@
 
 var Connection;
 
+var Tables;
+
 export {
   Connection ,
+  Tables ,
   
 }
 /* No side effect */
