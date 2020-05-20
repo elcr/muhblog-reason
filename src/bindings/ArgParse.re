@@ -16,16 +16,22 @@ let make = (~version, ~prog) => _make({ version, prog });
 
 
 type _addArgumentArguments = {
-    dest: string
+    dest: string,
+    metavar: string,
+    required: bool
 };
 
 
 [@bs.send.pipe: t]
-external _addArgument: (string, _addArgumentArguments) => unit = "addArgument";
+external _addArgument: (array(string), _addArgumentArguments) => unit = "addArgument";
 
 
-let addArgument = (~name, ~dest, parser) =>
-    _addArgument(name, { dest: dest }, parser);
+let addArgument = (~shortName, ~longName, ~dest, ~required, ~metavar, parser) =>
+    _addArgument(
+        [| shortName, longName |],
+        { dest, required, metavar },
+        parser
+    );
 
 
 [@bs.send]
