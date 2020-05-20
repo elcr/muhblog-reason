@@ -12,6 +12,28 @@
     "build": "bsb -make-world -clean-world"
   },
   "dependencies": {
-    "bs-platform": "^7.3.2"
+    "@emotion/core": "^10.0.28",
+    "argparse": "^1.0.10",
+    "bootstrap": "^4.5.0",
+    "bs-bastet": "ssh://git@github.com:elcr/bs-bastet-without-bisect.git",
+    "bs-css": "^12.2.0",
+    "bs-platform": "^7.3.2",
+    "emotion": "^10.0.27",
+    "emotion-server": "^10.0.27",
+    "node-fs-bs": "ssh://git@github.com:elcr/node-fs-bs.git",
+    "node-stream-bs": "ssh://git@github.com:elcr/node-stream-bs.git",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "reason-react": "^0.8.0",
+    "relude": "ssh://git@github.com:elcr/relude-without-bisect.git",
+    "sqlite-relude": "ssh://git@github.com:elcr/sqlite-relude.git",
+    "url-parse": "^1.4.7"
+  },
+  "devDependencies": {
+    "raw-loader": "^4.0.1",
+    "source-map-loader": "^0.2.4",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-node-externals": "^1.7.2"
   }
 }
