@@ -1,0 +1,64 @@
+open Relude.Globals;
+
+
+let getPath = (~siteName) =>
+    NodeFS.MakeTempDir.makeTempDir(Constants.tempDirPrefix)
+        |> IO.map(path => Node.Path.join2(path, siteName ++ ".db"));
+
+
+let connect = (~path) =>
+    SQLiteRelude.open_(path)
+        |> IO.flatMap(connection =>
+            SQLiteRelude.run("PRAGMA foreign_keys=ON", connection)
+                |> IO.map(() => connection)
+        )
+        |> IO.flatMap(connection =>
+            SQLiteRelude.run("PRAGMA journal_mode=WAL", connection)
+                |> IO.map(() => connection)
+        );
+
+
+let begin_ = SQLiteRelude.run("BEGIN");
+
+
+let commit = SQLiteRelude.run("COMMIT");
+
+
+let rollback = SQLiteRelude.run("ROLLBACK");
+
+
+let close = SQLiteRelude.close;
+
+
+type transactionError =
+    | BeginError(Js.Promise.error)
+    | InnerError(Js.Promise.error)
+    | CommitError(Js.Promise.error)
+    | RollbackError(Js.Promise.error);
+
+
+let transaction = (func, connection) =>
+    begin_(connection)
+        |> IO.mapError(error => BeginError(error))
+        // ugly as hell but it compiles and works - never touching again
+        |> IO.flatMap(() =>
+            func(connection)
+                |> IO.summonError
+                |> IO.flatMap(result =>
+                    switch (result) {
+                        | Ok(()) => commit(connection)
+                            |> IO.mapError(error => CommitError(error))
+                            |> IO.summonError
+                        | Error(innerError) => rollback(connection)
+                            |> IO.summonError
+                            |> IO.map(result => {
+                                let newError = switch (result) {
+                                    | Ok(()) => InnerError(innerError)
+                                    | Error(error) => RollbackError(error)
+                                };
+                                Error(newError)
+                            })
+                    }
+                )
+                |> IO.unsummonError
+        );

@@ -18,7 +18,12 @@
     ],
     "suffix": ".bs.js",
     "namespace": false,
-    "bs-dependencies": [],
+    "bs-dependencies": [
+      "node-fs-bs",
+      "bs-bastet",
+      "relude",
+      "sqlite-relude"
+    ],
     "bs-dev-dependencies": [],
     "ppx-flags": [],
     "refmt": 3
