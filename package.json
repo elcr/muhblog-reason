@@ -1,7 +1,7 @@
 {
   "name": "muhblog-reason",
   "version": "0.1.0",
-  "main": "src/Index.bs.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "repository": {
     "type": "git",
