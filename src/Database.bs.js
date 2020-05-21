@@ -5,9 +5,12 @@ var Connection;
 
 var Tables;
 
+var Utils;
+
 export {
   Connection ,
   Tables ,
+  Utils ,
   
 }
 /* No side effect */
