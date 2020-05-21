@@ -25,18 +25,28 @@ function route(segments) {
                             }))(Relude_Int.fromString(page)));
         }
     case 2 :
-        var match = segments[0];
-        if (match !== "tag") {
-          return ;
+        var directory = segments[0];
+        switch (directory) {
+          case "tag" :
+              var slug = segments[1];
+              return /* TagSearch */Block.__(1, [
+                        /* slug */slug,
+                        /* page */1
+                      ]);
+          case "static" :
+          case "uploads" :
+              break;
+          default:
+            return ;
         }
-        var slug = segments[1];
-        return /* TagSearch */Block.__(1, [
-                  /* slug */slug,
-                  /* page */1
+        var filename = segments[1];
+        return /* Static */Block.__(3, [
+                  /* directory */directory,
+                  /* filename */filename
                 ]);
     case 3 :
-        var match$1 = segments[0];
-        if (match$1 !== "tag") {
+        var match = segments[0];
+        if (match !== "tag") {
           return ;
         }
         var slug$1 = segments[1];
@@ -117,6 +127,8 @@ function build(route) {
         }
     case /* Entry */2 :
         return "/" + (String(route[/* year */0]) + ("/" + (String(route[/* month */1]) + ("/" + (String(route[/* day */2]) + ("/" + (String(route[/* slug */3]) + "")))))));
+    case /* Static */3 :
+        return "/" + (String(route[/* directory */0]) + ("/" + (String(route[/* filename */1]) + "")));
     
   }
 }

@@ -5,7 +5,8 @@ type route =
     | Index({ page: int })
     | TagSearch({ slug: string, page: int })
     | About
-    | Entry({ year: int, month: int, day: int, slug: string });
+    | Entry({ year: int, month: int, day: int, slug: string })
+    | Static({ directory: string, filename: string });
 
 
 let route = segments =>
@@ -31,6 +32,8 @@ let route = segments =>
                 |> Option.map(page => TagSearch({ slug, page }))
         | [| "tag", slug |] =>
             Some(TagSearch({ slug, page: 1 }))
+        | [| ("static" | "uploads") as directory, filename |] =>
+            Some(Static({ directory, filename }))
         | [| "about" |] =>
             Some(About)
         | [| page |] =>
@@ -51,4 +54,5 @@ let build = route =>
         | TagSearch({ slug, page }) => {j|/tag/$slug/$page|j}
         | About => "/about"
         | Entry({ year, month, day, slug }) => {j|/$year/$month/$day/$slug|j}
+        | Static({ directory, filename }) => {j|/$directory/$filename|j}
     };
