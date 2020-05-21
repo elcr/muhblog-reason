@@ -66,14 +66,6 @@ let getAboutPageText = connection =>
         );
 
 
-type indexEntry = {
-    slug: string,
-    title: string,
-    timestamp: int,
-    text: string
-};
-
-
 let getIndexPageEntries = (~page, connection) =>
     Select.make()
         |> Select.from("Entry", "e")
@@ -93,31 +85,9 @@ let getIndexPageEntries = (~page, connection) =>
                         |> Select.limit(Constants.entriesPerPage)
                         |> Select.offset((page - 1) * Constants.entriesPerPage)
                         |. Database__Connection.executeSelectAll(connection)
-                        |> IO.map((entries: array(indexEntry)) => (count, entries))
+                        |> IO.map((entries: array(PageData.indexEntry)) => (count, entries))
             }
         );
-
-
-type relatedEntry = {
-    title: string,
-    slug: string
-};
-
-
-type tag = {
-    name: string,
-    slug: string
-}
-
-
-type entry = {
-    title: string,
-    timestamp: int,
-    text: string,
-    tags: array(tag),
-    previous: option(relatedEntry),
-    next: option(relatedEntry),
-};
 
 
 let getEntry = (~slug, connection) =>
@@ -152,19 +122,19 @@ let getEntry = (~slug, connection) =>
         |> IO.map(
             Option.map(row => {
                 let entry = JSON.parse(row##json);
-                {
+                ({
                     title: entry##title,
                     timestamp: entry##timestamp,
                     text: entry##text,
                     tags: JSON.parse(entry##tags),
                     previous: JSON.parse(row##previous),
                     next: JSON.parse(row##next)
-                }
+                }: PageData.entry)
             })
         );
 
 
-let getTagPageEntries = (~page, ~slug, connection) => {
+let getTagSearchEntries = (~page, ~slug, connection) => {
     let (subquery, _params) = Select.make()
         |> Select.from("json_each(json_extract(e.json, '$.tags'))", "_each")
         |> Select.field("json_extract(json_each.value, '$.slug')", "_slug")
@@ -190,7 +160,7 @@ let getTagPageEntries = (~page, ~slug, connection) => {
                         |> Select.limit(Constants.entriesPerPage)
                         |> Select.offset((page - 1) * Constants.entriesPerPage)
                         |. Database__Connection.executeSelectAll(connection)
-                        |> IO.map((entries: array(indexEntry)) => (count, entries))
+                        |> IO.map((entries: array(PageData.indexEntry)) => (count, entries))
             }
         )
 };

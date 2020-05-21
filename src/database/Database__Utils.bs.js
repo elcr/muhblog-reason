@@ -103,7 +103,7 @@ function getEntry(slug, connection) {
               }), Database__Connection.executeSelectOne(Squel.select().from("Entry", "e").field("e.json", "json").field(Squel.select().from("Entry", "eP").field("json_object('title', json_extract(eP.json, '$.title'), 'slug', json_extract(eP.json, '$.slug'))", "_previous").where("json_extract(eP.json, '$.timestamp') < json_extract(e.json, '$.timestamp')").order("(json_extract(eP.json, '$.timestamp'), json_extract(eP.json, '$.title'))", false), "previous").field(Squel.select().from("Entry", "eN").field("json_object('title', json_extract(eN.json, '$.title'), 'slug', json_extract(eN.json, '$.slug'))", "_next").where("json_extract(eN.json, '$.timestamp') > json_extract(e.json, '$.timestamp')").order("(json_extract(eN.json, '$.timestamp'), json_extract(eN.json, '$.title'))", false), "next").where("json_extract(e.json, '$.slug') = ?", slug).limit(1))(connection));
 }
 
-function getTagPageEntries(page, slug, connection) {
+function getTagSearchEntries(page, slug, connection) {
   var match = Squel.select().from("json_each(json_extract(e.json, '$.tags'))", "_each").field("json_extract(json_each.value, '$.slug')", "_slug").toParam();
   var predicate = "? IN (" + (String(match[0]) + ")");
   return Relude_IO.flatMap((function (countRow) {
@@ -137,7 +137,7 @@ export {
   getAboutPageText ,
   getIndexPageEntries ,
   getEntry ,
-  getTagPageEntries ,
+  getTagSearchEntries ,
   
 }
 /* Utils Not a pure module */
