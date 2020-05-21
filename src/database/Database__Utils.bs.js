@@ -103,6 +103,33 @@ function getEntry(slug, connection) {
               }), Database__Connection.executeSelectOne(Squel.select().from("Entry", "e").field("e.json", "json").field(Squel.select().from("Entry", "eP").field("json_object('title', json_extract(eP.json, '$.title'), 'slug', json_extract(eP.json, '$.slug'))", "").where("json_extract(eP.json, '$.timestamp') < json_extract(e.json, '$.timestamp')").order("(json_extract(eP.json, '$.timestamp'), json_extract(eP.json, '$.title'))", false), "previous").field(Squel.select().from("Entry", "eN").field("json_object('title', json_extract(eN.json, '$.title'), 'slug', json_extract(eN.json, '$.slug'))", "").where("json_extract(eN.json, '$.timestamp') > json_extract(e.json, '$.timestamp')").order("(json_extract(eN.json, '$.timestamp'), json_extract(eN.json, '$.title'))", false), "next").where("json_extract(e.json, '$.slug') = ?", slug).limit(1))(connection));
 }
 
+function getTagPageEntries(page, slug, connection) {
+  var match = Squel.select().from("json_each(json_extract(e.json, '$.tags'))", "_each").field("json_extract(json_each.value, '$.slug')", "_slug").toParam();
+  var predicate = "? IN (" + (String(match[0]) + ")");
+  return Relude_IO.flatMap((function (countRow) {
+                if (countRow !== undefined) {
+                  if (countRow !== 0) {
+                    return Relude_IO.map((function (entries) {
+                                  return /* tuple */[
+                                          countRow,
+                                          entries
+                                        ];
+                                }), Database__Connection.executeSelectAll(Squel.select().from("Entry", "e").field("json_extract(e.json, '$.slug')", "slug").field("json_extract(e.json, '$.title')", "title").field("json_extract(e.json, '$.timestamp')", "timestamp").field("json_extract(e.json, '$.text')", "text").where(predicate, slug).order("(timestamp, title)", false).limit(Constants.entriesPerPage).offset(Caml_int32.imul(page - 1 | 0, Constants.entriesPerPage)))(connection));
+                  } else {
+                    return /* Pure */Block.__(0, [/* tuple */[
+                                0,
+                                []
+                              ]]);
+                  }
+                } else {
+                  return /* Pure */Block.__(0, [/* tuple */[
+                              0,
+                              []
+                            ]]);
+                }
+              }), Database__Connection.executeSelectOne(Squel.select().from("Entry", "e").field("COUNT(*)", "count").where(predicate, slug))(connection));
+}
+
 export {
   insertAboutPage ,
   insertEntries ,
@@ -110,6 +137,7 @@ export {
   getAboutPageText ,
   getIndexPageEntries ,
   getEntry ,
+  getTagPageEntries ,
   
 }
 /* Utils Not a pure module */
