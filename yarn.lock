@@ -2428,9 +2428,9 @@ nanomatch@^1.2.9:
     to-regex "^3.0.1"
 
 needle@^2.2.1:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/needle/-/needle-2.4.1.tgz#14af48732463d7475696f937626b1b993247a56a"
-  integrity sha512-x/gi6ijr4B7fwl6WYL9FwlCvRQKGlUNvnceho8wxkwXqN8jvVmmmATTmZPRRG7b/yC1eode26C2HO9jl78Du9g==
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/needle/-/needle-2.5.0.tgz#e6fc4b3cc6c25caed7554bd613a5cf0bac8c31c0"
+  integrity sha512-o/qITSDR0JCyCKEQ1/1bnUXMmznxabbwi/Y4WwJElf+evwJNFNwIDMCCt5IigFVxgeGBJESLohGtIS9gEzo1fA==
   dependencies:
     debug "^3.2.6"
     iconv-lite "^0.4.4"
@@ -3432,7 +3432,7 @@ sprintf-js@~1.0.2:
 
 "sqlite-bs@ssh://git@github.com:elcr/sqlite-bs.git":
   version "0.1.0"
-  resolved "ssh://git@github.com:elcr/sqlite-bs.git#f7663891e6a246e102e5451b91aafce083823b11"
+  resolved "ssh://git@github.com:elcr/sqlite-bs.git#5cb494a8ae3f8d7f00f9c13a070e48cb9c7e1ea1"
   dependencies:
     bs-platform "^7.3.2"
     sqlite "^4.0.7"
@@ -3440,7 +3440,7 @@ sprintf-js@~1.0.2:
 
 "sqlite-relude@ssh://git@github.com:elcr/sqlite-relude.git":
   version "0.1.0"
-  resolved "ssh://git@github.com:elcr/sqlite-relude.git#93be5c153ad8322b2146cec52cd4f83f3dc2ca41"
+  resolved "ssh://git@github.com:elcr/sqlite-relude.git#7c999fb3f04d4c7dce1ea2ec76eaf0e02a86cd35"
   dependencies:
     bs-bastet "ssh://git@github.com:elcr/bs-bastet-without-bisect.git"
     bs-platform "^7.3.2"

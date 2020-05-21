@@ -3,13 +3,8 @@ open Relude.Globals;
 open Squel;
 
 
-let getPath = (~siteName) =>
-    NodeFS.MakeTempDir.makeTempDir(Constants.tempDirPrefix)
-        |> IO.map(path => Node.Path.join2(path, siteName ++ ".db"));
-
-
-let connect = (~path) =>
-    SQLiteRelude.open_(path)
+let connect = () =>
+    SQLiteRelude.open_(~mode=SQLiteRelude.Mode.readWrite lor SQLiteRelude.Mode.uri, "file::memory:?mode=memory&cache=shared")
         |> IO.flatMap(connection =>
             SQLiteRelude.run("PRAGMA foreign_keys=ON", connection)
                 |> IO.map(() => connection)

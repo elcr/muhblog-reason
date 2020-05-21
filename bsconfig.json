@@ -23,6 +23,7 @@
       "bs-bastet",
       "relude",
       "sqlite-relude",
+      "sqlite-bs",
       "slugify-bs"
     ],
     "bs-dev-dependencies": [],
