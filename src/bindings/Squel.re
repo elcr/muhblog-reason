@@ -15,6 +15,9 @@ module Select = {
     external field: (string, string) => t = "field";
 
     [@bs.send.pipe: t]
+    external subQuery: (t, string) => t = "field";
+
+    [@bs.send.pipe: t]
     external join: (string, string, string) => t = "join";
 
     [@bs.send.pipe: t]

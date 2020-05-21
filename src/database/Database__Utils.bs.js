@@ -71,7 +71,7 @@ function getIndexPageEntries(page, connection) {
                                           countRow,
                                           entries
                                         ];
-                                }), Database__Connection.executeSelectAll(Squel.select().from("Entry", "e").field("json_extract(e.json, '$.slug')", "slug").field("json_extract(e.json, '$.slug')", "title").field("json_extract(e.json, '$.timestamp')", "timestamp").field("json_extract(e.json, '$.text')", "text").order("timestamp", false).limit(Constants.entriesPerPage).offset(Caml_int32.imul(page - 1 | 0, Constants.entriesPerPage)))(connection));
+                                }), Database__Connection.executeSelectAll(Squel.select().from("Entry", "e").field("json_extract(e.json, '$.slug')", "slug").field("json_extract(e.json, '$.title')", "title").field("json_extract(e.json, '$.timestamp')", "timestamp").field("json_extract(e.json, '$.text')", "text").order("(timestamp, title)", false).limit(Constants.entriesPerPage).offset(Caml_int32.imul(page - 1 | 0, Constants.entriesPerPage)))(connection));
                   } else {
                     return /* Pure */Block.__(0, [/* tuple */[
                                 0,
@@ -87,12 +87,29 @@ function getIndexPageEntries(page, connection) {
               }), Database__Connection.executeSelectOne(Squel.select().from("Entry", "e").field("COUNT(*)", "count"))(connection));
 }
 
+function getEntry(slug, connection) {
+  return Relude_IO.map((function (param) {
+                return Relude_Option.map((function (row) {
+                              var entry = JSON.parse(row.json);
+                              return {
+                                      title: entry.title,
+                                      timestamp: entry.timestamp,
+                                      text: entry.text,
+                                      tags: JSON.parse(entry.tags),
+                                      previous: JSON.parse(row.previous),
+                                      next: JSON.parse(row.next)
+                                    };
+                            }), param);
+              }), Database__Connection.executeSelectOne(Squel.select().from("Entry", "e").field("e.json", "json").field(Squel.select().from("Entry", "eP").field("json_object('title', json_extract(eP.json, '$.title'), 'slug', json_extract(eP.json, '$.slug'))", "").where("json_extract(eP.json, '$.timestamp') < json_extract(e.json, '$.timestamp')").order("(json_extract(eP.json, '$.timestamp'), json_extract(eP.json, '$.title'))", false), "previous").field(Squel.select().from("Entry", "eN").field("json_object('title', json_extract(eN.json, '$.title'), 'slug', json_extract(eN.json, '$.slug'))", "").where("json_extract(eN.json, '$.timestamp') > json_extract(e.json, '$.timestamp')").order("(json_extract(eN.json, '$.timestamp'), json_extract(eN.json, '$.title'))", false), "next").where("json_extract(e.json, '$.slug') = ?", slug).limit(1))(connection));
+}
+
 export {
   insertAboutPage ,
   insertEntries ,
   insertAll ,
   getAboutPageText ,
   getIndexPageEntries ,
+  getEntry ,
   
 }
 /* Utils Not a pure module */

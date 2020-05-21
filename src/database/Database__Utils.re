@@ -82,7 +82,7 @@ type indexEntry = {
 };
 
 
-let getIndexPageEntries = (page, connection) =>
+let getIndexPageEntries = (~page, connection) =>
     Select.make()
         |> Select.from("Entry", "e")
         |> Select.field("COUNT(*)", "count")
@@ -94,13 +94,79 @@ let getIndexPageEntries = (page, connection) =>
                     Select.make()
                         |> Select.from("Entry", "e")
                         |> Select.field("json_extract(e.json, '$.slug')", "slug")
-                        |> Select.field("json_extract(e.json, '$.slug')", "title")
+                        |> Select.field("json_extract(e.json, '$.title')", "title")
                         |> Select.field("json_extract(e.json, '$.timestamp')", "timestamp")
                         |> Select.field("json_extract(e.json, '$.text')", "text")
-                        |> Select.order("timestamp", false)
+                        |> Select.order("(timestamp, title)", false)
                         |> Select.limit(Constants.entriesPerPage)
                         |> Select.offset((page - 1) * Constants.entriesPerPage)
                         |. Database__Connection.executeSelectAll(connection)
                         |> IO.map((entries: array(indexEntry)) => (count, entries))
             }
+        );
+
+
+type relatedEntry = {
+    title: string,
+    slug: string
+};
+
+
+type tag = {
+    name: string,
+    slug: string
+}
+
+
+type entry = {
+    title: string,
+    timestamp: int,
+    text: string,
+    tags: array(tag),
+    previous: option(relatedEntry),
+    next: option(relatedEntry),
+};
+
+
+let getEntry = (~slug, connection) =>
+    Select.make()
+        |> Select.from("Entry", "e")
+        |> Select.field("e.json", "json")
+        |> Select.subQuery(
+            Select.make()
+                |> Select.from("Entry", "eP")
+                |> Select.field(
+                    "json_object('title', json_extract(eP.json, '$.title'), 'slug', json_extract(eP.json, '$.slug'))",
+                    ""
+                )
+                |> Select.where("json_extract(eP.json, '$.timestamp') < json_extract(e.json, '$.timestamp')", [||])
+                |> Select.order("(json_extract(eP.json, '$.timestamp'), json_extract(eP.json, '$.title'))", false),
+            "previous"
+        )
+        |> Select.subQuery(
+            Select.make()
+                |> Select.from("Entry", "eN")
+                |> Select.field(
+                    "json_object('title', json_extract(eN.json, '$.title'), 'slug', json_extract(eN.json, '$.slug'))",
+                    ""
+                )
+                |> Select.where("json_extract(eN.json, '$.timestamp') > json_extract(e.json, '$.timestamp')", [||])
+                |> Select.order("(json_extract(eN.json, '$.timestamp'), json_extract(eN.json, '$.title'))", false),
+            "next"
+        )
+        |> Select.where("json_extract(e.json, '$.slug') = ?", [| slug |])
+        |> Select.limit(1)
+        |. Database__Connection.executeSelectOne(connection)
+        |> IO.map(
+            Option.map(row => {
+                let entry = JSON.parse(row##json);
+                {
+                    title: entry##title,
+                    timestamp: entry##timestamp,
+                    text: entry##text,
+                    tags: JSON.parse(entry##tags),
+                    previous: JSON.parse(row##previous),
+                    next: JSON.parse(row##next)
+                }
+            })
         );
