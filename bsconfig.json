@@ -24,7 +24,8 @@
       "relude",
       "sqlite-relude",
       "sqlite-bs",
-      "slugify-bs"
+      "slugify-bs",
+      "markdown-metadata-bs"
     ],
     "bs-dev-dependencies": [],
     "ppx-flags": [],

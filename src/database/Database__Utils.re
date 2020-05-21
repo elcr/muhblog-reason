@@ -11,20 +11,12 @@ let insertAboutPage = (text: string, connection) =>
         |> IO.map(ignore);
 
 
-type parsedEntry = {
-    title: string,
-    timestamp: int,
-    tags: array(string),
-    text: string
-};
-
-
 let insertEntries = (entries, connection) =>
     Insert.make()
         |> Insert.into("Entry")
         |> Insert.setFieldsRows(
             Js.Array.map(
-                ({ title, timestamp, tags, text }: parsedEntry) =>
+                ({ title, timestamp, tags, text }: Parse.parsedEntry) =>
                     {
                         "json": JSON.stringify({
                             "slug": Utils.slug(title),
@@ -137,7 +129,7 @@ let getEntry = (~slug, connection) =>
                 |> Select.from("Entry", "eP")
                 |> Select.field(
                     "json_object('title', json_extract(eP.json, '$.title'), 'slug', json_extract(eP.json, '$.slug'))",
-                    ""
+                    "_previous"
                 )
                 |> Select.where("json_extract(eP.json, '$.timestamp') < json_extract(e.json, '$.timestamp')", [||])
                 |> Select.order("(json_extract(eP.json, '$.timestamp'), json_extract(eP.json, '$.title'))", false),
@@ -148,7 +140,7 @@ let getEntry = (~slug, connection) =>
                 |> Select.from("Entry", "eN")
                 |> Select.field(
                     "json_object('title', json_extract(eN.json, '$.title'), 'slug', json_extract(eN.json, '$.slug'))",
-                    ""
+                    "_next"
                 )
                 |> Select.where("json_extract(eN.json, '$.timestamp') > json_extract(e.json, '$.timestamp')", [||])
                 |> Select.order("(json_extract(eN.json, '$.timestamp'), json_extract(eN.json, '$.title'))", false),
