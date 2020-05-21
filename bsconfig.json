@@ -22,7 +22,8 @@
       "node-fs-bs",
       "bs-bastet",
       "relude",
-      "sqlite-relude"
+      "sqlite-relude",
+      "slugify-bs"
     ],
     "bs-dev-dependencies": [],
     "ppx-flags": [],
