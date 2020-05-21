@@ -3460,6 +3460,11 @@ sqlite@^4.0.7:
   resolved "https://registry.yarnpkg.com/sqlite/-/sqlite-4.0.7.tgz#45d9843cf8daff07eaa2446e936583c687981ffb"
   integrity sha512-1bBO+me3gXRfqwRR3K9aNDoSbTkQ87o6fSjj/BE2gSHHsK3qIDR+LoFZHgZ6kSPdFBoLTsy5/w/+8PBBaK+lvg==
 
+squel@^5.13.0:
+  version "5.13.0"
+  resolved "https://registry.yarnpkg.com/squel/-/squel-5.13.0.tgz#09cc73e91f0d0e326482605ee76e3b7ac881ddf6"
+  integrity sha512-Fzd8zqbuqNwzodO3yO6MkX8qiDoVBuwqAaa3eKNz4idhBf24IQHbatBhLUiHAGGl962eGvPVRxzRuFWZlSf49w==
+
 ssri@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/ssri/-/ssri-6.0.1.tgz#2a3c41b28dd45b62b63676ecb74001265ae9edd8"
