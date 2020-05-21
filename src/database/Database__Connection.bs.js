@@ -8,15 +8,7 @@ import * as SQLiteRelude from "sqlite-relude/src/SQLiteRelude.bs.js";
 import * as Relude_Option from "relude/src/Relude_Option.bs.js";
 
 function connect(param) {
-  return Relude_IO.flatMap((function (connection) {
-                return Relude_IO.map((function (param) {
-                              return connection;
-                            }), SQLiteRelude.run("PRAGMA journal_mode=WAL", connection));
-              }), Relude_IO.flatMap((function (connection) {
-                    return Relude_IO.map((function (param) {
-                                  return connection;
-                                }), SQLiteRelude.run("PRAGMA foreign_keys=ON", connection));
-                  }), SQLiteRelude.open_(SQLite.Mode.readWrite | SQLite.Mode.uri, undefined, "file::memory:?mode=memory&cache=shared")));
+  return SQLiteRelude.open_(SQLite.Mode.readWrite | SQLite.Mode.uri, undefined, "file::memory:?mode=memory&cache=shared");
 }
 
 function begin_(param) {

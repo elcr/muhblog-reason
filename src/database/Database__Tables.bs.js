@@ -9,34 +9,20 @@ function createAboutPageTable(param) {
 }
 
 function createEntryTable(param) {
-  return SQLiteRelude.run("\n    CREATE TABLE IF NOT EXISTS Entry (\n        slug TEXT PRIMARY KEY,\n        title TEXT NOT NULL,\n        timestamp INTEGER NOT NULL,\n        text TEXT NOT NULL\n    )\n", param);
-}
-
-function createTagTable(param) {
-  return SQLiteRelude.run("\n    CREATE TABLE IF NOT EXISTS Tag (\n        slug TEXT PRIMARY KEY,\n        name TEXT NOT NULL\n    )\n", param);
-}
-
-function createEntryTagTable(param) {
-  return SQLiteRelude.run("\n    CREATE TABLE IF NOT EXISTS EntryTag (\n        entrySlug TEXT NOT NULL REFERENCES Entry(slug) ON UPDATE CASCADE ON DELETE CASCADE,\n        tagSlug TEXT NOT NULL REFERENCES Tag(slug) ON UPDATE CASCADE ON DELETE CASCADE,\n        PRIMARY KEY (entrySlug, tagSlug)\n    )\n", param);
+  return SQLiteRelude.run("\n    CREATE TABLE IF NOT EXISTS Entry (\n        json TEXT PRIMARY KEY\n    )\n", param);
 }
 
 function createAllTables(param) {
   return Database__Connection.transaction((function (connection) {
                 return Relude_IO.flatMap((function (param) {
-                              return SQLiteRelude.run("\n    CREATE TABLE IF NOT EXISTS EntryTag (\n        entrySlug TEXT NOT NULL REFERENCES Entry(slug) ON UPDATE CASCADE ON DELETE CASCADE,\n        tagSlug TEXT NOT NULL REFERENCES Tag(slug) ON UPDATE CASCADE ON DELETE CASCADE,\n        PRIMARY KEY (entrySlug, tagSlug)\n    )\n", connection);
-                            }), Relude_IO.flatMap((function (param) {
-                                  return SQLiteRelude.run("\n    CREATE TABLE IF NOT EXISTS Tag (\n        slug TEXT PRIMARY KEY,\n        name TEXT NOT NULL\n    )\n", connection);
-                                }), Relude_IO.flatMap((function (param) {
-                                      return SQLiteRelude.run("\n    CREATE TABLE IF NOT EXISTS Entry (\n        slug TEXT PRIMARY KEY,\n        title TEXT NOT NULL,\n        timestamp INTEGER NOT NULL,\n        text TEXT NOT NULL\n    )\n", connection);
-                                    }), SQLiteRelude.run("\n    CREATE TABLE IF NOT EXISTS AboutPage (\n        text TEXT PRIMARY KEY\n    )\n", connection))));
+                              return SQLiteRelude.run("\n    CREATE TABLE IF NOT EXISTS Entry (\n        json TEXT PRIMARY KEY\n    )\n", connection);
+                            }), SQLiteRelude.run("\n    CREATE TABLE IF NOT EXISTS AboutPage (\n        text TEXT PRIMARY KEY\n    )\n", connection));
               }), param);
 }
 
 export {
   createAboutPageTable ,
   createEntryTable ,
-  createTagTable ,
-  createEntryTagTable ,
   createAllTables ,
   
 }

@@ -1,1 +1,1 @@
-let tempDirPrefix = "muhblog-";
+let entriesPerPage = 10;

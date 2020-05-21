@@ -6,12 +6,12 @@ open Squel;
 let insertAboutPage = (text: string, connection) =>
     Insert.make()
         |> Insert.into("AboutPage")
-        |> Insert.setFields({ "name": text })
+        |> Insert.setFields({ "text": text })
         |. Database__Connection.executeInsert(connection)
         |> IO.map(ignore);
 
 
-type entry = {
+type parsedEntry = {
     title: string,
     timestamp: int,
     tags: array(string),
@@ -19,65 +19,37 @@ type entry = {
 };
 
 
-type insertEntryError =
-    | EntryError(Js.Promise.error)
-    | TagsError(Js.Promise.error)
-    | EntryTagsError(Js.Promise.error);
-
-
-let insertEntry = ({ title, timestamp, tags, text }, connection) => {
-    let titleSlug = Utils.slug(title);
-
+let insertEntries = (entries, connection) =>
     Insert.make()
         |> Insert.into("Entry")
-        |> Insert.setFields({
-            "slug": titleSlug,
-            "title": title,
-            "timestamp": timestamp,
-            "text": text,
-        })
+        |> Insert.setFieldsRows(
+            Js.Array.map(
+                ({ title, timestamp, tags, text }: parsedEntry) =>
+                    {
+                        "json": JSON.stringify({
+                            "slug": Utils.slug(title),
+                            "title": title,
+                            "timestamp": timestamp,
+                            "tags": Js.Array.map(
+                                tag => {
+                                    "name": tag,
+                                    "slug": Utils.slug(tag)
+                                },
+                                tags
+                            ),
+                            "text": text
+                        })
+                    },
+                entries
+            )
+        )
         |. Database__Connection.executeInsert(connection)
-        |> IO.mapError(error => EntryError(error))
-        |> IO.flatMap(_id => {
-            let sluggedTags = Js.Array.map(
-                name => {
-                    "slug": Utils.slug(name),
-                    "name": name
-                },
-                tags
-            );
-            Insert.makeInsertOrIgnore()
-                |> Insert.into("Tag")
-                |> Insert.setFieldsRows(sluggedTags)
-                |. Database__Connection.executeInsert(connection)
-                |> IO.bimap(
-                    _id => sluggedTags,
-                    error => TagsError(error)
-                )
-        })
-        |> IO.flatMap(sluggedTags => {
-            let mappedTags = Js.Array.map(
-                tag => {
-                    "entrySlug": titleSlug,
-                    "tagSlug": tag##slug
-                },
-                sluggedTags
-            );
-            Insert.makeInsertOrIgnore()
-                |> Insert.into("EntryTag")
-                |> Insert.setFieldsRows(mappedTags)
-                |. Database__Connection.executeInsert(connection)
-                |> IO.bimap(
-                    ignore,
-                    error => EntryTagsError(error)
-                )
-        })
-};
+        |> IO.map(ignore);
 
 
 type insertAllError =
     | InsertAboutPageError(Js.Promise.error)
-    | InsertEntryError({ entry, error: insertEntryError });
+    | InsertEntriesError(Js.Promise.error);
 
 
 let insertAll = (aboutText, entries) =>
@@ -85,15 +57,50 @@ let insertAll = (aboutText, entries) =>
         insertAboutPage(aboutText, connection)
             |> IO.mapError(error => InsertAboutPageError(error))
             |> IO.flatMap(() =>
-                entries
-                    |> Js.Array.map(entry =>
-                        insertEntry(entry, connection)
-                            |> IO.mapError(error => InsertEntryError({ entry, error }))
-                    )
-                    |> Js.Array.reduce(
-                        (current, accumulator) =>
-                            IO.flatMap(() => current, accumulator),
-                        IO.Pure()
-                    )
+                insertEntries(entries, connection)
+                    |> IO.mapError(error => InsertEntriesError(error))
             )
     );
+
+
+let getAboutPageText = connection =>
+    Select.make()
+        |> Select.from("AboutPage", "a")
+        |> Select.field("a.text", "text")
+        |> Select.limit(1)
+        |. Database__Connection.executeSelectOne(connection)
+        |> IO.map(
+            Option.map(row => (row##text: string))
+        );
+
+
+type indexEntry = {
+    slug: string,
+    title: string,
+    timestamp: int,
+    text: string
+};
+
+
+let getIndexPageEntries = (page, connection) =>
+    Select.make()
+        |> Select.from("Entry", "e")
+        |> Select.field("COUNT(*)", "count")
+        |. Database__Connection.executeSelectOne(connection)
+        |> IO.flatMap(countRow =>
+            switch (countRow) {
+                | Some(0) | None => IO.Pure((0, [||]))
+                | Some(count) =>
+                    Select.make()
+                        |> Select.from("Entry", "e")
+                        |> Select.field("json_extract(e.json, '$.slug')", "slug")
+                        |> Select.field("json_extract(e.json, '$.slug')", "title")
+                        |> Select.field("json_extract(e.json, '$.timestamp')", "timestamp")
+                        |> Select.field("json_extract(e.json, '$.text')", "text")
+                        |> Select.order("timestamp", false)
+                        |> Select.limit(Constants.entriesPerPage)
+                        |> Select.offset((page - 1) * Constants.entriesPerPage)
+                        |. Database__Connection.executeSelectAll(connection)
+                        |> IO.map((entries: array(indexEntry)) => (count, entries))
+            }
+        );

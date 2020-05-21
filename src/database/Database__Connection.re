@@ -4,15 +4,10 @@ open Squel;
 
 
 let connect = () =>
-    SQLiteRelude.open_(~mode=SQLiteRelude.Mode.readWrite lor SQLiteRelude.Mode.uri, "file::memory:?mode=memory&cache=shared")
-        |> IO.flatMap(connection =>
-            SQLiteRelude.run("PRAGMA foreign_keys=ON", connection)
-                |> IO.map(() => connection)
-        )
-        |> IO.flatMap(connection =>
-            SQLiteRelude.run("PRAGMA journal_mode=WAL", connection)
-                |> IO.map(() => connection)
-        );
+    SQLiteRelude.open_(
+        ~mode=SQLiteRelude.Mode.readWrite lor SQLiteRelude.Mode.uri,
+        "file::memory:?mode=memory&cache=shared"
+    );
 
 
 let begin_ = SQLiteRelude.run("BEGIN");
