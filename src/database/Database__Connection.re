@@ -1,5 +1,7 @@
 open Relude.Globals;
 
+open Squel;
+
 
 let getPath = (~siteName) =>
     NodeFS.MakeTempDir.makeTempDir(Constants.tempDirPrefix)
@@ -62,3 +64,29 @@ let transaction = (func, connection) =>
                 )
                 |> IO.unsummonError
         );
+
+
+let executeSelectOne = query => {
+    let (query, params) = Select.(
+        limit(1, query)
+            |> build
+    );
+    SQLiteRelude.getWithParams(query, params)
+};
+
+
+let executeSelectExists = (query, connection) =>
+    executeSelectOne(Select.field("1", "_", query), connection)
+        |> IO.map(Option.isSome);
+
+
+let executeSelectAll = query => {
+    let (query, params) = Select.build(query);
+    SQLiteRelude.getAllWithParams(query, params)
+};
+
+
+let executeInsert = query => {
+    let (query, params) = Insert.build(query);
+    SQLiteRelude.runInsertWithParams(query, params)
+};

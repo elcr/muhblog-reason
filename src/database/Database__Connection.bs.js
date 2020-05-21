@@ -6,6 +6,7 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Constants from "../Constants.bs.js";
 import * as Relude_IO from "relude/src/Relude_IO.bs.js";
 import * as SQLiteRelude from "sqlite-relude/src/SQLiteRelude.bs.js";
+import * as Relude_Option from "relude/src/Relude_Option.bs.js";
 import * as NodeFS__MakeTempDir from "node-fs-bs/src/NodeFS__MakeTempDir.bs.js";
 
 function getPath(siteName) {
@@ -58,6 +59,37 @@ function transaction(func, connection) {
                   }), SQLiteRelude.run("BEGIN", connection)));
 }
 
+function executeSelectOne(query) {
+  var match = query.limit(1).toParam();
+  var params = match[1];
+  var query$1 = match[0];
+  return (function (param) {
+      return SQLiteRelude.getWithParams(query$1, params, param);
+    });
+}
+
+function executeSelectExists(query, connection) {
+  return Relude_IO.map(Relude_Option.isSome, executeSelectOne(query.field("1", "_"))(connection));
+}
+
+function executeSelectAll(query) {
+  var match = query.toParam();
+  var params = match[1];
+  var query$1 = match[0];
+  return (function (param) {
+      return SQLiteRelude.getAllWithParams(query$1, params, param);
+    });
+}
+
+function executeInsert(query) {
+  var match = query.toParam();
+  var params = match[1];
+  var query$1 = match[0];
+  return (function (param) {
+      return SQLiteRelude.runInsertWithParams(query$1, params, param);
+    });
+}
+
 var close = SQLiteRelude.close;
 
 export {
@@ -68,6 +100,10 @@ export {
   rollback ,
   close ,
   transaction ,
+  executeSelectOne ,
+  executeSelectExists ,
+  executeSelectAll ,
+  executeInsert ,
   
 }
 /* path Not a pure module */
