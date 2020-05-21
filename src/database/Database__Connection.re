@@ -67,10 +67,7 @@ let transaction = (func, connection) =>
 
 
 let executeSelectOne = query => {
-    let (query, params) = Select.(
-        limit(1, query)
-            |> build
-    );
+    let (query, params) = Select.build(query);
     SQLiteRelude.getWithParams(query, params)
 };
 

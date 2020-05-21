@@ -60,7 +60,7 @@ function transaction(func, connection) {
 }
 
 function executeSelectOne(query) {
-  var match = query.limit(1).toParam();
+  var match = query.toParam();
   var params = match[1];
   var query$1 = match[0];
   return (function (param) {
