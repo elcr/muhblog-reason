@@ -32,9 +32,9 @@ let rollback = SQLiteRelude.run("ROLLBACK");
 let close = SQLiteRelude.close;
 
 
-type transactionError =
+type transactionError('a) =
     | BeginError(Js.Promise.error)
-    | InnerError(Js.Promise.error)
+    | InnerError('a)
     | CommitError(Js.Promise.error)
     | RollbackError(Js.Promise.error);
 

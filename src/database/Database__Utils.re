@@ -73,3 +73,27 @@ let insertEntry = ({ title, timestamp, tags, text }, connection) => {
                 )
         })
 };
+
+
+type insertAllError =
+    | InsertAboutPageError(Js.Promise.error)
+    | InsertEntryError({ entry, error: insertEntryError });
+
+
+let insertAll = (aboutText, entries) =>
+    Database__Connection.transaction(connection =>
+        insertAboutPage(aboutText, connection)
+            |> IO.mapError(error => InsertAboutPageError(error))
+            |> IO.flatMap(() =>
+                entries
+                    |> Js.Array.map(entry =>
+                        insertEntry(entry, connection)
+                            |> IO.mapError(error => InsertEntryError({ entry, error }))
+                    )
+                    |> Js.Array.reduce(
+                        (current, accumulator) =>
+                            IO.flatMap(() => current, accumulator),
+                        IO.Pure()
+                    )
+            )
+    );

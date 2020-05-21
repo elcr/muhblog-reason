@@ -54,9 +54,33 @@ function insertEntry(param, connection) {
                               }))(connection))));
 }
 
+function insertAll(aboutText, entries) {
+  return (function (param) {
+      return Database__Connection.transaction((function (connection) {
+                    return Relude_IO.flatMap((function (param) {
+                                  return entries.map((function (entry) {
+                                                  return Curry._2(Relude_IO.mapError, (function (error) {
+                                                                return /* InsertEntryError */Block.__(1, [
+                                                                          /* entry */entry,
+                                                                          /* error */error
+                                                                        ]);
+                                                              }), insertEntry(entry, connection));
+                                                })).reduce((function (current, accumulator) {
+                                                return Relude_IO.flatMap((function (param) {
+                                                              return current;
+                                                            }), accumulator);
+                                              }), /* Pure */Block.__(0, [undefined]));
+                                }), Curry._2(Relude_IO.mapError, (function (error) {
+                                      return /* InsertAboutPageError */Block.__(0, [error]);
+                                    }), insertAboutPage(aboutText, connection)));
+                  }), param);
+    });
+}
+
 export {
   insertAboutPage ,
   insertEntry ,
+  insertAll ,
   
 }
 /* Squel Not a pure module */
