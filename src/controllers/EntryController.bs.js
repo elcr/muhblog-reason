@@ -2,13 +2,49 @@
 'use strict';
 
 var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var Utils = require("../Utils.bs.js");
+var Relude_IO = require("relude/src/Relude_IO.bs.js");
+var Relude_Int = require("relude/src/Relude_Int.bs.js");
+var Relude_List = require("relude/src/Relude_List.bs.js");
+var Relude_Option = require("relude/src/Relude_Option.bs.js");
 
 function makeResponse(entries, year, month, day, slug) {
-  return /* Pure */Block.__(0, [/* Page */Block.__(0, [
-                /* data */undefined,
-                /* status */200
-              ])]);
+  var timestamp = Relude_Int.fromFloat(new Date(Relude_Int.toFloat(year), Relude_Int.toFloat(month), Relude_Int.toFloat(day)).getTime());
+  return Relude_IO.map((function (entry) {
+                return /* Page */Block.__(0, [
+                          /* data *//* Entry */Block.__(3, [
+                              /* title */entry.title,
+                              /* timestamp */timestamp,
+                              /* text */entry.text,
+                              /* tags */entry.tags,
+                              /* previous */Relude_Option.map((function (entry) {
+                                      return entry.title;
+                                    }), Curry._2(Relude_List.find, (function (entry) {
+                                          return entry.timestamp < timestamp;
+                                        }), Relude_List.sortBy((function (a, b) {
+                                              return Curry._2(Relude_Int.compare, b.timestamp, a.timestamp);
+                                            }), entries))),
+                              /* next */Relude_Option.map((function (entry) {
+                                      return entry.title;
+                                    }), Curry._2(Relude_List.find, (function (entry) {
+                                          return entry.timestamp > timestamp;
+                                        }), Relude_List.sortBy((function (a, b) {
+                                              return Curry._2(Relude_Int.compare, a.timestamp, b.timestamp);
+                                            }), entries)))
+                            ]),
+                          /* status */200
+                        ]);
+              }), Relude_IO.fromOption((function (prim) {
+                    
+                  }), Curry._2(Relude_List.find, (function (entry) {
+                        if (entry.timestamp === timestamp) {
+                          return Curry._1(Utils.slug(undefined), entry.title) === slug;
+                        } else {
+                          return false;
+                        }
+                      }), entries)));
 }
 
 exports.makeResponse = makeResponse;
-/* No side effect */
+/* Utils Not a pure module */

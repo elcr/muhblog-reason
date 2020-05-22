@@ -1,6 +1,16 @@
 open Relude.Globals;
 
 
+let splitURLSegments = url =>
+    Js.String.sliceToEnd(~from=1, url)
+        |> Js.String.split("/")
+        |> Js.Array.map(segment =>
+            Js.Global.decodeURIComponent(segment)
+                |> Js.String.trim
+        )
+        |> Js.Array.filter(segment => Js.String.length(segment) >= 1);
+
+
 let makeResponse = (
     ~data as { about, entries }: Parse.parsedData,
     route: option(Router.route)
@@ -21,17 +31,11 @@ let makeResponse = (
     };
 
 
-let make = (~siteName, ~data: Parse.parsedData) => {
-    HTTP.Server.make((request, response) => {
+let make = (~siteName, ~data: Parse.parsedData) =>
+    HTTP.Server.make((request, response) =>
         HTTP.Request.getURL(request)
             |> Option.getOrElse("/")
-            |> Js.String.sliceToEnd(~from=1)
-            |> Js.String.split("/")
-            |> Js.Array.map(segment =>
-                Js.Global.decodeURIComponent(segment)
-                    |> Js.String.trim
-            )
-            |> Js.Array.filter(segment => Js.String.length(segment) >= 1)
+            |> splitURLSegments
             |> Router.route
             |> makeResponse(~data)
             |> IO.tap((res: Response.t) => {
@@ -64,8 +68,7 @@ let make = (~siteName, ~data: Parse.parsedData) => {
                 };
             })
             |> IO.unsafeRunAsync(ignore)
-    })
-};
+    );
 
 
 let listen = HTTP.Server.listen(

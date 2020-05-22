@@ -19,7 +19,7 @@ function formatTitle(siteName, pageData) {
     case /* About */2 :
         return "About | " + (String(siteName) + "");
     case /* Entry */3 :
-        return "" + (String(pageData[0].title) + (" | " + (String(siteName) + "")));
+        return "" + (String(pageData[/* title */0]) + (" | " + (String(siteName) + "")));
     
   }
 }

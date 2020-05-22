@@ -15,6 +15,14 @@ var StaticController = require("./controllers/StaticController.bs.js");
 var NotFoundController = require("./controllers/NotFoundController.bs.js");
 var TagSearchController = require("./controllers/TagSearchController.bs.js");
 
+function splitURLSegments(url) {
+  return url.slice(1).split("/").map((function (segment) {
+                  return decodeURIComponent(segment).trim();
+                })).filter((function (segment) {
+                return segment.length >= 1;
+              }));
+}
+
 function makeResponse(param, route) {
   if (route === undefined) {
     return NotFoundController.response;
@@ -56,11 +64,7 @@ function make(siteName, data) {
                                     HTTP.$$Response.setContentLength(length)(response);
                                     response.end(body, "utf-8");
                                     
-                                  }))(makeResponse(data, Router.route(Relude_Option.getOrElse("/", Caml_option.undefined_to_opt(request.url)).slice(1).split("/").map((function (segment) {
-                                                return decodeURIComponent(segment).trim();
-                                              })).filter((function (segment) {
-                                              return segment.length >= 1;
-                                            }))))));
+                                  }))(makeResponse(data, Router.route(splitURLSegments(Relude_Option.getOrElse("/", Caml_option.undefined_to_opt(request.url)))))));
               }));
 }
 
@@ -72,6 +76,7 @@ function listen(param) {
   
 }
 
+exports.splitURLSegments = splitURLSegments;
 exports.makeResponse = makeResponse;
 exports.make = make;
 exports.listen = listen;

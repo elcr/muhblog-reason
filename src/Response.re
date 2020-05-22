@@ -11,5 +11,4 @@ type t =
     });
 
 
-type error =
-    | DatabaseError(Js.Promise.error);
+type io = Relude.IO.t(t, unit);
