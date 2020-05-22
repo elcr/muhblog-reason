@@ -5,7 +5,9 @@ var Block = require("bs-platform/lib/js/block.js");
 
 function makeResponse(about) {
   return /* Pure */Block.__(0, [/* Page */Block.__(0, [
-                /* data *//* About */Block.__(2, [/* text */about]),
+                /* data *//* About */Block.__(2, [{
+                      text: about
+                    }]),
                 /* status */200
               ])]);
 }

@@ -31,6 +31,13 @@ module Root = {
 [@react.component]
 let make = (~siteName, ~pageData) => {
     let title = formatTitle(~siteName, pageData);
+    let content = switch (pageData) {
+        | Some(Index(data)) => <IndexPage data/>
+        | Some(TagSearch(data)) => <TagSearchPage data/>
+        | Some(About(data)) => <AboutPage data/>
+        | Some(Entry(data)) => <EntryPage data/>
+        | None => <NotFoundPage/>
+    };
 
     <Emotion.Provider>
         <html lang="en">
@@ -43,7 +50,7 @@ let make = (~siteName, ~pageData) => {
             </head>
             <body>
                 <Root>
-                    ("hello" |> React.string)
+                    content
                 </Root>
             </body>
         </html>

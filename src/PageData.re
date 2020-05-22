@@ -1,19 +1,41 @@
 type indexEntry = {
     title: string,
-    timestamp: int,
+    date: Date.t,
     text: string
 };
 
 
+type indexData = {
+    page: int,
+    total: int,
+    entries: list(indexEntry)
+};
+
+
+type tagSearchData = {
+    tag: string,
+    page: int,
+    entries: list(indexEntry)
+};
+
+
+type aboutData = {
+    text: string
+};
+
+
+type entryData = {
+    title: string,
+    date: Date.t,
+    text: string,
+    tags: list(string),
+    previous: option(string),
+    next: option(string)
+};
+
+
 type t =
-    | Index({ page: int, total: int, entries: list(indexEntry) })
-    | TagSearch({ tag: string, page: int, entries: list(indexEntry) })
-    | About({ text: string })
-    | Entry({
-        title: string,
-        timestamp: int,
-        text: string,
-        tags: list(string),
-        previous: option(string),
-        next: option(string),
-    });
+    | Index(indexData)
+    | TagSearch(tagSearchData)
+    | About(aboutData)
+    | Entry(entryData);

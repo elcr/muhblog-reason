@@ -5,6 +5,11 @@ var Css = require("bs-css-emotion/src/Css.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var Emotion = require("../bindings/Emotion.bs.js");
+var AboutPage = require("./pages/AboutPage.bs.js");
+var EntryPage = require("./pages/EntryPage.bs.js");
+var IndexPage = require("./pages/IndexPage.bs.js");
+var NotFoundPage = require("./pages/NotFoundPage.bs.js");
+var TagSearchPage = require("./pages/TagSearchPage.bs.js");
 var BootstrapRebootMinCss = require("bootstrap/dist/css/bootstrap-reboot.min.css");
 
 function formatTitle(siteName, pageData) {
@@ -15,11 +20,11 @@ function formatTitle(siteName, pageData) {
     case /* Index */0 :
         return siteName;
     case /* TagSearch */1 :
-        return "" + (String(pageData[/* tag */0]) + (" | " + (String(siteName) + "")));
+        return "" + (String(pageData[0].tag) + (" | " + (String(siteName) + "")));
     case /* About */2 :
         return "About | " + (String(siteName) + "");
     case /* Entry */3 :
-        return "" + (String(pageData[/* title */0]) + (" | " + (String(siteName) + "")));
+        return "" + (String(pageData[0].title) + (" | " + (String(siteName) + "")));
     
   }
 }
@@ -51,6 +56,34 @@ function Page__Component(Props) {
   var siteName = Props.siteName;
   var pageData = Props.pageData;
   var title = formatTitle(siteName, pageData);
+  var content;
+  if (pageData !== undefined) {
+    switch (pageData.tag | 0) {
+      case /* Index */0 :
+          content = React.createElement(IndexPage.make, {
+                data: pageData[0]
+              });
+          break;
+      case /* TagSearch */1 :
+          content = React.createElement(TagSearchPage.make, {
+                data: pageData[0]
+              });
+          break;
+      case /* About */2 :
+          content = React.createElement(AboutPage.make, {
+                data: pageData[0]
+              });
+          break;
+      case /* Entry */3 :
+          content = React.createElement(EntryPage.make, {
+                data: pageData[0]
+              });
+          break;
+      
+    }
+  } else {
+    content = React.createElement(NotFoundPage.make, { });
+  }
   return React.createElement(Emotion.Provider.make, {
               children: React.createElement("html", {
                     lang: "en"
@@ -60,7 +93,7 @@ function Page__Component(Props) {
                             content: "width=device-width, initial-scale=1, shrink-to-fit=no",
                             name: "viewport"
                           }), React.createElement("title", undefined, title), React.createElement("style", undefined, BootstrapRebootMinCss)), React.createElement("body", undefined, React.createElement(Page__Component$Root, {
-                            children: "hello"
+                            children: content
                           })))
             });
 }
