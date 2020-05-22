@@ -32,17 +32,26 @@ let makeResponse = (
 
 
 let make = (~siteName, ~data: Parse.parsedData) =>
-    HTTP.Server.make((request, response) =>
-        HTTP.Request.getURL(request)
-            |> Option.getOrElse("/")
-            |> splitURLSegments
+    HTTP.Server.make((request, response) => {
+        let url = HTTP.Request.getURL(request)
+            |> Option.getOrElse("/");
+        splitURLSegments(url)
             |> Router.route
             |> makeResponse(~data)
             |> IO.tap((res: Response.t) => {
                 open HTTP;
                 open NodeStream;
 
+                let startTime = Js.Date.now();
                 let output = Response.getStream(response);
+                Writeable.on(
+                    `close(() => {
+                        let status = Response.getStatusCode(response);
+                        let ms = Js.Date.now() -. startTime;
+                        Js.Console.log({j|$status $url $(ms)ms|j})
+                    }),
+                    output
+                );
 
                 switch (res) {
                     | Page({ data, status }) => {
@@ -55,7 +64,7 @@ let make = (~siteName, ~data: Parse.parsedData) =>
                         Response.setStatusCode(status, response);
                         Response.setContentType("text/html; charset=utf-8", response);
                         Response.setContentLength(length, response);
-                        Writeable.end_(~chunk=body, ~encoding="utf-8", output);
+                        Writeable.end_(~chunk=body, ~encoding="utf-8", output)
                     }
                     | Stream({ stream, type_, length, modified }) => {
                         Response.setStatusCode(200, response);
@@ -63,12 +72,12 @@ let make = (~siteName, ~data: Parse.parsedData) =>
                             |. Response.setContentType(response);
                         Response.setContentLength(length, response);
                         Response.setLastModified(modified, response);
-                        Readable.pipe(output, stream);
+                        Readable.pipe(output, stream)
                     }
                 };
             })
             |> IO.unsafeRunAsync(ignore)
-    );
+    });
 
 
 let listen = HTTP.Server.listen(

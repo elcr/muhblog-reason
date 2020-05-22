@@ -46,9 +46,17 @@ function makeResponse(param, route) {
 
 function make(siteName, data) {
   return Http.createServer((function (request, response) {
+                var url = Relude_Option.getOrElse("/", Caml_option.undefined_to_opt(request.url));
                 return Relude_IO.unsafeRunAsync((function (prim) {
                               
                             }), Relude_IO.tap((function (res) {
+                                    var startTime = Date.now();
+                                    response.on("close", (function (param) {
+                                            var status = response.statusCode;
+                                            var ms = Date.now() - startTime;
+                                            console.log("" + (String(status) + (" " + (String(url) + (" " + (String(ms) + "ms"))))));
+                                            
+                                          }));
                                     if (res.tag) {
                                       HTTP.$$Response.setStatusCode(200, response);
                                       HTTP.$$Response.setContentType(Relude_Option.getOrElse("application/octet-stream", res[/* type_ */1]))(response);
@@ -64,7 +72,7 @@ function make(siteName, data) {
                                     HTTP.$$Response.setContentLength(length)(response);
                                     response.end(body, "utf-8");
                                     
-                                  }))(makeResponse(data, Router.route(splitURLSegments(Relude_Option.getOrElse("/", Caml_option.undefined_to_opt(request.url)))))));
+                                  }))(makeResponse(data, Router.route(splitURLSegments(url)))));
               }));
 }
 

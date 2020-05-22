@@ -16,6 +16,9 @@ module Response = {
     [@bs.set]
     external _setStatusCode: (t, int) => unit = "statusCode";
 
+    [@bs.get]
+    external getStatusCode: t => int = "statusCode";
+
     let setStatusCode = (status, response) => _setStatusCode(response, status);
 
     [@bs.send.pipe: t]
