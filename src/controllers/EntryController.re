@@ -1,19 +1,23 @@
 open Relude.Globals;
 
 
-let makeResponse = (~entries, ~year, ~month, ~day, ~slug) => {
-    let timestamp = ()
-        |> Js.Date.makeWithYMD(
-            ~year=Int.toFloat(year),
-            ~month=Int.toFloat(month),
-            ~date=Int.toFloat(day)
-        )
-        |> Js.Date.getTime
-        |> Int.fromFloat;
+let dayTimestamp = date => {
+    let newDate = Date.make(
+        ~year=Date.getYear(date),
+        ~month=Date.getMonth(date),
+        ~day=Date.getDay(date),
+        ()
+    );
+    Date.toUnixTimestamp(newDate)
+};
 
+
+let makeResponse = (~entries, ~year, ~month, ~day, ~slug) => {
+    let timestamp = Date.make(~year, ~month, ~day, ())
+        |> Date.toUnixTimestamp;
     entries
         |> List.find((entry: Parse.parsedEntry) =>
-            entry.timestamp === timestamp
+            dayTimestamp(entry.date) === timestamp
                 && Utils.slug(entry.title) === slug
         )
         |> IO.fromOption(ignore)
@@ -27,18 +31,18 @@ let makeResponse = (~entries, ~year, ~month, ~day, ~slug) => {
                     tags: entry.tags,
                     previous: entries
                         |> List.sortBy((a: Parse.parsedEntry, b) =>
-                            Int.compare(b.timestamp, a.timestamp),
+                            Int.compare(dayTimestamp(b.date), dayTimestamp(a.date)),
                         )
                         |> List.find((entry: Parse.parsedEntry) =>
-                            entry.timestamp < timestamp
+                            dayTimestamp(entry.date) < timestamp
                         )
                         |> Option.map((entry: Parse.parsedEntry) => entry.title),
                     next: entries
                         |> List.sortBy((a: Parse.parsedEntry, b) =>
-                            Int.compare(a.timestamp, b.timestamp),
+                            Int.compare(dayTimestamp(a.date), dayTimestamp(b.date)),
                         )
                         |> List.find((entry: Parse.parsedEntry) =>
-                            entry.timestamp > timestamp
+                            dayTimestamp(entry.date) > timestamp
                         )
                         |> Option.map((entry: Parse.parsedEntry) => entry.title)
                 }))
