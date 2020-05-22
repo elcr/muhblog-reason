@@ -100,7 +100,8 @@ type readAndParseEntriesDirectoryError =
 let readAndParseEntriesDirectory = directory => {
     open NodeFS;
 
-    ReadDir.readDir(directory)
+    IO.Suspend(() => Js.Console.log({j|Reading from entries directory "$directory"|j}))
+        |> IO.flatMap(() => ReadDir.readDir(directory))
         |> IO.mapError(error => ReadDirectoryError(error))
         |> IO.flatMap(entries =>
             entries
@@ -109,9 +110,10 @@ let readAndParseEntriesDirectory = directory => {
                         |> Js.String.endsWith(".md")
                         && !ReadDir.DirectoryEntry.isDirectory(entry)
                 )
-                |> Js.Array.map(({ name }: ReadDir.DirectoryEntry.t) =>
-                    Node.Path.join2(directory, name)
-                        |> ReadFile.readFile
+                |> Js.Array.map(({ name }: ReadDir.DirectoryEntry.t) => {
+                    let path = Node.Path.join2(directory, name);
+                    IO.Suspend(() => Js.Console.log({j|Reading entry from "$path"|j}))
+                        |> IO.flatMap(() => ReadFile.readFile(path))
                         |> IO.mapError(error => ReadEntryError({ name, error }))
                         |> IO.flatMap(text =>
                             parseEntry(text)
@@ -120,7 +122,7 @@ let readAndParseEntriesDirectory = directory => {
                                 )
                                 |> IO.fromResult
                         )
-                )
+                })
                 |> Js.Array.reduce(
                     (accumulator, current) =>
                         IO.flatMap(
@@ -136,7 +138,9 @@ let readAndParseEntriesDirectory = directory => {
 };
 
 
-let readAndParseAboutPath = NodeFS.ReadFile.readFile;
+let readAndParseAboutPath = path =>
+    IO.Suspend(() => Js.Console.log({j|Reading about text from "$path"|j}))
+        |> IO.flatMap(() => NodeFS.ReadFile.readFile(path));
 
 
 type parsedData = {

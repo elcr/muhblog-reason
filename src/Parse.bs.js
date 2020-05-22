@@ -112,6 +112,7 @@ function readAndParseEntriesDirectory(directory) {
                                   }
                                 })).map((function (param) {
                                 var name = param.name;
+                                var path = Path.join(directory, name);
                                 return Relude_IO.flatMap((function (text) {
                                               return Relude_IO.fromResult(Curry._2(Relude_Result.mapError, (function (error) {
                                                                 return /* ParseError */Block.__(2, [
@@ -124,7 +125,12 @@ function readAndParseEntriesDirectory(directory) {
                                                             /* name */name,
                                                             /* error */error
                                                           ]);
-                                                }), NodeFS__ReadFile.readFile(undefined, Path.join(directory, name))));
+                                                }), Relude_IO.flatMap((function (param) {
+                                                      return NodeFS__ReadFile.readFile(undefined, path);
+                                                    }), /* Suspend */Block.__(2, [(function (param) {
+                                                          console.log("Reading entry from \"" + (String(path) + "\""));
+                                                          
+                                                        })]))));
                               })).reduce((function (accumulator, current) {
                               return Relude_IO.flatMap((function (entries) {
                                             return Relude_IO.map((function (entry) {
@@ -137,7 +143,21 @@ function readAndParseEntriesDirectory(directory) {
                             }), /* Pure */Block.__(0, [/* [] */0]));
               }), Curry._2(Relude_IO.mapError, (function (error) {
                     return /* ReadDirectoryError */Block.__(0, [error]);
-                  }), NodeFS__ReadDir.readDir(undefined, directory)));
+                  }), Relude_IO.flatMap((function (param) {
+                        return NodeFS__ReadDir.readDir(undefined, directory);
+                      }), /* Suspend */Block.__(2, [(function (param) {
+                            console.log("Reading from entries directory \"" + (String(directory) + "\""));
+                            
+                          })]))));
+}
+
+function readAndParseAboutPath(path) {
+  return Relude_IO.flatMap((function (param) {
+                return NodeFS__ReadFile.readFile(undefined, path);
+              }), /* Suspend */Block.__(2, [(function (param) {
+                    console.log("Reading about text from \"" + (String(path) + "\""));
+                    
+                  })]));
 }
 
 function readAndParseAll(aboutPath, entriesDirectory) {
@@ -149,13 +169,11 @@ function readAndParseAll(aboutPath, entriesDirectory) {
                                     };
                             }), (function (error) {
                               return /* AboutFileError */Block.__(0, [error]);
-                            }), NodeFS__ReadFile.readFile(undefined, aboutPath));
+                            }), readAndParseAboutPath(aboutPath));
               }), Curry._2(Relude_IO.mapError, (function (error) {
                     return /* EntriesDirectoryError */Block.__(1, [error]);
                   }), readAndParseEntriesDirectory(entriesDirectory)));
 }
-
-var readAndParseAboutPath = NodeFS__ReadFile.readFile;
 
 exports.parseTitle = parseTitle;
 exports.matchDate = matchDate;
