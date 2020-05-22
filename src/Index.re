@@ -1,5 +1,9 @@
 let main = () => {
-    let { siteName }: CLI.arguments = CLI.parseArguments();
+    let {
+        siteName,
+        aboutPath,
+        entriesDirectory
+    }: CLI.arguments = CLI.parseArguments();
 
     Server.make(~siteName)
         |> Server.listen

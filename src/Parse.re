@@ -49,12 +49,13 @@ let parseTimestamp = metadata =>
         });
 
 
-let parseTags = metadata: option(array(string)) =>
+let parseTags = metadata: option(list(string)) =>
     Js.Dict.get(metadata, "tags")
-        |> Option.filter(array => Js.Array.length(array) > 0);
+        |> Option.filter(array => Js.Array.length(array) > 0)
+        |> Option.map(List.fromArray);
 
 
-type parseError =
+type parseEntryError =
     | TitleMissing
     | TimestampError(parseTimestampError)
     | TagsMissing
@@ -64,7 +65,7 @@ type parseError =
 type parsedEntry = {
     title: string,
     timestamp: int,
-    tags: array(string),
+    tags: list(string),
     text: string
 };
 
@@ -88,3 +89,74 @@ let parseEntry = markdown => {
         | _ => Error(BadMetadata)
     }
 };
+
+
+type readEntriesDirectoryError =
+    | ReadDirectoryError(NodeFS.Error.t)
+    | ReadEntryError(NodeFS.Error.t)
+    | ParseError({ name: string, error: parseEntryError });
+
+
+let readEntriesDirectory = directory => {
+    open NodeFS;
+
+    ReadDir.readDir(directory)
+        |> IO.mapError(error => ReadDirectoryError(error))
+        |> IO.flatMap(entries =>
+            entries
+                |> Js.Array.filter((entry: ReadDir.DirectoryEntry.t) =>
+                    Js.String.toLowerCase(entry.name)
+                        |> Js.String.endsWith(".md")
+                        && !ReadDir.DirectoryEntry.isDirectory(entry)
+                )
+                |> Js.Array.map(({ name }: ReadDir.DirectoryEntry.t) =>
+                    Node.Path.join2(directory, name)
+                        |> ReadFile.readFile
+                        |> IO.mapError(error => ReadEntryError(error))
+                        |> IO.flatMap(text =>
+                            parseEntry(text)
+                                |> Result.mapError(error =>
+                                    ParseError({ name, error })
+                                )
+                                |> IO.fromResult
+                        )
+                )
+                |> Js.Array.reduce(
+                    (accumulator, current) =>
+                        IO.flatMap(
+                            entries => IO.map(
+                                entry => [ entry, ...entries ],
+                                current
+                            ),
+                            accumulator
+                        ),
+                    IO.Pure([])
+                )
+        )
+};
+
+
+let readAboutPath = NodeFS.ReadFile.readFile;
+
+
+type parsed = {
+    about: string,
+    entries: list(parsedEntry)
+};
+
+
+type readAllError =
+    | AboutFileError(NodeFS.Error.t)
+    | EntriesDirectoryError(readEntriesDirectoryError);
+
+
+let readAll = (~aboutPath, ~entriesDirectory) =>
+    readEntriesDirectory(entriesDirectory)
+        |> IO.mapError(error => EntriesDirectoryError(error))
+        |> IO.flatMap(entries =>
+            readAboutPath(aboutPath)
+                |> IO.bimap(
+                    about => { about, entries },
+                    error => AboutFileError(error)
+                )
+        );
