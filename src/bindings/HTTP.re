@@ -1,6 +1,3 @@
-open Relude.Globals;
-
-
 module Request = {
     type t;
 
@@ -28,9 +25,8 @@ module Response = {
     let setContentLength = (length: int) =>
         setHeader(~key="Content-Length", ~value=Js.String.make(length));
     let setLastModified = timestamp => {
-        let date = Float.fromInt(timestamp)
-            |> Js.Date.fromFloat
-            |> Js.Date.toUTCString;
+        let date = Date.fromUnixTimestamp(timestamp)
+            |> Date.toUTCTimestamp;
         setHeader(~key="Last-Modified", ~value=date)
     };
 

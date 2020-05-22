@@ -29,20 +29,11 @@ let parseTimestamp = metadata =>
                 |> Js.Array.sliceFrom(1)
                 |> Js.Array.map(capture =>
                     Js.Nullable.toOption(capture)
-                        |> Option.flatMap(Float.fromString)
+                        |> Option.flatMap(Int.fromString)
                 );
             switch (captures) {
                 | [| Some(year), Some(month), Some(day), Some(hour), Some(minute) |] =>
-                    Js.Date.makeWithYMDHM(
-                        ~year,
-                        ~month,
-                        ~date=day,
-                        ~hours=hour,
-                        ~minutes=minute,
-                        ()
-                    )
-                        |> Js.Date.getTime
-                        |> Int.fromFloat
+                    Date.make(~year, ~month, ~day, ~hour, ~minute, ())
                         |. Ok
                 | _ => Error(Malformed)
             }
@@ -64,7 +55,7 @@ type parseEntryError =
 
 type parsedEntry = {
     title: string,
-    timestamp: int,
+    date: Date.t,
     tags: list(string),
     text: string
 };
@@ -77,9 +68,9 @@ let parseEntry = markdown => {
         parseTimestamp(metadata),
         parseTags(metadata)
     ) {
-        | (Some(title), Ok(timestamp), Some(tags)) => Ok({
+        | (Some(title), Ok(date), Some(tags)) => Ok({
             title,
-            timestamp,
+            date,
             tags,
             text
         })
