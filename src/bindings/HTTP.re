@@ -1,3 +1,6 @@
+open Relude.Globals;
+
+
 module Request = {
     type t;
 
@@ -21,6 +24,12 @@ module Response = {
     let setContentType = value => setHeader(~key="Content-Type", ~value);
     let setContentLength = (length: int) =>
         setHeader(~key="Content-Length", ~value=Js.String.make(length));
+    let setLastModified = timestamp => {
+        let date = Float.fromInt(timestamp)
+            |> Js.Date.fromFloat
+            |> Js.Date.toUTCString;
+        setHeader(~key="Last-Modified", ~value=date)
+    };
 
     external getStream: t => NodeStream.Writeable.t = "%identity";
 };

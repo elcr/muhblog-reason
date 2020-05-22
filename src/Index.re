@@ -1,6 +1,8 @@
 let main = () => {
-    let args = CLI.parseArguments();
-    Js.Console.log(args)
+    let { siteName }: CLI.arguments = CLI.parseArguments();
+
+    Server.make(~siteName)
+        |> Server.listen
 };
 
 

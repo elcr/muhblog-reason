@@ -18,10 +18,8 @@ let makeResponse = (route: option(Router.route)) =>
     };
 
 
-let make = () =>
+let make = (~siteName) => {
     HTTP.Server.make((request, response) => {
-        let startTime = Js.Date.now();
-
         HTTP.Request.getURL(request)
             |> Option.getOrElse("/")
             |> Js.String.sliceToEnd(~from=1)
@@ -33,8 +31,38 @@ let make = () =>
             |> Js.Array.filter(segment => Js.String.length(segment) >= 1)
             |> Router.route
             |> makeResponse
-            |> ignore
-    });
+            |> IO.tap((res: Response.t) => {
+                open HTTP;
+                open NodeStream;
+
+                let output = Response.getStream(response);
+
+                switch (res) {
+                    | Page({ data, status }) => {
+                        let body = Page.Render.render(
+                            ~siteName,
+                            ~pageData=data
+                        );
+                        let length = Buffer.byteLength(body);
+
+                        Response.setStatusCode(status, response);
+                        Response.setContentType("text/html; charset=utf-8", response);
+                        Response.setContentLength(length, response);
+                        Writeable.end_(~chunk=body, ~encoding="utf-8", output);
+                    }
+                    | Stream({ stream, type_, length, modified }) => {
+                        Response.setStatusCode(200, response);
+                        Option.getOrElse("application/octet-stream", type_)
+                            |. Response.setContentType(response);
+                        Response.setContentLength(length, response);
+                        Response.setLastModified(modified, response);
+                        Readable.pipe(output, stream);
+                    }
+                };
+            })
+            |> IO.unsafeRunAsync(ignore)
+    })
+};
 
 
 let listen = HTTP.Server.listen(
