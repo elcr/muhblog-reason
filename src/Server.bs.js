@@ -4,6 +4,7 @@
 var HTTP = require("./bindings/HTTP.bs.js");
 var Http = require("http");
 var Router = require("./Router.bs.js");
+var $$Response = require("./Response.bs.js");
 var Relude_IO = require("relude/src/Relude_IO.bs.js");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
 var Page__Render = require("./views/Page__Render.bs.js");
@@ -12,7 +13,6 @@ var AboutController = require("./controllers/AboutController.bs.js");
 var EntryController = require("./controllers/EntryController.bs.js");
 var IndexController = require("./controllers/IndexController.bs.js");
 var StaticController = require("./controllers/StaticController.bs.js");
-var NotFoundController = require("./controllers/NotFoundController.bs.js");
 var TagSearchController = require("./controllers/TagSearchController.bs.js");
 
 function splitURLSegments(url) {
@@ -24,9 +24,6 @@ function splitURLSegments(url) {
 }
 
 function makeResponse(param, route) {
-  if (route === undefined) {
-    return NotFoundController.response;
-  }
   var entries = param.entries;
   if (typeof route === "number") {
     return AboutController.makeResponse(param.about);
@@ -53,7 +50,7 @@ function make(siteName, data) {
                                     var startTime = Date.now();
                                     response.on("close", (function (param) {
                                             var status = response.statusCode;
-                                            var ms = Date.now() - startTime;
+                                            var ms = Date.now() - startTime | 0;
                                             console.log("" + (String(status) + (" " + (String(url) + (" " + (String(ms) + "ms"))))));
                                             
                                           }));
@@ -72,7 +69,13 @@ function make(siteName, data) {
                                     HTTP.$$Response.setContentLength(length)(response);
                                     response.end(body, "utf-8");
                                     
-                                  }))(makeResponse(data, Router.route(splitURLSegments(url)))));
+                                  }))(Relude_IO.handleError((function (param) {
+                                      return $$Response.notFound;
+                                    }), Relude_IO.flatMap((function (param) {
+                                          return makeResponse(data, param);
+                                        }), Relude_IO.fromOption((function (prim) {
+                                              
+                                            }), Router.route(splitURLSegments(url)))))));
               }));
 }
 
@@ -88,4 +91,4 @@ exports.splitURLSegments = splitURLSegments;
 exports.makeResponse = makeResponse;
 exports.make = make;
 exports.listen = listen;
-/* HTTP Not a pure module */
+/* http Not a pure module */

@@ -11,4 +11,7 @@ type t =
     });
 
 
-type io = Relude.IO.t(t, unit);
+let notFound = Page({
+    data: None,
+    status: 400
+});

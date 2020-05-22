@@ -13,21 +13,19 @@ let splitURLSegments = url =>
 
 let makeResponse = (
     ~data as { about, entries }: Parse.parsedData,
-    route: option(Router.route)
+    route: Router.route
 ) =>
     switch (route) {
-        | Some(Index({ page })) =>
+        | Index({ page }) =>
             IndexController.makeResponse(~entries, ~page)
-        | Some(TagSearch({ slug, page })) =>
+        | TagSearch({ slug, page }) =>
             TagSearchController.makeResponse(~entries, ~slug, ~page)
-        | Some(About) =>
+        | About =>
             AboutController.makeResponse(~about)
-        | Some(Entry({ year, month, day, slug })) =>
+        | Entry({ year, month, day, slug }) =>
             EntryController.makeResponse(~entries, ~year, ~month, ~day, ~slug)
-        | Some(Static({ directory, filename })) =>
+        | Static({ directory, filename }) =>
             StaticController.makeResponse(~directory, ~filename)
-        | None =>
-            NotFoundController.response
     };
 
 
@@ -37,17 +35,19 @@ let make = (~siteName, ~data: Parse.parsedData) =>
             |> Option.getOrElse("/");
         splitURLSegments(url)
             |> Router.route
-            |> makeResponse(~data)
+            |> IO.fromOption(ignore)
+            |> IO.flatMap(makeResponse(~data))
+            |> IO.handleError(() => Response.notFound)
             |> IO.tap((res: Response.t) => {
                 open HTTP;
                 open NodeStream;
 
-                let startTime = Js.Date.now();
+                let startTime = Date.unixTimestampNow();
                 let output = Response.getStream(response);
                 Writeable.on(
                     `close(() => {
                         let status = Response.getStatusCode(response);
-                        let ms = Js.Date.now() -. startTime;
+                        let ms = Date.unixTimestampNow() - startTime;
                         Js.Console.log({j|$status $url $(ms)ms|j})
                     }),
                     output
