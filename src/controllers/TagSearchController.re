@@ -1,6 +1,6 @@
 open Relude.Globals;
 
 
-let makeResponse = (~slug as _slug, ~page as _page) =>
+let makeResponse = (~entries, ~slug, ~page) =>
     Response.Page({ data: None, status: 200 })
         |. IO.Pure;

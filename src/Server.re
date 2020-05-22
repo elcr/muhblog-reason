@@ -1,16 +1,19 @@
 open Relude.Globals;
 
 
-let makeResponse = (route: option(Router.route)) =>
+let makeResponse = (
+    ~data as { about, entries }: Parse.parsedData,
+    route: option(Router.route)
+) =>
     switch (route) {
         | Some(Index({ page })) =>
-            IndexController.makeResponse(~page)
+            IndexController.makeResponse(~entries, ~page)
         | Some(TagSearch({ slug, page })) =>
-            TagSearchController.makeResponse(~slug, ~page)
+            TagSearchController.makeResponse(~entries, ~slug, ~page)
         | Some(About) =>
-            AboutController.makeResponse()
+            AboutController.makeResponse(~about)
         | Some(Entry({ year, month, day, slug })) =>
-            EntryController.makeResponse(~year, ~month, ~day, ~slug)
+            EntryController.makeResponse(~entries, ~year, ~month, ~day, ~slug)
         | Some(Static({ directory, filename })) =>
             StaticController.makeResponse(~directory, ~filename)
         | None =>
@@ -18,7 +21,7 @@ let makeResponse = (route: option(Router.route)) =>
     };
 
 
-let make = (~siteName) => {
+let make = (~siteName, ~data: Parse.parsedData) => {
     HTTP.Server.make((request, response) => {
         HTTP.Request.getURL(request)
             |> Option.getOrElse("/")
@@ -30,7 +33,7 @@ let make = (~siteName) => {
             )
             |> Js.Array.filter(segment => Js.String.length(segment) >= 1)
             |> Router.route
-            |> makeResponse
+            |> makeResponse(~data)
             |> IO.tap((res: Response.t) => {
                 open HTTP;
                 open NodeStream;

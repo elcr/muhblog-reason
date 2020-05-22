@@ -2,14 +2,63 @@
 'use strict';
 
 var CLI = require("./CLI.bs.js");
+var Parse = require("./Parse.bs.js");
 var Server = require("./Server.bs.js");
+var Relude_IO = require("relude/src/Relude_IO.bs.js");
+
+function printError(error) {
+  var message;
+  if (error.tag) {
+    var match = error[0];
+    switch (match.tag | 0) {
+      case /* ReadDirectoryError */0 :
+          switch (match[0].tag | 0) {
+            case /* NoSuchFileOrDirectory */7 :
+                message = "Entries path does not exist";
+                break;
+            case /* NotADirectory */8 :
+                message = "Entries path is not a directory";
+                break;
+            default:
+              message = "Error reading entries directory";
+          }
+          break;
+      case /* ReadEntryError */1 :
+          message = "Error reading entry: " + match[/* name */0];
+          break;
+      case /* ParseError */2 :
+          message = "Error parsing entry: " + match[/* name */0];
+          break;
+      
+    }
+  } else {
+    switch (error[0].tag | 0) {
+      case /* IsADirectory */5 :
+          message = "About path is a directory";
+          break;
+      case /* NoSuchFileOrDirectory */7 :
+          message = "About file does not exist";
+          break;
+      default:
+        message = "Error reading about file";
+    }
+  }
+  console.error(message);
+  
+}
 
 function main(param) {
   var match = CLI.parseArguments(undefined);
-  return Server.listen(Server.make(match.siteName));
+  var siteName = match.siteName;
+  return Relude_IO.unsafeRunAsync((function (prim) {
+                
+              }), Relude_IO.bitap(Server.listen, printError, Relude_IO.map((function (data) {
+                        return Server.make(siteName, data);
+                      }), Parse.readAndParseAll(match.aboutPath, match.entriesDirectory))));
 }
 
 main(undefined);
 
+exports.printError = printError;
 exports.main = main;
 /*  Not a pure module */

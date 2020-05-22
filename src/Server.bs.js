@@ -15,27 +15,28 @@ var StaticController = require("./controllers/StaticController.bs.js");
 var NotFoundController = require("./controllers/NotFoundController.bs.js");
 var TagSearchController = require("./controllers/TagSearchController.bs.js");
 
-function makeResponse(route) {
+function makeResponse(param, route) {
   if (route === undefined) {
     return NotFoundController.response;
   }
+  var entries = param.entries;
   if (typeof route === "number") {
-    return AboutController.makeResponse(undefined);
+    return AboutController.makeResponse(param.about);
   }
   switch (route.tag | 0) {
     case /* Index */0 :
-        return IndexController.makeResponse(route[/* page */0]);
+        return IndexController.makeResponse(entries, route[/* page */0]);
     case /* TagSearch */1 :
-        return TagSearchController.makeResponse(route[/* slug */0], route[/* page */1]);
+        return TagSearchController.makeResponse(entries, route[/* slug */0], route[/* page */1]);
     case /* Entry */2 :
-        return EntryController.makeResponse(route[/* year */0], route[/* month */1], route[/* day */2], route[/* slug */3]);
+        return EntryController.makeResponse(entries, route[/* year */0], route[/* month */1], route[/* day */2], route[/* slug */3]);
     case /* Static */3 :
         return StaticController.makeResponse(route[/* directory */0], route[/* filename */1]);
     
   }
 }
 
-function make(siteName) {
+function make(siteName, data) {
   return Http.createServer((function (request, response) {
                 return Relude_IO.unsafeRunAsync((function (prim) {
                               
@@ -55,7 +56,7 @@ function make(siteName) {
                                     HTTP.$$Response.setContentLength(length)(response);
                                     response.end(body, "utf-8");
                                     
-                                  }))(makeResponse(Router.route(Relude_Option.getOrElse("/", Caml_option.undefined_to_opt(request.url)).slice(1).split("/").map((function (segment) {
+                                  }))(makeResponse(data, Router.route(Relude_Option.getOrElse("/", Caml_option.undefined_to_opt(request.url)).slice(1).split("/").map((function (segment) {
                                                 return decodeURIComponent(segment).trim();
                                               })).filter((function (segment) {
                                               return segment.length >= 1;

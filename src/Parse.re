@@ -91,13 +91,13 @@ let parseEntry = markdown => {
 };
 
 
-type readEntriesDirectoryError =
+type readAndParseEntriesDirectoryError =
     | ReadDirectoryError(NodeFS.Error.t)
-    | ReadEntryError(NodeFS.Error.t)
+    | ReadEntryError({ name: string, error: NodeFS.Error.t })
     | ParseError({ name: string, error: parseEntryError });
 
 
-let readEntriesDirectory = directory => {
+let readAndParseEntriesDirectory = directory => {
     open NodeFS;
 
     ReadDir.readDir(directory)
@@ -112,7 +112,7 @@ let readEntriesDirectory = directory => {
                 |> Js.Array.map(({ name }: ReadDir.DirectoryEntry.t) =>
                     Node.Path.join2(directory, name)
                         |> ReadFile.readFile
-                        |> IO.mapError(error => ReadEntryError(error))
+                        |> IO.mapError(error => ReadEntryError({ name, error }))
                         |> IO.flatMap(text =>
                             parseEntry(text)
                                 |> Result.mapError(error =>
@@ -136,25 +136,25 @@ let readEntriesDirectory = directory => {
 };
 
 
-let readAboutPath = NodeFS.ReadFile.readFile;
+let readAndParseAboutPath = NodeFS.ReadFile.readFile;
 
 
-type parsed = {
+type parsedData = {
     about: string,
     entries: list(parsedEntry)
 };
 
 
-type readAllError =
+type readAndParseAllError =
     | AboutFileError(NodeFS.Error.t)
-    | EntriesDirectoryError(readEntriesDirectoryError);
+    | EntriesDirectoryError(readAndParseEntriesDirectoryError);
 
 
-let readAll = (~aboutPath, ~entriesDirectory) =>
-    readEntriesDirectory(entriesDirectory)
+let readAndParseAll = (~aboutPath, ~entriesDirectory) =>
+    readAndParseEntriesDirectory(entriesDirectory)
         |> IO.mapError(error => EntriesDirectoryError(error))
         |> IO.flatMap(entries =>
-            readAboutPath(aboutPath)
+            readAndParseAboutPath(aboutPath)
                 |> IO.bimap(
                     about => { about, entries },
                     error => AboutFileError(error)

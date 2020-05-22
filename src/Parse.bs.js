@@ -102,7 +102,7 @@ function parseEntry(markdown) {
   }
 }
 
-function readEntriesDirectory(directory) {
+function readAndParseEntriesDirectory(directory) {
   return Relude_IO.flatMap((function (entries) {
                 return entries.filter((function (entry) {
                                   if (entry.name.toLowerCase().endsWith(".md")) {
@@ -120,7 +120,10 @@ function readEntriesDirectory(directory) {
                                                                         ]);
                                                               }), parseEntry(text)));
                                             }), Curry._2(Relude_IO.mapError, (function (error) {
-                                                  return /* ReadEntryError */Block.__(1, [error]);
+                                                  return /* ReadEntryError */Block.__(1, [
+                                                            /* name */name,
+                                                            /* error */error
+                                                          ]);
                                                 }), NodeFS__ReadFile.readFile(undefined, Path.join(directory, name))));
                               })).reduce((function (accumulator, current) {
                               return Relude_IO.flatMap((function (entries) {
@@ -137,7 +140,7 @@ function readEntriesDirectory(directory) {
                   }), NodeFS__ReadDir.readDir(undefined, directory)));
 }
 
-function readAll(aboutPath, entriesDirectory) {
+function readAndParseAll(aboutPath, entriesDirectory) {
   return Relude_IO.flatMap((function (entries) {
                 return Relude_IO.bimap((function (about) {
                               return {
@@ -149,17 +152,17 @@ function readAll(aboutPath, entriesDirectory) {
                             }), NodeFS__ReadFile.readFile(undefined, aboutPath));
               }), Curry._2(Relude_IO.mapError, (function (error) {
                     return /* EntriesDirectoryError */Block.__(1, [error]);
-                  }), readEntriesDirectory(entriesDirectory)));
+                  }), readAndParseEntriesDirectory(entriesDirectory)));
 }
 
-var readAboutPath = NodeFS__ReadFile.readFile;
+var readAndParseAboutPath = NodeFS__ReadFile.readFile;
 
 exports.parseTitle = parseTitle;
 exports.matchDate = matchDate;
 exports.parseTimestamp = parseTimestamp;
 exports.parseTags = parseTags;
 exports.parseEntry = parseEntry;
-exports.readEntriesDirectory = readEntriesDirectory;
-exports.readAboutPath = readAboutPath;
-exports.readAll = readAll;
+exports.readAndParseEntriesDirectory = readAndParseEntriesDirectory;
+exports.readAndParseAboutPath = readAndParseAboutPath;
+exports.readAndParseAll = readAndParseAll;
 /* path Not a pure module */
