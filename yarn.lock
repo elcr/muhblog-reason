@@ -634,7 +634,15 @@ browserify-zlib@^0.2.0:
     bs-platform "^7.2.2"
     bs-stdlib-shims "^0.1.0"
 
-bs-css@^12.2.0:
+bs-css-emotion@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/bs-css-emotion/-/bs-css-emotion-1.2.0.tgz#44c0b74123744d231bc36ac821cd6269f29649a3"
+  integrity sha512-mcydi8OdmwvwutlEYYe1x4K9lGC3fYXxIeNcXvICesyZ8tWZQNIVbdSbUkL/gRSbz+vBcFKQDQ53TY/y7mIYQw==
+  dependencies:
+    bs-css "12.2.0"
+    emotion "^10.0.7"
+
+bs-css@12.2.0:
   version "12.2.0"
   resolved "https://registry.yarnpkg.com/bs-css/-/bs-css-12.2.0.tgz#926e758d7f95c02f516505ecdcd855e1d9dcb2a0"
   integrity sha512-JDaJAc8XKYZA05G8xVuDhB184yGKgNajdUloPC+OK+J8gGTnv8pfrhWKsFFKry87eJN4kKHhgsbXaN5U70g+3Q==
@@ -1218,7 +1226,7 @@ emotion-server@^10.0.27:
   dependencies:
     create-emotion-server "10.0.27"
 
-emotion@^10.0.27:
+emotion@^10.0.27, emotion@^10.0.7:
   version "10.0.27"
   resolved "https://registry.yarnpkg.com/emotion/-/emotion-10.0.27.tgz#f9ca5df98630980a23c819a56262560562e5d75e"
   integrity sha512-2xdDzdWWzue8R8lu4G76uWX5WhyQuzATon9LmNeCy/2BHVC6dsEpfhN1a0qhELgtDVdjyEA6J8Y/VlI5ZnaH0g==
