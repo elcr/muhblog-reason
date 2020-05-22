@@ -18,26 +18,26 @@ function makeResponse(entries, year, month, day, slug) {
   var timestamp = $$Date.make(year, month, day, undefined, undefined, undefined).getTime();
   return Relude_IO.map((function (entry) {
                 return /* Page */Block.__(0, [
-                          /* data *//* Entry */Block.__(3, [
-                              /* title */entry.title,
-                              /* timestamp */timestamp,
-                              /* text */entry.text,
-                              /* tags */entry.tags,
-                              /* previous */Relude_Option.map((function (entry) {
-                                      return entry.title;
-                                    }), Curry._2(Relude_List.find, (function (entry) {
-                                          return dayTimestamp(entry.date) < timestamp;
-                                        }), Relude_List.sortBy((function (a, b) {
-                                              return Curry._2(Relude_Int.compare, dayTimestamp(b.date), dayTimestamp(a.date));
-                                            }), entries))),
-                              /* next */Relude_Option.map((function (entry) {
-                                      return entry.title;
-                                    }), Curry._2(Relude_List.find, (function (entry) {
-                                          return dayTimestamp(entry.date) > timestamp;
-                                        }), Relude_List.sortBy((function (a, b) {
-                                              return Curry._2(Relude_Int.compare, dayTimestamp(a.date), dayTimestamp(b.date));
-                                            }), entries)))
-                            ]),
+                          /* data *//* Entry */Block.__(3, [{
+                                title: entry.title,
+                                date: entry.date,
+                                text: entry.text,
+                                tags: entry.tags,
+                                previous: Relude_Option.map((function (entry) {
+                                        return entry.title;
+                                      }), Curry._2(Relude_List.find, (function (entry) {
+                                            return dayTimestamp(entry.date) < timestamp;
+                                          }), Relude_List.sortBy((function (a, b) {
+                                                return Curry._2(Relude_Int.compare, b.date.getTime(), a.date.getTime());
+                                              }), entries))),
+                                next: Relude_Option.map((function (entry) {
+                                        return entry.title;
+                                      }), Curry._2(Relude_List.find, (function (entry) {
+                                            return dayTimestamp(entry.date) > timestamp;
+                                          }), Relude_List.sortBy((function (a, b) {
+                                                return Curry._2(Relude_Int.compare, a.date.getTime(), b.date.getTime());
+                                              }), entries)))
+                              }]),
                           /* status */200
                         ]);
               }), Relude_IO.fromOption((function (prim) {

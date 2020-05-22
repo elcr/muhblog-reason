@@ -26,12 +26,15 @@ let makeResponse = (~entries, ~year, ~month, ~day, ~slug) => {
                 status: 200,
                 data: Some(Entry({
                     title: entry.title,
-                    timestamp,
+                    date: entry.date,
                     text: entry.text,
                     tags: entry.tags,
                     previous: entries
                         |> List.sortBy((a: Parse.parsedEntry, b) =>
-                            Int.compare(dayTimestamp(b.date), dayTimestamp(a.date)),
+                            Int.compare(
+                                Date.toUnixTimestamp(b.date),
+                                Date.toUnixTimestamp(a.date)
+                            )
                         )
                         |> List.find((entry: Parse.parsedEntry) =>
                             dayTimestamp(entry.date) < timestamp
@@ -39,7 +42,10 @@ let makeResponse = (~entries, ~year, ~month, ~day, ~slug) => {
                         |> Option.map((entry: Parse.parsedEntry) => entry.title),
                     next: entries
                         |> List.sortBy((a: Parse.parsedEntry, b) =>
-                            Int.compare(dayTimestamp(a.date), dayTimestamp(b.date)),
+                            Int.compare(
+                                Date.toUnixTimestamp(a.date),
+                                Date.toUnixTimestamp(b.date)
+                            )
                         )
                         |> List.find((entry: Parse.parsedEntry) =>
                             dayTimestamp(entry.date) > timestamp
