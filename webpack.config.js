@@ -1,6 +1,4 @@
 const path = require('path')
-const nodeExternals = require('webpack-node-externals')
-
 
 const sourceDirectory = path.join(__dirname, 'src')
 const outputDirectory = path.join(__dirname, 'dist')
@@ -24,14 +22,24 @@ const config = {
     module: {
         rules: [
             {
-                test: /\.css$/,
+                test: /\.s?css$/,
                 use: [
                     {
                         loader: 'raw-loader',
                         options: {
                             esModule: false
                         }
-                    }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: () => [
+                                require('precss'),
+                                require('autoprefixer')
+                            ]
+                        }
+                    },
+                    {loader: 'sass-loader'}
                 ],
             },
             {
@@ -41,13 +49,6 @@ const config = {
             }
         ]
     },
-    externals: [
-        nodeExternals({
-            whitelist: [
-                /\.css$/
-            ]
-        })
-    ],
     mode: 'development'
 }
 

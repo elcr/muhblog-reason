@@ -1,2 +1,2 @@
 [@bs.module]
-external css: string = "bootstrap/dist/css/bootstrap-reboot.min.css"
+external css: string = "bootstrap/scss/bootstrap-reboot.scss";
