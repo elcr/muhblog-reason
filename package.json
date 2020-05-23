@@ -29,7 +29,8 @@
     "reason-react": "^0.8.0",
     "relude": "ssh://git@github.com:elcr/relude-without-bisect.git",
     "slugify-bs": "ssh://git@github.com:elcr/slugify-bs.git",
-    "squel": "^5.13.0"
+    "squel": "^5.13.0",
+    "strftime": "^0.10.0"
   },
   "devDependencies": {
     "autoprefixer": "^9.8.0",

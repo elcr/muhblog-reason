@@ -24,7 +24,10 @@ var className = Curry._1(Css.style, /* :: */[
             Css.backgroundColor(Style.backgroundColour),
             /* :: */[
               Css.color(Style.textColour),
-              /* [] */0
+              /* :: */[
+                Css.fontSize(Css.rem(0.875)),
+                /* [] */0
+              ]
             ]
           ]
         ]

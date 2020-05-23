@@ -15,12 +15,20 @@ var textColour = Css.rgb(173, 175, 174);
 
 var linkColour = Css.rgb(222, 226, 230);
 
-var border = Css.borderBottom(Css.px(1), /* solid */12956715, Css.rgb(40, 40, 40));
+var border_000 = Css.px(1);
+
+var border_002 = Css.rgb(40, 40, 40);
+
+var border = /* tuple */[
+  border_000,
+  /* solid */12956715,
+  border_002
+];
 
 var smallCapsClassName = Curry._1(Css.style, /* :: */[
       Css.fontFamily(/* serif */-97640579),
       /* :: */[
-        Css.fontVariant(/* smallCaps */-386684792),
+        Css.unsafe("font-variant", "small-caps"),
         /* [] */0
       ]
     ]);

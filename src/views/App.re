@@ -8,7 +8,8 @@ module Root = {
             flexDirection(column),
             minHeight(vh(100.0)),
             backgroundColor(Style.backgroundColour),
-            color(Style.textColour)
+            color(Style.textColour),
+            fontSize(rem(0.875))
         ])
     );
 

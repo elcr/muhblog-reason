@@ -1,27 +1,3 @@
-module Link = {
-    let baseClassName = Css.(
-        style([
-            padding2(
-                ~v=rem(0.5),
-                ~h=rem(0.625)
-            )
-        ])
-    );
-
-    [@react.component]
-    let make = (~className=?, ~route, ~activeRoute, ~children) => {
-        let className = Style.combineClassNames([
-            Some(baseClassName),
-            className
-        ]);
-
-        <RouteLink className route activeRoute>
-            children
-        </RouteLink>
-    };
-};
-
-
 module HomeLink = {
     let className = Css.(
         style([
@@ -32,10 +8,10 @@ module HomeLink = {
     );
 
     [@react.component]
-    let make = (~activeRoute, ~children) =>
-        <Link className activeRoute route=Router.Index({ page: 1 })>
+    let make = (~children) =>
+        <RouteLink className route=Router.Index({ page: 1 })>
             children
-        </Link>;
+        </RouteLink>;
 };
 
 
@@ -63,7 +39,12 @@ let className = Css.(
         style([
             display(flexBox),
             justifyContent(center),
-            Style.border
+            padding2(
+                ~v=rem(0.5),
+                ~h=zero
+            ),
+            marginBottom(rem(1.0)),
+            Relude.Function.uncurry3(borderBottom, Style.border)
         ])
     ])
 );
@@ -73,11 +54,11 @@ let className = Css.(
 let make = (~siteName, ~activeRoute) =>
     <nav className>
         <Container>
-            <HomeLink activeRoute>
+            <HomeLink>
                 (siteName |> React.string)
             </HomeLink>
-            <Link activeRoute route=Router.About>
+            <RouteLink activeRoute=?activeRoute route=Router.About>
                 ("About" |> React.string)
-            </Link>
+            </RouteLink>
         </Container>
     </nav>;

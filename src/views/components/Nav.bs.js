@@ -6,36 +6,8 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Style from "../Style.bs.js";
 import * as React from "react";
 import * as RouteLink from "./RouteLink.bs.js";
-
-var baseClassName = Curry._1(Css.style, /* :: */[
-      Css.padding2(Css.rem(0.5), Css.rem(0.625)),
-      /* [] */0
-    ]);
-
-function Nav$Link(Props) {
-  var className = Props.className;
-  var route = Props.route;
-  var activeRoute = Props.activeRoute;
-  var children = Props.children;
-  var className$1 = Style.combineClassNames(/* :: */[
-        baseClassName,
-        /* :: */[
-          className,
-          /* [] */0
-        ]
-      ]);
-  return React.createElement(RouteLink.make, {
-              route: route,
-              activeRoute: activeRoute,
-              className: className$1,
-              children: children
-            });
-}
-
-var Link = {
-  baseClassName: baseClassName,
-  make: Nav$Link
-};
+import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
+import * as Relude_Function from "relude/src/Relude_Function.bs.js";
 
 var className = Curry._1(Css.style, /* :: */[
       Css.marginRight(Css.auto),
@@ -49,12 +21,10 @@ var className = Curry._1(Css.style, /* :: */[
     ]);
 
 function Nav$HomeLink(Props) {
-  var activeRoute = Props.activeRoute;
   var children = Props.children;
-  return React.createElement(Nav$Link, {
-              className: className,
+  return React.createElement(RouteLink.make, {
               route: /* Index */Block.__(0, [/* page */1]),
-              activeRoute: activeRoute,
+              className: className,
               children: children
             });
 }
@@ -95,8 +65,14 @@ var className$2 = Curry._1(Css.merge, /* :: */[
               /* :: */[
                 Css.justifyContent(Css.center),
                 /* :: */[
-                  Style.border,
-                  /* [] */0
+                  Css.padding2(Css.rem(0.5), Css.zero),
+                  /* :: */[
+                    Css.marginBottom(Css.rem(1.0)),
+                    /* :: */[
+                      Relude_Function.uncurry3(Css.borderBottom, Style.border),
+                      /* [] */0
+                    ]
+                  ]
                 ]
               ]
             ]),
@@ -107,28 +83,29 @@ var className$2 = Curry._1(Css.merge, /* :: */[
 function Nav(Props) {
   var siteName = Props.siteName;
   var activeRoute = Props.activeRoute;
+  var tmp = {
+    route: /* About */0,
+    children: "About"
+  };
+  if (activeRoute !== undefined) {
+    tmp.activeRoute = Caml_option.valFromOption(activeRoute);
+  }
   return React.createElement("nav", {
               className: className$2
             }, React.createElement(Nav$Container, {
                   children: null
                 }, React.createElement(Nav$HomeLink, {
-                      activeRoute: activeRoute,
                       children: siteName
-                    }), React.createElement(Nav$Link, {
-                      route: /* About */0,
-                      activeRoute: activeRoute,
-                      children: "About"
-                    })));
+                    }), React.createElement(RouteLink.make, tmp)));
 }
 
 var make = Nav;
 
 export {
-  Link ,
   HomeLink ,
   Container ,
   className$2 as className,
   make ,
   
 }
-/* baseClassName Not a pure module */
+/* className Not a pure module */

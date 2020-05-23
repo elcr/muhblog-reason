@@ -19,7 +19,7 @@ let activeClassName = Css.style(hoverStyles);
 
 
 [@react.component]
-let make = (~route, ~activeRoute, ~className=?, ~children) => {
+let make = (~route, ~activeRoute=?, ~className=?, ~children) => {
     let className = Style.combineClassNames([
         Some(baseClassName),
         className,

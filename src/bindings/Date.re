@@ -36,6 +36,10 @@ external toUTCTimestamp: t => string = "toUTCString";
 
 
 [@bs.send]
+external toISOTimestamp: t => string = "toISOString";
+
+
+[@bs.send]
 external getYear: t => int = "getFullYear";
 
 
