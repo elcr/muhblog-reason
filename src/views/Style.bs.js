@@ -2,92 +2,41 @@
 
 import * as Css from "bs-css-emotion/src/Css.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
+import * as Relude_List from "relude/src/Relude_List.bs.js";
+import * as Relude_Function from "relude/src/Relude_Function.bs.js";
 
-var blue = Css.rgb(25, 116, 195);
-
-var grey1 = Css.rgb(249, 249, 250);
-
-var grey2 = Css.rgb(233, 236, 239);
-
-var grey3 = Css.rgb(222, 226, 230);
-
-var grey4 = Css.rgb(206, 212, 218);
-
-var grey5 = Css.rgb(173, 181, 189);
-
-var grey6 = Css.rgb(108, 117, 125);
-
-var grey7 = Css.rgb(73, 80, 87);
-
-var grey8 = Css.rgb(52, 58, 64);
-
-var grey9 = Css.rgb(33, 37, 41);
-
-var desktopColumnWidth = Css.width(Css.rem(37.5));
-
-var partial_arg = "(min-width: " + (String(37.5) + "rem)");
+var desktopColumnWidth = Css.rem(50.0);
 
 function desktopMediaQuery(param) {
-  return Css.media(partial_arg, param);
+  return Css.media("(min-width: 37.5rem)", param);
 }
 
-function registerGlobalStyles(param) {
-  Curry._2(Css.$$global, "a", /* :: */[
-        Css.textDecoration(Css.none),
-        /* :: */[
-          Css.color(blue),
-          /* [] */0
-        ]
-      ]);
-  var codeStyle_000 = Css.fontSize(Css.rem(0.875));
-  var codeStyle_001 = /* :: */[
-    Css.fontFamily(/* monospace */-555363901),
-    /* :: */[
-      Css.backgroundColor(grey2),
-      /* [] */0
-    ]
-  ];
-  var codeStyle = /* :: */[
-    codeStyle_000,
-    codeStyle_001
-  ];
-  Curry._2(Css.$$global, "code", codeStyle);
-  Curry._2(Css.$$global, "pre", /* :: */[
-        Css.padding(Css.rem(0.625)),
-        /* :: */[
-          Css.overflow(Css.auto),
-          codeStyle
-        ]
-      ]);
-  return Curry._2(Css.$$global, "h1 code, h2 code, h3 code", /* :: */[
-              Css.fontSize(Css.inherit_),
-              /* [] */0
-            ]);
+var textColour = Css.rgb(173, 175, 174);
+
+var linkColour = Css.rgb(222, 226, 230);
+
+var borderColour = Css.rgb(40, 40, 40);
+
+var border = Css.borderBottom(Css.px(1), /* solid */12956715, borderColour);
+
+function combineClassNames(classNames) {
+  return Curry._1(Css.merge, Relude_List.mapOption(Relude_Function.identity, classNames));
 }
 
-var darkBorderColour = grey2;
+var backgroundColour = Css.black;
 
-var lightBorderColour = grey3;
-
-var desktopColumnRem = 37.5;
+var linkHoverColour = Css.white;
 
 export {
-  blue ,
-  grey1 ,
-  grey2 ,
-  grey3 ,
-  grey4 ,
-  grey5 ,
-  grey6 ,
-  grey7 ,
-  grey8 ,
-  grey9 ,
-  darkBorderColour ,
-  lightBorderColour ,
-  desktopColumnRem ,
   desktopColumnWidth ,
   desktopMediaQuery ,
-  registerGlobalStyles ,
+  backgroundColour ,
+  textColour ,
+  linkColour ,
+  linkHoverColour ,
+  borderColour ,
+  border ,
+  combineClassNames ,
   
 }
-/* blue Not a pure module */
+/* desktopColumnWidth Not a pure module */

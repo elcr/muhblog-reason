@@ -4,7 +4,7 @@ import * as Block from "bs-platform/lib/es6/block.js";
 
 var notFound = /* Page */Block.__(0, [
     /* data */undefined,
-    /* status */400
+    /* status */404
   ]);
 
 export {

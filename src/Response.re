@@ -13,5 +13,5 @@ type t =
 
 let notFound = Page({
     data: None,
-    status: 400
+    status: 404
 });

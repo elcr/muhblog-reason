@@ -40,3 +40,21 @@ type t =
     | TagSearch(tagSearchData)
     | About(aboutData)
     | Entry(entryData);
+
+
+let toRoute = pageData: Router.route =>
+    switch (pageData) {
+        | Index({ page }) =>
+            Index({ page: page })
+        | TagSearch({ tag, page }) =>
+            TagSearch({ slug: Utils.slug(tag), page })
+        | About(_) =>
+            About
+        | Entry({ date, title }) =>
+            Entry({
+                year: Date.getYear(date),
+                month: Date.getMonth(date),
+                day: Date.getDay(date),
+                slug: Utils.slug(title)
+            })
+    };

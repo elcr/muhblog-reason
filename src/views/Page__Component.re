@@ -16,7 +16,9 @@ module Root = {
         style([
             display(flexBox),
             flexDirection(column),
-            minHeight(vh(100.0))
+            minHeight(vh(100.0)),
+            backgroundColor(Style.backgroundColour),
+            color(Style.textColour)
         ])
     );
 
@@ -31,6 +33,7 @@ module Root = {
 [@react.component]
 let make = (~siteName, ~pageData) => {
     let title = formatTitle(~siteName, pageData);
+    let activeRoute = Option.map(PageData.toRoute, pageData);
     let content = switch (pageData) {
         | Some(Index(data)) => <IndexPage data/>
         | Some(TagSearch(data)) => <TagSearchPage data/>
@@ -50,6 +53,7 @@ let make = (~siteName, ~pageData) => {
             </head>
             <body>
                 <Root>
+                    <Nav siteName activeRoute/>
                     content
                 </Root>
             </body>
