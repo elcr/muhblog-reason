@@ -2,6 +2,7 @@ module Container = {
     let className = Css.(
         style([
             display(flexBox),
+            flexGrow(1.0),
             justifyContent(center)
         ])
     );

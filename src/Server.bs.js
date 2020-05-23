@@ -2,7 +2,7 @@
 
 import * as HTTP from "./bindings/HTTP.bs.js";
 import * as Http from "http";
-import * as Render from "./views/Render.bs.js";
+import * as Render from "./Render.bs.js";
 import * as Router from "./Router.bs.js";
 import * as $$Response from "./Response.bs.js";
 import * as Relude_IO from "relude/src/Relude_IO.bs.js";

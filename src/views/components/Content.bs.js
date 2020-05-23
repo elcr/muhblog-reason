@@ -8,8 +8,11 @@ import * as React from "react";
 var className = Curry._1(Css.style, /* :: */[
       Css.display(Css.flexBox),
       /* :: */[
-        Css.justifyContent(Css.center),
-        /* [] */0
+        Css.flexGrow(1.0),
+        /* :: */[
+          Css.justifyContent(Css.center),
+          /* [] */0
+        ]
       ]
     ]);
 
