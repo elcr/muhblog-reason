@@ -1,3 +1,6 @@
+open Relude.Globals;
+
+
 type t = Js.Date.t;
 
 

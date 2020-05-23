@@ -2,13 +2,79 @@
 'use strict';
 
 var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var Utils = require("../Utils.bs.js");
+var Constants = require("../Constants.bs.js");
+var Relude_IO = require("relude/src/Relude_IO.bs.js");
+var Caml_int32 = require("bs-platform/lib/js/caml_int32.js");
+var Relude_Int = require("relude/src/Relude_Int.bs.js");
+var Relude_List = require("relude/src/Relude_List.bs.js");
+var Relude_Option = require("relude/src/Relude_Option.bs.js");
 
 function makeResponse(entries, slug, page) {
-  return /* Pure */Block.__(0, [/* Page */Block.__(0, [
-                /* data */undefined,
-                /* status */200
-              ])]);
+  return Relude_IO.fromOption((function (prim) {
+                
+              }), Curry._2(Relude_Option.flatMap, (function (param) {
+                    var tag = param[2];
+                    var filteredEntries = param[0];
+                    return Relude_Option.map((function (pageEntries) {
+                                  return /* Page */Block.__(0, [
+                                            /* data *//* TagSearch */Block.__(1, [{
+                                                  tag: tag,
+                                                  page: page,
+                                                  total: Curry._1(Relude_List.length, filteredEntries),
+                                                  entries: Relude_List.map((function (entry) {
+                                                            return {
+                                                                    title: entry.title,
+                                                                    date: entry.date,
+                                                                    text: entry.text
+                                                                  };
+                                                          }))(pageEntries)
+                                                }]),
+                                            /* status */200
+                                          ]);
+                                }), Relude_Option.filter((function (pageEntries) {
+                                        return Curry._1(Relude_List.length, pageEntries) !== 0;
+                                      }))(Relude_List.take(Constants.entriesPerPage, param[1])));
+                  }), Curry._2(Relude_Option.flatMap, (function (param) {
+                        var tag = param[1];
+                        var filteredEntries = param[0];
+                        return Relude_Option.map((function (param) {
+                                      return /* tuple */[
+                                              filteredEntries,
+                                              param[1],
+                                              tag
+                                            ];
+                                    }), Relude_List.splitAt(Caml_int32.imul(page - 1 | 0, Constants.entriesPerPage), Relude_List.sortBy((function (a, b) {
+                                              return Curry._2(Relude_Int.compare, b.date.getTime(), a.date.getTime());
+                                            }), filteredEntries)));
+                      }), Relude_List.foldLeft((function (accumulator, entry) {
+                              var tag = Curry._2(Relude_List.find, (function (tag) {
+                                      return Curry._1(Utils.slug(undefined), tag) === slug;
+                                    }), entry.tags);
+                              if (tag !== undefined) {
+                                if (accumulator !== undefined) {
+                                  return /* tuple */[
+                                          /* :: */[
+                                            entry,
+                                            accumulator[0]
+                                          ],
+                                          tag
+                                        ];
+                                } else {
+                                  return /* tuple */[
+                                          /* :: */[
+                                            entry,
+                                            /* [] */0
+                                          ],
+                                          tag
+                                        ];
+                                }
+                              } else {
+                                return accumulator;
+                              }
+                            }), undefined)(entries))));
 }
 
 exports.makeResponse = makeResponse;
-/* No side effect */
+/* Utils Not a pure module */

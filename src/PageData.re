@@ -15,6 +15,7 @@ type indexData = {
 type tagSearchData = {
     tag: string,
     page: int,
+    total: int,
     entries: list(indexEntry)
 };
 
