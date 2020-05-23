@@ -24,10 +24,10 @@ function setContentLength(length) {
     });
 }
 
-function setLastModified(timestamp) {
-  var date = new Date(timestamp).toUTCString();
+function setLastModified(date) {
+  var partial_arg = date.toUTCString();
   return (function (param) {
-      param.setHeader("Last-Modified", date);
+      param.setHeader("Last-Modified", partial_arg);
       
     });
 }

@@ -7,7 +7,7 @@ type t =
         stream: NodeStream.Readable.t,
         type_: option(string),
         length: int,
-        modified: int
+        modified: Date.t
     });
 
 

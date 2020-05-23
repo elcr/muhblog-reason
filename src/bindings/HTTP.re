@@ -24,11 +24,8 @@ module Response = {
     let setContentType = value => setHeader(~key="Content-Type", ~value);
     let setContentLength = (length: int) =>
         setHeader(~key="Content-Length", ~value=Js.String.make(length));
-    let setLastModified = timestamp => {
-        let date = Date.fromUnixTimestamp(timestamp)
-            |> Date.toUTCTimestamp;
-        setHeader(~key="Last-Modified", ~value=date)
-    };
+    let setLastModified = date =>
+        setHeader(~key="Last-Modified", ~value=Date.toUTCTimestamp(date));
 
     external getStream: t => NodeStream.Writeable.t = "%identity";
 };
