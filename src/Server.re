@@ -55,7 +55,7 @@ let make = (~siteName, ~data: Parse.parsedData) =>
 
                 switch (res) {
                     | Page({ data, status }) => {
-                        let body = Page.Render.render(
+                        let body = Render.render(
                             ~siteName,
                             ~pageData=data
                         );

@@ -2,11 +2,11 @@
 
 import * as HTTP from "./bindings/HTTP.bs.js";
 import * as Http from "http";
+import * as Render from "./views/Render.bs.js";
 import * as Router from "./Router.bs.js";
 import * as $$Response from "./Response.bs.js";
 import * as Relude_IO from "relude/src/Relude_IO.bs.js";
 import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
-import * as Page__Render from "./views/Page__Render.bs.js";
 import * as Relude_Option from "relude/src/Relude_Option.bs.js";
 import * as AboutController from "./controllers/AboutController.bs.js";
 import * as EntryController from "./controllers/EntryController.bs.js";
@@ -61,7 +61,7 @@ function make(siteName, data) {
                                       res[/* stream */0].pipe(response);
                                       return ;
                                     }
-                                    var body = Page__Render.render(siteName, res[/* data */0]);
+                                    var body = Render.render(siteName, res[/* data */0]);
                                     var length = Buffer.byteLength(body);
                                     HTTP.$$Response.setStatusCode(res[/* status */1], response);
                                     HTTP.$$Response.setContentType("text/html; charset=utf-8")(response);

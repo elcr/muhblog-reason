@@ -41,12 +41,10 @@ module HomeLink = {
 
 module Container = {
     let className = Css.(
-        style([
-            display(flexBox),
-            alignItems(center),
-            width(pct(100.0)),
-            Style.desktopMediaQuery([
-                maxWidth(Style.desktopColumnWidth)
+        merge([
+            Style.centredColumnClassName,
+            style([
+                alignItems(center)
             ])
         ])
     );
@@ -60,12 +58,13 @@ module Container = {
 
 
 let className = Css.(
-    style([
-        display(flexBox),
-        justifyContent(center),
-        Style.border,
-        fontFamily(`serif),
-        fontVariant(`smallCaps)
+    merge([
+        Style.smallCapsClassName,
+        style([
+            display(flexBox),
+            justifyContent(center),
+            Style.border
+        ])
     ])
 );
 

@@ -1,26 +1,30 @@
+open Relude.Globals;
+
+
+let hoverStyles = Css.([
+    textDecoration(none),
+    color(Style.linkHoverColour)
+])
+
+
 let baseClassName = Css.(
     style([
-        textDecoration(none),
         color(Style.linkColour),
-        hover([
-            color(Style.linkHoverColour)
-        ])
+        hover(hoverStyles)
     ])
 );
 
 
+let activeClassName = Css.style(hoverStyles);
+
+
 [@react.component]
-let make = (~route, ~activeRoute, ~className=?, ~activeClassName=?, ~children) => {
-    let activeClassName = switch (activeRoute, activeClassName) {
-        | (Some(activeRoute), Some(_)) when route == activeRoute =>
-            activeClassName
-        | _ =>
-            None
-    };
+let make = (~route, ~activeRoute, ~className=?, ~children) => {
     let className = Style.combineClassNames([
         Some(baseClassName),
         className,
-        activeClassName
+        Option.filter(activeRoute => route == activeRoute, activeRoute)
+            |> Option.map(_ => activeClassName)
     ]);
     let href = Router.build(route);
 

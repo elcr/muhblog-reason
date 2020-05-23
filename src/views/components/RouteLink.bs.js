@@ -6,34 +6,45 @@ import * as Style from "../Style.bs.js";
 import * as React from "react";
 import * as Router from "../../Router.bs.js";
 import * as Caml_obj from "bs-platform/lib/es6/caml_obj.js";
+import * as Relude_Option from "relude/src/Relude_Option.bs.js";
+
+var hoverStyles_000 = Css.textDecoration(Css.none);
+
+var hoverStyles_001 = /* :: */[
+  Css.color(Style.linkHoverColour),
+  /* [] */0
+];
+
+var hoverStyles = /* :: */[
+  hoverStyles_000,
+  hoverStyles_001
+];
 
 var baseClassName = Curry._1(Css.style, /* :: */[
-      Css.textDecoration(Css.none),
+      Css.color(Style.linkColour),
       /* :: */[
-        Css.color(Style.linkColour),
-        /* :: */[
-          Css.hover(/* :: */[
-                Css.color(Style.linkHoverColour),
-                /* [] */0
-              ]),
-          /* [] */0
-        ]
+        Css.hover(hoverStyles),
+        /* [] */0
       ]
     ]);
+
+var activeClassName = Curry._1(Css.style, hoverStyles);
 
 function RouteLink(Props) {
   var route = Props.route;
   var activeRoute = Props.activeRoute;
   var className = Props.className;
-  var activeClassName = Props.activeClassName;
   var children = Props.children;
-  var activeClassName$1 = activeRoute !== undefined && activeClassName !== undefined && Caml_obj.caml_equal(route, activeRoute) ? activeClassName : undefined;
   var className$1 = Style.combineClassNames(/* :: */[
         baseClassName,
         /* :: */[
           className,
           /* :: */[
-            activeClassName$1,
+            Relude_Option.map((function (param) {
+                    return activeClassName;
+                  }), Relude_Option.filter((function (activeRoute) {
+                          return Caml_obj.caml_equal(route, activeRoute);
+                        }))(activeRoute)),
             /* [] */0
           ]
         ]
@@ -48,8 +59,10 @@ function RouteLink(Props) {
 var make = RouteLink;
 
 export {
+  hoverStyles ,
   baseClassName ,
+  activeClassName ,
   make ,
   
 }
-/* baseClassName Not a pure module */
+/* hoverStyles Not a pure module */

@@ -64,20 +64,14 @@ var HomeLink = {
   make: Nav$HomeLink
 };
 
-var className$1 = Curry._1(Css.style, /* :: */[
-      Css.display(Css.flexBox),
+var className$1 = Curry._1(Css.merge, /* :: */[
+      Style.centredColumnClassName,
       /* :: */[
-        Css.alignItems(Css.center),
-        /* :: */[
-          Css.width(Css.pct(100.0)),
-          /* :: */[
-            Style.desktopMediaQuery(/* :: */[
-                  Css.maxWidth(Style.desktopColumnWidth),
-                  /* [] */0
-                ]),
-            /* [] */0
-          ]
-        ]
+        Curry._1(Css.style, /* :: */[
+              Css.alignItems(Css.center),
+              /* [] */0
+            ]),
+        /* [] */0
       ]
     ]);
 
@@ -93,20 +87,20 @@ var Container = {
   make: Nav$Container
 };
 
-var className$2 = Curry._1(Css.style, /* :: */[
-      Css.display(Css.flexBox),
+var className$2 = Curry._1(Css.merge, /* :: */[
+      Style.smallCapsClassName,
       /* :: */[
-        Css.justifyContent(Css.center),
-        /* :: */[
-          Style.border,
-          /* :: */[
-            Css.fontFamily(/* serif */-97640579),
-            /* :: */[
-              Css.fontVariant(/* smallCaps */-386684792),
-              /* [] */0
-            ]
-          ]
-        ]
+        Curry._1(Css.style, /* :: */[
+              Css.display(Css.flexBox),
+              /* :: */[
+                Css.justifyContent(Css.center),
+                /* :: */[
+                  Style.border,
+                  /* [] */0
+                ]
+              ]
+            ]),
+        /* [] */0
       ]
     ]);
 

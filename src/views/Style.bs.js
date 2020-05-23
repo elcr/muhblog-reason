@@ -15,9 +15,29 @@ var textColour = Css.rgb(173, 175, 174);
 
 var linkColour = Css.rgb(222, 226, 230);
 
-var borderColour = Css.rgb(40, 40, 40);
+var border = Css.borderBottom(Css.px(1), /* solid */12956715, Css.rgb(40, 40, 40));
 
-var border = Css.borderBottom(Css.px(1), /* solid */12956715, borderColour);
+var smallCapsClassName = Curry._1(Css.style, /* :: */[
+      Css.fontFamily(/* serif */-97640579),
+      /* :: */[
+        Css.fontVariant(/* smallCaps */-386684792),
+        /* [] */0
+      ]
+    ]);
+
+var centredColumnClassName = Curry._1(Css.style, /* :: */[
+      Css.display(Css.flexBox),
+      /* :: */[
+        Css.width(Css.pct(100.0)),
+        /* :: */[
+          Css.media("(min-width: 37.5rem)", /* :: */[
+                Css.maxWidth(desktopColumnWidth),
+                /* [] */0
+              ]),
+          /* [] */0
+        ]
+      ]
+    ]);
 
 function combineClassNames(classNames) {
   return Curry._1(Css.merge, Relude_List.mapOption(Relude_Function.identity, classNames));
@@ -34,8 +54,9 @@ export {
   textColour ,
   linkColour ,
   linkHoverColour ,
-  borderColour ,
   border ,
+  smallCapsClassName ,
+  centredColumnClassName ,
   combineClassNames ,
   
 }
