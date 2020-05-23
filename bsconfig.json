@@ -23,8 +23,6 @@
       "node-stream-bs",
       "bs-bastet",
       "relude",
-      "sqlite-relude",
-      "sqlite-bs",
       "slugify-bs",
       "markdown-metadata-bs",
       "reason-react",

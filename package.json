@@ -31,7 +31,6 @@
     "reason-react": "^0.8.0",
     "relude": "ssh://git@github.com:elcr/relude-without-bisect.git",
     "slugify-bs": "ssh://git@github.com:elcr/slugify-bs.git",
-    "sqlite-relude": "ssh://git@github.com:elcr/sqlite-relude.git",
     "squel": "^5.13.0",
     "url-parse": "^1.4.7"
   },
