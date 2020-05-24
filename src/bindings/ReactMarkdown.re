@@ -21,11 +21,18 @@ type paragraphProps = {
 };
 
 
+type linkProps = {
+    href: string,
+    children: React.element
+};
+
+
 type renderers = {
     virtualHtml: virtualHtmlProps => React.element,
     // code: codeProps => React.element,
     heading: headingProps => React.element,
-    paragraph: paragraphProps => React.element
+    paragraph: paragraphProps => React.element,
+    link: linkProps => React.element
 };
 
 

@@ -25,7 +25,11 @@ let renderers = ReactMarkdown.{
     paragraph: ({ children }) =>
         <Paragraph>
             children
-        </Paragraph>
+        </Paragraph>,
+    link: ({ href, children }) =>
+        <Link url=href>
+            children
+        </Link>
 };
 
 
