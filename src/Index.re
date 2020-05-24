@@ -1,3 +1,6 @@
+[%raw {| require('source-map-support/register')|}]
+
+
 open Relude.Globals;
 
 

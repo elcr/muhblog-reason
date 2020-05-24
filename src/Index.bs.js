@@ -5,6 +5,8 @@ import * as Parse from "./Parse.bs.js";
 import * as Server from "./Server.bs.js";
 import * as Relude_IO from "relude/src/Relude_IO.bs.js";
 
+((require('source-map-support/register')));
+
 function printError(error) {
   var message;
   if (error.tag) {
