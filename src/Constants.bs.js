@@ -5,9 +5,12 @@ var entriesPerPage = 10;
 
 var stubLength = 100;
 
+var paginationSize = 5;
+
 export {
   entriesPerPage ,
   stubLength ,
+  paginationSize ,
   
 }
 /* No side effect */

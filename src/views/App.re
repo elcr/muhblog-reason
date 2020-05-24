@@ -25,8 +25,8 @@ module Root = {
 let make = (~siteName, ~pageData) => {
     let activeRoute = Option.map(PageData.toRoute, pageData);
     let page = switch (pageData) {
-        | Some(Index(data)) => <IndexPage data/>
-        | Some(TagSearch(data)) => <TagSearchPage data/>
+        | Some(Index(data)) => <IndexPage activeRoute data/>
+        | Some(TagSearch(data)) => <TagSearchPage activeRoute data/>
         | Some(About(data)) => <AboutPage data/>
         | Some(Entry(data)) => <EntryPage data/>
         | None => <NotFoundPage/>

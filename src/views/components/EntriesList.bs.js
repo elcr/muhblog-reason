@@ -2,18 +2,22 @@
 
 import * as Css from "bs-css-emotion/src/Css.js";
 import * as $$Date from "../../bindings/Date.bs.js";
+import * as Arrow from "./Arrow.bs.js";
 import * as Block from "bs-platform/lib/es6/block.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Style from "../Style.bs.js";
 import * as Utils from "../../Utils.bs.js";
 import * as React from "react";
 import * as Heading from "./Heading.bs.js";
+import * as Js_math from "bs-platform/lib/es6/js_math.js";
 import * as Markdown from "./Markdown.bs.js";
+import * as Constants from "../../Constants.bs.js";
 import * as RouteLink from "./RouteLink.bs.js";
 import * as Timestamp from "./Timestamp.bs.js";
 import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
 import * as Relude_List from "relude/src/Relude_List.bs.js";
 import * as Relude_Array from "relude/src/Relude_Array.bs.js";
+import * as Relude_Float from "relude/src/Relude_Float.bs.js";
 import * as Relude_Option from "relude/src/Relude_Option.bs.js";
 import * as Relude_Function from "relude/src/Relude_Function.bs.js";
 
@@ -54,7 +58,13 @@ var className$1 = Curry._1(Css.style, /* :: */[
                     Css.marginTop(Css.zero),
                     /* [] */0
                   ]),
-              /* [] */0
+              /* :: */[
+                Css.lastOfType(/* :: */[
+                      Css.marginBottom(Css.zero),
+                      /* [] */0
+                    ]),
+                /* [] */0
+              ]
             ]
           ]
         ]
@@ -90,48 +100,262 @@ var Header = {
   make: EntriesList$Header
 };
 
+var className$3 = Curry._1(Css.style, /* :: */[
+      Css.margin2(Css.auto, Css.rem(0.375)),
+      /* :: */[
+        Style.desktopMediaQuery(/* :: */[
+              Css.margin2(Css.auto, Css.rem(0.5)),
+              /* [] */0
+            ]),
+        /* [] */0
+      ]
+    ]);
+
+function EntriesList$PageItem(Props) {
+  var children = Props.children;
+  return React.createElement("span", {
+              className: className$3
+            }, children);
+}
+
+var PageItem = {
+  className: className$3,
+  make: EntriesList$PageItem
+};
+
+function EntriesList$PageLink(Props) {
+  var buildPageRoute = Props.buildPageRoute;
+  var activeRoute = Props.activeRoute;
+  var page = Props.page;
+  var children = Props.children;
+  var tmp = {
+    route: Curry._1(buildPageRoute, page),
+    className: className$3,
+    children: children
+  };
+  if (activeRoute !== undefined) {
+    tmp.activeRoute = Caml_option.valFromOption(activeRoute);
+  }
+  return React.createElement(RouteLink.make, tmp);
+}
+
+var PageLink = {
+  className: className$3,
+  make: EntriesList$PageLink
+};
+
+function EntriesList$PreviousPageLinks(Props) {
+  var buildPageRoute = Props.buildPageRoute;
+  var activeRoute = Props.activeRoute;
+  var page = Props.page;
+  var firstArrow = React.createElement(Arrow.make, {
+        direction: /* Left */0,
+        double: true
+      });
+  var previousArrow = React.createElement(Arrow.make, {
+        direction: /* Left */0
+      });
+  if (page === 1) {
+    return React.createElement(React.Fragment, undefined, React.createElement(EntriesList$PageItem, {
+                    children: firstArrow
+                  }), React.createElement(EntriesList$PageItem, {
+                    children: previousArrow
+                  }));
+  } else {
+    return React.createElement(React.Fragment, undefined, React.createElement(EntriesList$PageLink, {
+                    buildPageRoute: buildPageRoute,
+                    activeRoute: activeRoute,
+                    page: 1,
+                    children: firstArrow
+                  }), React.createElement(EntriesList$PageLink, {
+                    buildPageRoute: buildPageRoute,
+                    activeRoute: activeRoute,
+                    page: page - 1 | 0,
+                    children: previousArrow
+                  }));
+  }
+}
+
+var PreviousPageLinks = {
+  make: EntriesList$PreviousPageLinks
+};
+
+function EntriesList$NextPageLinks(Props) {
+  var buildPageRoute = Props.buildPageRoute;
+  var activeRoute = Props.activeRoute;
+  var totalPages = Props.totalPages;
+  var page = Props.page;
+  var nextArrow = React.createElement(Arrow.make, {
+        direction: /* Right */1
+      });
+  var lastArrow = React.createElement(Arrow.make, {
+        direction: /* Right */1,
+        double: true
+      });
+  if (page === totalPages) {
+    return React.createElement(React.Fragment, undefined, React.createElement(EntriesList$PageItem, {
+                    children: nextArrow
+                  }), React.createElement(EntriesList$PageItem, {
+                    children: lastArrow
+                  }));
+  } else {
+    return React.createElement(React.Fragment, undefined, React.createElement(EntriesList$PageLink, {
+                    buildPageRoute: buildPageRoute,
+                    activeRoute: activeRoute,
+                    page: page + 1 | 0,
+                    children: nextArrow
+                  }), React.createElement(EntriesList$PageLink, {
+                    buildPageRoute: buildPageRoute,
+                    activeRoute: activeRoute,
+                    page: totalPages,
+                    children: lastArrow
+                  }));
+  }
+}
+
+var NextPageLinks = {
+  make: EntriesList$NextPageLinks
+};
+
+function EntriesList$PageNumberLinks(Props) {
+  var buildPageRoute = Props.buildPageRoute;
+  var activeRoute = Props.activeRoute;
+  var totalPages = Props.totalPages;
+  var page = Props.page;
+  var padding = Constants.paginationSize / 2 | 0;
+  var startPage = page - padding | 0;
+  var endPage = page + padding | 0;
+  if (startPage < 1 && endPage > totalPages) {
+    startPage = 1;
+    endPage = totalPages;
+  } else {
+    var difference = 0;
+    if (startPage < 1) {
+      difference = 1 - startPage | 0;
+      startPage = startPage + difference | 0;
+      endPage = endPage + difference | 0;
+    }
+    if (endPage > totalPages) {
+      difference = endPage - totalPages | 0;
+      endPage = endPage - difference | 0;
+      startPage = startPage - difference | 0;
+      startPage = startPage < 1 ? 1 : startPage;
+    }
+    
+  }
+  return Utils.range(startPage, endPage, undefined, undefined).map((function (p) {
+                if (p === page) {
+                  return React.createElement(EntriesList$PageItem, {
+                              children: p
+                            });
+                } else {
+                  return React.createElement(EntriesList$PageLink, {
+                              buildPageRoute: buildPageRoute,
+                              activeRoute: activeRoute,
+                              page: p,
+                              children: p
+                            });
+                }
+              }));
+}
+
+var PageNumberLinks = {
+  make: EntriesList$PageNumberLinks
+};
+
+var className$4 = Curry._1(Css.merge, /* :: */[
+      Style.smallCapsClassName,
+      /* :: */[
+        Curry._1(Css.style, /* :: */[
+              Css.fontSize(Css.rem(1.125)),
+              /* :: */[
+                Css.margin2(Css.rem(2.4), Css.auto),
+                /* [] */0
+              ]
+            ]),
+        /* [] */0
+      ]
+    ]);
+
+function EntriesList$Pagination(Props) {
+  var buildPageRoute = Props.buildPageRoute;
+  var activeRoute = Props.activeRoute;
+  var total = Props.total;
+  var page = Props.page;
+  var totalPages = Js_math.ceil(Relude_Float.fromInt(total) / Relude_Float.fromInt(Constants.entriesPerPage));
+  return React.createElement("div", {
+              className: className$4
+            }, React.createElement(EntriesList$PreviousPageLinks, {
+                  buildPageRoute: buildPageRoute,
+                  activeRoute: activeRoute,
+                  page: page
+                }), React.createElement(EntriesList$PageNumberLinks, {
+                  buildPageRoute: buildPageRoute,
+                  activeRoute: activeRoute,
+                  totalPages: totalPages,
+                  page: page
+                }), React.createElement(EntriesList$NextPageLinks, {
+                  buildPageRoute: buildPageRoute,
+                  activeRoute: activeRoute,
+                  totalPages: totalPages,
+                  page: page
+                }));
+}
+
+var Pagination = {
+  className: className$4,
+  make: EntriesList$Pagination
+};
+
 function EntriesList(Props) {
-  Props.page;
-  Props.total;
+  var buildPageRoute = Props.buildPageRoute;
+  var activeRoute = Props.activeRoute;
+  var page = Props.page;
+  var total = Props.total;
   var entries = Props.entries;
-  return Relude_List.toArray(Relude_List.map((function (entry) {
-                      var route_000 = /* year */entry.date.getFullYear();
-                      var route_001 = /* month */$$Date.getMonth(entry.date);
-                      var route_002 = /* day */entry.date.getDate();
-                      var route_003 = /* slug */Curry._1(Utils.slug(undefined), entry.title);
-                      var route = /* Entry */Block.__(2, [
-                          route_000,
-                          route_001,
-                          route_002,
-                          route_003
-                        ]);
-                      var preview = Relude_Option.getOrElse(entry.text, Curry._2(Relude_Option.flatMap, (function (prim) {
-                                  if (prim == null) {
-                                    return ;
-                                  } else {
-                                    return Caml_option.some(prim);
-                                  }
-                                }), Curry._2(Relude_Option.flatMap, (function (param) {
-                                      return Relude_Array.at(1, param);
-                                    }), Relude_Option.map((function (prim) {
-                                          return prim;
-                                        }), Caml_option.null_to_opt(/^(.+?)\n\n/.exec(entry.text))))));
-                      return React.createElement(EntriesList$Article, {
-                                  children: null,
-                                  key: entry.date.toISOString() + entry.title
-                                }, React.createElement(EntriesList$Header, {
-                                      children: null
-                                    }, React.createElement(EntriesList$IndexHeading, {
-                                          children: React.createElement(RouteLink.make, {
-                                                route: route,
-                                                children: entry.title
-                                              })
-                                        }), React.createElement(Timestamp.make, {
-                                          date: entry.date
-                                        })), React.createElement("section", undefined, React.createElement(Markdown.make, {
-                                          text: preview
-                                        })));
-                    }))(entries));
+  return Relude_List.toArray(Relude_List.append(React.createElement(EntriesList$Pagination, {
+                      buildPageRoute: buildPageRoute,
+                      activeRoute: activeRoute,
+                      total: total,
+                      page: page
+                    }), Relude_List.map((function (entry) {
+                          var route_000 = /* year */entry.date.getFullYear();
+                          var route_001 = /* month */$$Date.getMonth(entry.date);
+                          var route_002 = /* day */entry.date.getDate();
+                          var route_003 = /* slug */Curry._1(Utils.slug(undefined), entry.title);
+                          var route = /* Entry */Block.__(2, [
+                              route_000,
+                              route_001,
+                              route_002,
+                              route_003
+                            ]);
+                          var preview = Relude_Option.getOrElse(entry.text, Curry._2(Relude_Option.flatMap, (function (prim) {
+                                      if (prim == null) {
+                                        return ;
+                                      } else {
+                                        return Caml_option.some(prim);
+                                      }
+                                    }), Curry._2(Relude_Option.flatMap, (function (param) {
+                                          return Relude_Array.at(1, param);
+                                        }), Relude_Option.map((function (prim) {
+                                              return prim;
+                                            }), Caml_option.null_to_opt(/^(.+?)\n\n/.exec(entry.text))))));
+                          return React.createElement(EntriesList$Article, {
+                                      children: null,
+                                      key: entry.date.toISOString() + entry.title
+                                    }, React.createElement(EntriesList$Header, {
+                                          children: null
+                                        }, React.createElement(EntriesList$IndexHeading, {
+                                              children: React.createElement(RouteLink.make, {
+                                                    route: route,
+                                                    children: entry.title
+                                                  })
+                                            }), React.createElement(Timestamp.make, {
+                                              date: entry.date
+                                            })), React.createElement("section", undefined, React.createElement(Markdown.make, {
+                                              text: preview
+                                            })));
+                        }))(entries)));
 }
 
 var make = EntriesList;
@@ -140,6 +364,12 @@ export {
   IndexHeading ,
   Article ,
   Header ,
+  PageItem ,
+  PageLink ,
+  PreviousPageLinks ,
+  NextPageLinks ,
+  PageNumberLinks ,
+  Pagination ,
   make ,
   
 }

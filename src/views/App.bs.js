@@ -55,11 +55,13 @@ function App(Props) {
     switch (pageData.tag | 0) {
       case /* Index */0 :
           page = React.createElement(IndexPage.make, {
+                activeRoute: activeRoute,
                 data: pageData[0]
               });
           break;
       case /* TagSearch */1 :
           page = React.createElement(TagSearchPage.make, {
+                activeRoute: activeRoute,
                 data: pageData[0]
               });
           break;

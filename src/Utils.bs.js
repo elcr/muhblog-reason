@@ -2,13 +2,24 @@
 
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Slugify from "slugify-bs/src/Slugify.bs.js";
+import * as Belt_Array from "bs-platform/lib/es6/belt_Array.js";
+import * as Relude_List from "relude/src/Relude_List.bs.js";
 
 function slug(param) {
   return Curry._3(Slugify.slugify, "-", param, true);
 }
 
+function range(start, stop, stepOpt, param) {
+  var step = stepOpt !== undefined ? stepOpt : 1;
+  return Belt_Array.rangeBy(start, stop, step);
+}
+
+var reactList = Relude_List.toArray;
+
 export {
   slug ,
+  range ,
+  reactList ,
   
 }
 /* Slugify Not a pure module */
