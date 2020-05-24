@@ -1,21 +1,27 @@
-open Relude.Globals;
+module Label = {
+    let className = Css.(
+        merge([
+            Style.smallCapsClassName,
+            style([
+                fontSize(rem(1.25)),
+                marginBottom(rem(1.6))
+            ])
+        ])
+    );
+
+    [@react.component]
+    let make = (~children) =>
+        <div className>
+            children
+        </div>;
+};
 
 
 [@react.component]
-let make = (~data as { page, tag, entries }: PageData.tagSearchData) => {
-    let entries = entries
-        |> List.map((entry: PageData.indexEntry) =>
-            <div key=entry.title>
-                (entry.title |> React.string)
-            </div>
-        )
-        |> List.toArray;
-
-    <div>
-        <div>({j|tag $tag|j} |> React.string)</div>
-        <div>({j|page $page|j} |> React.string)</div>
-        <div>
-            (entries |> React.array)
-        </div>
-    </div>
-};
+let make = (~data as { tag, page, total, entries }: PageData.tagSearchData) =>
+    <>
+        <Label>
+            ({j|$total entries tagged "$tag"|j} |> React.string)
+        </Label>
+        <EntriesList page total entries/>
+    </>;
