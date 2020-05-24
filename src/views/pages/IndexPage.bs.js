@@ -8,26 +8,24 @@ import * as Style from "../Style.bs.js";
 import * as Utils from "../../Utils.bs.js";
 import * as React from "react";
 import * as Heading from "../components/Heading.bs.js";
+import * as Markdown from "../components/Markdown.bs.js";
 import * as RouteLink from "../components/RouteLink.bs.js";
 import * as Timestamp from "../components/Timestamp.bs.js";
+import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
 import * as Relude_List from "relude/src/Relude_List.bs.js";
+import * as Relude_Array from "relude/src/Relude_Array.bs.js";
+import * as Relude_Option from "relude/src/Relude_Option.bs.js";
 import * as Relude_Function from "relude/src/Relude_Function.bs.js";
 
-var className = Curry._1(Css.merge, /* :: */[
-      Style.smallCapsClassName,
+var className = Curry._1(Css.style, /* :: */[
+      Css.fontSize(Css.rem(1.5)),
       /* :: */[
-        Curry._1(Css.style, /* :: */[
-              Css.fontSize(Css.rem(1.5)),
-              /* :: */[
-                Css.marginBottom(Css.zero),
-                /* [] */0
-              ]
-            ]),
+        Css.marginBottom(Css.zero),
         /* [] */0
       ]
     ]);
 
-function IndexPage$NoMarginHeading(Props) {
+function IndexPage$IndexHeading(Props) {
   var children = Props.children;
   return React.createElement(Heading.make, {
               className: className,
@@ -35,20 +33,20 @@ function IndexPage$NoMarginHeading(Props) {
             });
 }
 
-var NoMarginHeading = {
+var IndexHeading = {
   className: className,
-  make: IndexPage$NoMarginHeading
+  make: IndexPage$IndexHeading
 };
 
 var className$1 = Curry._1(Css.style, /* :: */[
       Relude_Function.uncurry3(Css.borderBottom, Style.border),
       /* :: */[
-        Css.paddingBottom(Css.rem(0.2)),
+        Css.paddingBottom(Css.rem(1.6)),
         /* :: */[
           Css.margin2(Css.rem(0.5), Css.zero),
           /* :: */[
             Style.desktopMediaQuery(/* :: */[
-                  Css.margin2(Css.rem(1.0), Css.zero),
+                  Css.margin2(Css.rem(0.8), Css.zero),
                   /* [] */0
                 ]),
             /* :: */[
@@ -75,6 +73,23 @@ var Article = {
   make: IndexPage$Article
 };
 
+var className$2 = Curry._1(Css.style, /* :: */[
+      Css.marginBottom(Css.rem(1.0)),
+      /* [] */0
+    ]);
+
+function IndexPage$Header(Props) {
+  var children = Props.children;
+  return React.createElement("header", {
+              className: className$2
+            }, children);
+}
+
+var Header = {
+  className: className$2,
+  make: IndexPage$Header
+};
+
 function IndexPage(Props) {
   var param = Props.data;
   return Relude_List.toArray(Relude_List.map((function (entry) {
@@ -88,25 +103,41 @@ function IndexPage(Props) {
                           route_002,
                           route_003
                         ]);
+                      var preview = Relude_Option.getOrElse(entry.text, Curry._2(Relude_Option.flatMap, (function (prim) {
+                                  if (prim == null) {
+                                    return ;
+                                  } else {
+                                    return Caml_option.some(prim);
+                                  }
+                                }), Curry._2(Relude_Option.flatMap, (function (param) {
+                                      return Relude_Array.at(1, param);
+                                    }), Relude_Option.map((function (prim) {
+                                          return prim;
+                                        }), Caml_option.null_to_opt(/^(.+?)\n\n/.exec(entry.text))))));
                       return React.createElement(IndexPage$Article, {
-                                  children: React.createElement("header", undefined, React.createElement(IndexPage$NoMarginHeading, {
-                                            children: React.createElement(RouteLink.make, {
-                                                  route: route,
-                                                  children: entry.title
-                                                })
-                                          }), React.createElement(Timestamp.make, {
-                                            date: entry.date
-                                          })),
+                                  children: null,
                                   key: entry.date.toISOString() + entry.title
-                                });
+                                }, React.createElement(IndexPage$Header, {
+                                      children: null
+                                    }, React.createElement(IndexPage$IndexHeading, {
+                                          children: React.createElement(RouteLink.make, {
+                                                route: route,
+                                                children: entry.title
+                                              })
+                                        }), React.createElement(Timestamp.make, {
+                                          date: entry.date
+                                        })), React.createElement("section", undefined, React.createElement(Markdown.make, {
+                                          text: preview
+                                        })));
                     }))(param.entries));
 }
 
 var make = IndexPage;
 
 export {
-  NoMarginHeading ,
+  IndexHeading ,
   Article ,
+  Header ,
   make ,
   
 }

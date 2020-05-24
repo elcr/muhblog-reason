@@ -3,8 +3,11 @@
 
 var entriesPerPage = 10;
 
+var stubLength = 100;
+
 export {
   entriesPerPage ,
+  stubLength ,
   
 }
 /* No side effect */

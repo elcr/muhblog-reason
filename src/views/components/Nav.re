@@ -43,7 +43,7 @@ let className = Css.(
                 ~v=rem(0.5),
                 ~h=zero
             ),
-            marginBottom(rem(1.0)),
+            marginBottom(rem(1.6)),
             Relude.Function.uncurry3(borderBottom, Style.border)
         ])
     ])

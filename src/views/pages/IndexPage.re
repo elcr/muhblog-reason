@@ -1,14 +1,11 @@
 open Relude.Globals;
 
 
-module NoMarginHeading = {
+module IndexHeading = {
     let className = Css.(
-        merge([
-            Style.smallCapsClassName,
-            style([
-                fontSize(rem(1.5)),
-                marginBottom(zero)
-            ])
+        style([
+            fontSize(rem(1.5)),
+            marginBottom(zero)
         ])
     );
 
@@ -24,14 +21,14 @@ module Article = {
     let className = Css.(
         style([
             Relude.Function.uncurry3(borderBottom, Style.border),
-            paddingBottom(rem(0.2)),
+            paddingBottom(rem(1.6)),
             margin2(
                 ~v=rem(0.5),
                 ~h=zero
             ),
             Style.desktopMediaQuery([
                 margin2(
-                    ~v=rem(1.0),
+                    ~v=rem(0.8),
                     ~h=zero
                 )
             ]),
@@ -49,6 +46,21 @@ module Article = {
 };
 
 
+module Header = {
+    let className = Css.(
+        style([
+            marginBottom(rem(1.0))
+        ])
+    );
+
+    [@react.component]
+    let make = (~children) =>
+        <header className>
+            children
+        </header>;
+}
+
+
 [@react.component]
 let make = (~data as { page, total, entries }: PageData.indexData) =>
     entries
@@ -59,16 +71,24 @@ let make = (~data as { page, total, entries }: PageData.indexData) =>
                 day: Date.getDay(entry.date),
                 slug: Utils.slug(entry.title)
             });
+            let preview = Js.Re.exec_([%re {|/^(.+?)\n\n/|}], entry.text)
+                |> Option.map(Js.Re.captures)
+                |> Option.flatMap(Array.at(1))
+                |> Option.flatMap(Js.Nullable.toOption)
+                |> Option.getOrElse(entry.text);
 
             <Article key=(Date.toISOTimestamp(entry.date) ++ entry.title)>
-                <header>
-                    <NoMarginHeading>
+                <Header>
+                    <IndexHeading>
                         <RouteLink route>
                             (entry.title |> React.string)
                         </RouteLink>
-                    </NoMarginHeading>
+                    </IndexHeading>
                     <Timestamp date=entry.date/>
-                </header>
+                </Header>
+                <section>
+                    <Markdown text=preview/>
+                </section>
             </Article>
         })
         |> List.toArray

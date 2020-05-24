@@ -4,10 +4,10 @@ import * as Style from "../Style.bs.js";
 import * as React from "react";
 
 function Heading(Props) {
-  var sizeOpt = Props.size;
+  var levelOpt = Props.level;
   var className = Props.className;
   var children = Props.children;
-  var size = sizeOpt !== undefined ? sizeOpt : 1;
+  var level = levelOpt !== undefined ? levelOpt : 1;
   var className$1 = Style.combineClassNames(/* :: */[
         Style.smallCapsClassName,
         /* :: */[
@@ -15,7 +15,7 @@ function Heading(Props) {
           /* [] */0
         ]
       ]);
-  var tag = "h" + String(size > 6 ? 6 : size);
+  var tag = "h" + String(level > 6 ? 6 : level);
   return React.createElement(tag, {
               className: className$1
             }, children);
