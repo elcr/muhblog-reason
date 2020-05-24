@@ -227,7 +227,7 @@ module Pagination = {
 
 
 [@react.component]
-let make = (~buildPageRoute, ~activeRoute, ~page, ~total, ~entries) => {
+let make = (~buildPageRoute, ~activeRoute, ~page, ~total, ~entries) =>
     entries
         |> List.map((entry: PageData.indexEntry) => {
             let route = Router.Entry({
@@ -259,6 +259,4 @@ let make = (~buildPageRoute, ~activeRoute, ~page, ~total, ~entries) => {
         |> List.append(
             <Pagination buildPageRoute activeRoute total page/>
         )
-        |> List.toArray
-        |> React.array;
-}
+        |> Utils.reactList;

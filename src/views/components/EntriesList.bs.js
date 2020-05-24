@@ -313,7 +313,7 @@ function EntriesList(Props) {
   var page = Props.page;
   var total = Props.total;
   var entries = Props.entries;
-  return Relude_List.toArray(Relude_List.append(React.createElement(EntriesList$Pagination, {
+  return Utils.reactList(Relude_List.append(React.createElement(EntriesList$Pagination, {
                       buildPageRoute: buildPageRoute,
                       activeRoute: activeRoute,
                       total: total,
