@@ -14,7 +14,7 @@ let border = (px(1), `solid, rgb(40, 40, 40));
 
 let smallCapsClassName = style([
     fontFamily(`serif),
-    unsafe("font-variant", "small-caps")
+    unsafe("fontVariant", "small-caps")
 ]);
 
 

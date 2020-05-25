@@ -28,7 +28,7 @@ var border = /* tuple */[
 var smallCapsClassName = Curry._1(Css.style, /* :: */[
       Css.fontFamily(/* serif */-97640579),
       /* :: */[
-        Css.unsafe("font-variant", "small-caps"),
+        Css.unsafe("fontVariant", "small-caps"),
         /* [] */0
       ]
     ]);
