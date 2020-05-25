@@ -4,6 +4,7 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Slugify from "slugify-bs/src/Slugify.bs.js";
 import * as Belt_Array from "bs-platform/lib/es6/belt_Array.js";
 import * as Relude_List from "relude/src/Relude_List.bs.js";
+import * as Relude_Option from "relude/src/Relude_Option.bs.js";
 
 function slug(param) {
   return Curry._3(Slugify.slugify, "-", param, true);
@@ -16,10 +17,17 @@ function range(start, stop, stepOpt, param) {
 
 var reactList = Relude_List.toArray;
 
+var partial_arg = null;
+
+function reactOption(param) {
+  return Relude_Option.getOrElse(partial_arg, param);
+}
+
 export {
   slug ,
   range ,
   reactList ,
+  reactOption ,
   
 }
-/* Slugify Not a pure module */
+/* partial_arg Not a pure module */

@@ -1,7 +1,7 @@
 open Relude.Globals;
 
 
-module IndexHeading = {
+module StyledHeading = {
     let className = Css.(
         style([
             fontSize(rem(1.5)),
@@ -226,33 +226,48 @@ module Pagination = {
 };
 
 
+module Paragraph = {
+    let className = Css.(
+        style([
+            marginBottom(zero)
+        ])
+    );
+
+    [@react.component]
+    let make = (~children) =>
+        <p className>
+            children
+        </p>;
+}
+
+
 [@react.component]
 let make = (~buildPageRoute, ~activeRoute, ~page, ~total, ~entries) =>
     entries
-        |> List.map((entry: PageData.indexEntry) => {
+        |> List.map((({ title, date, text }): PageData.indexEntry) => {
             let route = Router.Entry({
-                year: Date.getYear(entry.date),
-                month: Date.getMonth(entry.date),
-                day: Date.getDay(entry.date),
-                slug: Utils.slug(entry.title)
+                year: Date.getYear(date),
+                month: Date.getMonth(date),
+                day: Date.getDay(date),
+                slug: Utils.slug(title)
             });
-            let preview = Js.Re.exec_([%re {|/^(.+?)\n\n/|}], entry.text)
+            let preview = Js.Re.exec_([%re {|/^(.+?)\n\n/|}], text)
                 |> Option.map(Js.Re.captures)
                 |> Option.flatMap(Array.at(1))
                 |> Option.flatMap(Js.Nullable.toOption)
-                |> Option.getOrElse(entry.text);
+                |> Option.getOrElse(text);
 
-            <Article key=(Date.toISOTimestamp(entry.date) ++ entry.title)>
+            <Article key=(Date.toISOTimestamp(date) ++ title)>
                 <Header>
-                    <IndexHeading>
+                    <StyledHeading>
                         <RouteLink route>
-                            (entry.title |> React.string)
+                            (title |> React.string)
                         </RouteLink>
-                    </IndexHeading>
-                    <Timestamp date=entry.date/>
+                    </StyledHeading>
+                    <Timestamp date/>
                 </Header>
                 <section>
-                    <Markdown text=preview/>
+                    <Markdown renderParagraph=Paragraph.make text=preview/>
                 </section>
             </Article>
         })

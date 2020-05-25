@@ -1,3 +1,6 @@
+open Relude.Globals;
+
+
 module HTMLElement = {
     [@react.component]
     let make = (~tag, ~children) =>
@@ -10,29 +13,63 @@ module HTMLElement = {
 };
 
 
-let renderers = ReactMarkdown.{
-    virtualHtml: ({ tag, children}) =>
-        <HTMLElement tag>
+module StyledHeading = {
+    let classNameH2 = Css.(
+        style([
+            margin4(
+                ~top=rem(1.5),
+                ~right=zero,
+                ~bottom=rem(0.6),
+                ~left=zero
+            ),
+            fontSize(rem(1.5)),
+            Relude.Function.uncurry3(borderBottom, Style.border)
+        ])
+    );
+
+    let classNameH3 = Css.(
+        style([
+            margin4(
+                ~top=rem(1.25),
+                ~right=zero,
+                ~bottom=rem(0.5),
+                ~left=zero
+            ),
+            fontSize(rem(1.25))
+        ])
+    );
+
+    [@react.component]
+    let make = (~level, ~children) => {
+        let className = switch (level) {
+            | 2 => Some(classNameH2)
+            | 3 => Some(classNameH3)
+            | _ => None
+        };
+
+        <Heading className=?className level>
             children
-        </HTMLElement>,
-    // code: ({ language, value }) => {
-    //     <HighlightedCode language text=value/>
-    // },
-    heading: ({ level, children }) =>
-        <Heading level>
-            children
-        </Heading>,
-    paragraph: ({ children }) =>
-        <Paragraph>
-            children
-        </Paragraph>,
-    link: ({ href, children }) =>
-        <Link url=href>
-            children
-        </Link>
+        </Heading>
+    };
 };
 
 
 [@react.component]
-let make = (~text) =>
-    <ReactMarkdown renderers source=text escapeHtml=false/>;
+let make = (~renderParagraph=?, ~text) => {
+    let renderers = {
+        "virtualHtml": HTMLElement.make,
+        // "code": props =>
+        //     <HighlightedCode language=(props##language) text=(props##value)/>,
+        "heading": StyledHeading.make,
+        "paragraph": Option.getOrElse(
+            props => <p>(props##children)</p>,
+            renderParagraph
+        ),
+        "link": props =>
+            <Link url=(props##href)>
+                (props##children)
+            </Link>
+    };
+
+    <ReactMarkdown renderers source=text escapeHtml=false/>
+}

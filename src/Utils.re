@@ -11,3 +11,6 @@ let range = (~start, ~stop, ~step=1, ()) =>
 let reactList = list =>
     List.toArray(list)
         |> React.array;
+
+
+let reactOption = Option.getOrElse(React.null);

@@ -5,7 +5,7 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Relude_List from "relude/src/Relude_List.bs.js";
 import * as Relude_Function from "relude/src/Relude_Function.bs.js";
 
-var desktopColumnWidth = Css.rem(50.0);
+var desktopColumnWidth = Css.rem(48.0);
 
 function desktopMediaQuery(param) {
   return Css.media("(min-width: 37.5rem)", param);

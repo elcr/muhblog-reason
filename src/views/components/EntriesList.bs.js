@@ -29,7 +29,7 @@ var className = Curry._1(Css.style, /* :: */[
       ]
     ]);
 
-function EntriesList$IndexHeading(Props) {
+function EntriesList$StyledHeading(Props) {
   var children = Props.children;
   return React.createElement(Heading.make, {
               className: className,
@@ -37,9 +37,9 @@ function EntriesList$IndexHeading(Props) {
             });
 }
 
-var IndexHeading = {
+var StyledHeading = {
   className: className,
-  make: EntriesList$IndexHeading
+  make: EntriesList$StyledHeading
 };
 
 var className$1 = Curry._1(Css.style, /* :: */[
@@ -307,6 +307,23 @@ var Pagination = {
   make: EntriesList$Pagination
 };
 
+var className$5 = Curry._1(Css.style, /* :: */[
+      Css.marginBottom(Css.zero),
+      /* [] */0
+    ]);
+
+function EntriesList$Paragraph(Props) {
+  var children = Props.children;
+  return React.createElement("p", {
+              className: className$5
+            }, children);
+}
+
+var Paragraph = {
+  className: className$5,
+  make: EntriesList$Paragraph
+};
+
 function EntriesList(Props) {
   var buildPageRoute = Props.buildPageRoute;
   var activeRoute = Props.activeRoute;
@@ -318,18 +335,21 @@ function EntriesList(Props) {
                       activeRoute: activeRoute,
                       total: total,
                       page: page
-                    }), Relude_List.map((function (entry) {
-                          var route_000 = /* year */entry.date.getFullYear();
-                          var route_001 = /* month */$$Date.getMonth(entry.date);
-                          var route_002 = /* day */entry.date.getDate();
-                          var route_003 = /* slug */Curry._1(Utils.slug(undefined), entry.title);
+                    }), Relude_List.map((function (param) {
+                          var text = param.text;
+                          var date = param.date;
+                          var title = param.title;
+                          var route_000 = /* year */date.getFullYear();
+                          var route_001 = /* month */$$Date.getMonth(date);
+                          var route_002 = /* day */date.getDate();
+                          var route_003 = /* slug */Curry._1(Utils.slug(undefined), title);
                           var route = /* Entry */Block.__(2, [
                               route_000,
                               route_001,
                               route_002,
                               route_003
                             ]);
-                          var preview = Relude_Option.getOrElse(entry.text, Curry._2(Relude_Option.flatMap, (function (prim) {
+                          var preview = Relude_Option.getOrElse(text, Curry._2(Relude_Option.flatMap, (function (prim) {
                                       if (prim == null) {
                                         return ;
                                       } else {
@@ -339,20 +359,21 @@ function EntriesList(Props) {
                                           return Relude_Array.at(1, param);
                                         }), Relude_Option.map((function (prim) {
                                               return prim;
-                                            }), Caml_option.null_to_opt(/^(.+?)\n\n/.exec(entry.text))))));
+                                            }), Caml_option.null_to_opt(/^(.+?)\n\n/.exec(text))))));
                           return React.createElement(EntriesList$Article, {
                                       children: null,
-                                      key: entry.date.toISOString() + entry.title
+                                      key: date.toISOString() + title
                                     }, React.createElement(EntriesList$Header, {
                                           children: null
-                                        }, React.createElement(EntriesList$IndexHeading, {
+                                        }, React.createElement(EntriesList$StyledHeading, {
                                               children: React.createElement(RouteLink.make, {
                                                     route: route,
-                                                    children: entry.title
+                                                    children: title
                                                   })
                                             }), React.createElement(Timestamp.make, {
-                                              date: entry.date
+                                              date: date
                                             })), React.createElement("section", undefined, React.createElement(Markdown.make, {
+                                              renderParagraph: EntriesList$Paragraph,
                                               text: preview
                                             })));
                         }))(entries)));
@@ -361,7 +382,7 @@ function EntriesList(Props) {
 var make = EntriesList;
 
 export {
-  IndexHeading ,
+  StyledHeading ,
   Article ,
   Header ,
   PageItem ,
@@ -370,6 +391,7 @@ export {
   NextPageLinks ,
   PageNumberLinks ,
   Pagination ,
+  Paragraph ,
   make ,
   
 }

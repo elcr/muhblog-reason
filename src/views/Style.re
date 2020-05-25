@@ -2,7 +2,7 @@ open Relude.Globals;
 open Css;
 
 
-let desktopColumnWidth = rem(50.0);
+let desktopColumnWidth = rem(48.0);
 let desktopMediaQuery = media("(min-width: 37.5rem)");
 
 let backgroundColour = black;

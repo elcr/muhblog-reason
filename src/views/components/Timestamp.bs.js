@@ -2,20 +2,29 @@
 
 import * as Css from "bs-css-emotion/src/Css.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
+import * as Style from "../Style.bs.js";
 import * as React from "react";
 import * as Strftime from "strftime";
 
-var className = Curry._1(Css.style, /* :: */[
+var baseClassName = Curry._1(Css.style, /* :: */[
       Css.fontStyle(Css.italic),
       /* [] */0
     ]);
 
 function Timestamp(Props) {
+  var className = Props.className;
   var date = Props.date;
   var iso = date.toISOString();
   var formatted = Strftime("%d/%m/%Y %H:%M", date);
+  var className$1 = Style.combineClassNames(/* :: */[
+        baseClassName,
+        /* :: */[
+          className,
+          /* [] */0
+        ]
+      ]);
   return React.createElement("time", {
-              className: className,
+              className: className$1,
               dateTime: iso
             }, formatted);
 }
@@ -23,8 +32,8 @@ function Timestamp(Props) {
 var make = Timestamp;
 
 export {
-  className ,
+  baseClassName ,
   make ,
   
 }
-/* className Not a pure module */
+/* baseClassName Not a pure module */
