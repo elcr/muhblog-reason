@@ -43,10 +43,10 @@ module TagItem = {
             fontStyle(italic),
             margin2(
                 ~v=zero,
-                ~h=rem(0.6)
+                ~h=rem(0.3)
             ),
             firstOfType([
-                margin(zero)
+                marginLeft(zero)
             ])
         ])
     );

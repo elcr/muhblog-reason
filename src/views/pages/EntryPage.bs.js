@@ -67,10 +67,10 @@ var className$2 = Curry._1(Css.style, /* :: */[
       /* :: */[
         Css.fontStyle(Css.italic),
         /* :: */[
-          Css.margin2(Css.zero, Css.rem(0.6)),
+          Css.margin2(Css.zero, Css.rem(0.3)),
           /* :: */[
             Css.firstOfType(/* :: */[
-                  Css.margin(Css.zero),
+                  Css.marginLeft(Css.zero),
                   /* [] */0
                 ]),
             /* [] */0
