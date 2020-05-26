@@ -53,6 +53,12 @@ let build = route =>
         | TagSearch({ slug, page: 1 }) => {j|/tag/$slug/|j}
         | TagSearch({ slug, page }) => {j|/tag/$slug/$page/|j}
         | About => "/about/"
-        | Entry({ year, month, day, slug }) => {j|/$year/$month/$day/$slug/|j}
+        | Entry({ year, month, day, slug }) => {
+            let month = Int.toString(month)
+                |> String.padStart(~targetLength=2, ~padWith="0");
+            let day = Int.toString(day)
+                |> String.padStart(~targetLength=2, ~padWith="0");
+            {j|/$year/$month/$day/$slug/|j}
+        }
         | Uploads({ filename }) => {j|/uploads/$filename|j}
     };

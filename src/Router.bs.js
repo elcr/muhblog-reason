@@ -4,6 +4,7 @@ import * as Block from "bs-platform/lib/es6/block.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Relude_Int from "relude/src/Relude_Int.bs.js";
 import * as Relude_Option from "relude/src/Relude_Option.bs.js";
+import * as Relude_String from "relude/src/Relude_String.bs.js";
 
 function route(segments) {
   var len = segments.length;
@@ -121,7 +122,9 @@ function build(route) {
           return "/tag/" + (String(slug) + "/");
         }
     case /* Entry */2 :
-        return "/" + (String(route[/* year */0]) + ("/" + (String(route[/* month */1]) + ("/" + (String(route[/* day */2]) + ("/" + (String(route[/* slug */3]) + "/")))))));
+        var month = Relude_String.padStart(2, "0", Relude_Int.toString(route[/* month */1]));
+        var day = Relude_String.padStart(2, "0", Relude_Int.toString(route[/* day */2]));
+        return "/" + (String(route[/* year */0]) + ("/" + (String(month) + ("/" + (String(day) + ("/" + (String(route[/* slug */3]) + "/")))))));
     case /* Uploads */3 :
         return "/uploads/" + (String(route[/* filename */0]) + "");
     
