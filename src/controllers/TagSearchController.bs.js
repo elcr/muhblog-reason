@@ -49,7 +49,7 @@ function makeResponse(entries, slug, page) {
                                             }), filteredEntries)));
                       }), Relude_List.foldLeft((function (accumulator, entry) {
                               var tag = Curry._2(Relude_List.find, (function (tag) {
-                                      return Curry._1(Utils.slug(undefined), tag) === slug;
+                                      return Utils.slug(tag) === slug;
                                     }), entry.tags);
                               if (tag !== undefined) {
                                 if (accumulator !== undefined) {

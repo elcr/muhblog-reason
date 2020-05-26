@@ -1,7 +1,11 @@
 open Relude.Globals;
 
 
-let slug = Slugify.slugify(~replacement="-", ~lower=true);
+let slug = Slugify.slugify(
+    ~replacement="-",
+    ~remove=[%bs.re {|/:/|}],
+    ~lower=true
+);
 
 
 let range = (~start, ~stop, ~step=1, ()) =>

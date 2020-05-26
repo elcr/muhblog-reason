@@ -41,7 +41,7 @@ function TagSearchPage(Props) {
   var tag = param.tag;
   var buildPageRoute = function (page) {
     return /* TagSearch */Block.__(1, [
-              /* slug */Curry._1(Utils.slug(undefined), tag),
+              /* slug */Utils.slug(tag),
               /* page */page
             ]);
   };

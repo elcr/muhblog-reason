@@ -2,7 +2,6 @@
 
 import * as $$Date from "./bindings/Date.bs.js";
 import * as Block from "bs-platform/lib/es6/block.js";
-import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Utils from "./Utils.bs.js";
 
 function toRoute(pageData) {
@@ -12,7 +11,7 @@ function toRoute(pageData) {
     case /* TagSearch */1 :
         var match = pageData[0];
         return /* TagSearch */Block.__(1, [
-                  /* slug */Curry._1(Utils.slug(undefined), match.tag),
+                  /* slug */Utils.slug(match.tag),
                   /* page */match.page
                 ]);
     case /* About */2 :
@@ -24,7 +23,7 @@ function toRoute(pageData) {
                   /* year */date.getFullYear(),
                   /* month */$$Date.getMonth(date),
                   /* day */date.getDate(),
-                  /* slug */Curry._1(Utils.slug(undefined), match$1.title)
+                  /* slug */Utils.slug(match$1.title)
                 ]);
     
   }

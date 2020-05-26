@@ -49,7 +49,7 @@ function makeResponse(entries, year, month, day, slug) {
                     
                   }), Curry._2(Relude_List.find, (function (entry) {
                         if (dayTimestamp(entry.date) === timestamp) {
-                          return Curry._1(Utils.slug(undefined), entry.title) === slug;
+                          return Utils.slug(entry.title) === slug;
                         } else {
                           return false;
                         }

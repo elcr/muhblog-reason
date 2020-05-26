@@ -81,7 +81,7 @@ var className$2 = Curry._1(Css.style, /* :: */[
 
 function EntryPage$TagItem(Props) {
   var tag = Props.tag;
-  var route_000 = /* slug */Curry._1(Utils.slug(undefined), tag);
+  var route_000 = /* slug */Utils.slug(tag);
   var route = /* TagSearch */Block.__(1, [
       route_000,
       /* page */1
@@ -163,7 +163,7 @@ function EntryPage$NavigationLink(Props) {
   var route_000 = /* year */date.getFullYear();
   var route_001 = /* month */$$Date.getMonth(date);
   var route_002 = /* day */date.getDate();
-  var route_003 = /* slug */Curry._1(Utils.slug(undefined), title);
+  var route_003 = /* slug */Utils.slug(title);
   var route = /* Entry */Block.__(2, [
       route_000,
       route_001,
