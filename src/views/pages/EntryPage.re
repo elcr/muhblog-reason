@@ -185,29 +185,25 @@ module Navigation = {
     let make = (~previous, ~next) => {
         let previousLink = previous
             |> Option.map(({ title, date }: PageData.navigationEntry) =>
-                <>
+                <NavigationLinkContainer>
                     <Arrow direction=Arrow.Left/>
                     <NavigationLink title date/>
-                </>
+                </NavigationLinkContainer>
             )
-            |> Option.getOrElse(React.null);
+            |> Option.getOrElse(<div/>);
 
         let nextLink = next
             |> Option.map(({ title, date }: PageData.navigationEntry) =>
-                <>
+                <NavigationLinkContainer>
                     <NavigationLink title date/>
                     <Arrow direction=Arrow.Right/>
-                </>
+                </NavigationLinkContainer>
             )
-            |> Option.getOrElse(React.null);
+            |> Option.getOrElse(<div/>);
 
         <footer className>
-            <NavigationLinkContainer>
-                previousLink
-            </NavigationLinkContainer>
-            <NavigationLinkContainer>
-                nextLink
-            </NavigationLinkContainer>
+            previousLink
+            nextLink
         </footer>
     };
 };

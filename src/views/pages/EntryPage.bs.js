@@ -249,16 +249,20 @@ var className$7 = Curry._1(Css.merge, /* :: */[
 function EntryPage$Navigation(Props) {
   var previous = Props.previous;
   var next = Props.next;
-  var previousLink = Relude_Option.getOrElse(null, Relude_Option.map((function (param) {
-              return React.createElement(React.Fragment, undefined, React.createElement(Arrow.make, {
+  var previousLink = Relude_Option.getOrElse(React.createElement("div", undefined), Relude_Option.map((function (param) {
+              return React.createElement(EntryPage$NavigationLinkContainer, {
+                          children: null
+                        }, React.createElement(Arrow.make, {
                               direction: /* Left */0
                             }), React.createElement(EntryPage$NavigationLink, {
                               title: param.title,
                               date: param.date
                             }));
             }), previous));
-  var nextLink = Relude_Option.getOrElse(null, Relude_Option.map((function (param) {
-              return React.createElement(React.Fragment, undefined, React.createElement(EntryPage$NavigationLink, {
+  var nextLink = Relude_Option.getOrElse(React.createElement("div", undefined), Relude_Option.map((function (param) {
+              return React.createElement(EntryPage$NavigationLinkContainer, {
+                          children: null
+                        }, React.createElement(EntryPage$NavigationLink, {
                               title: param.title,
                               date: param.date
                             }), React.createElement(Arrow.make, {
@@ -267,11 +271,7 @@ function EntryPage$Navigation(Props) {
             }), next));
   return React.createElement("footer", {
               className: className$7
-            }, React.createElement(EntryPage$NavigationLinkContainer, {
-                  children: previousLink
-                }), React.createElement(EntryPage$NavigationLinkContainer, {
-                  children: nextLink
-                }));
+            }, previousLink, nextLink);
 }
 
 var Navigation = {
