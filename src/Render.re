@@ -1,4 +1,4 @@
-let render = (~siteName, ~pageData: option(PageData.t)) => {
+let render = (~siteName, ~favicon, ~pageData: option(PageData.t)) => {
     Style.registerGlobalStyles();
 
     let renderedApp = ReactDOMServerRe.renderToString(
@@ -14,7 +14,7 @@ let render = (~siteName, ~pageData: option(PageData.t)) => {
         | None => {j|Not found | $siteName|j}
     };
     let renderedPage = ReactDOMServerRe.renderToString(
-        <Page title css>
+        <Page title css favicon>
             html
         </Page>
     );

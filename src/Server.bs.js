@@ -41,6 +41,7 @@ function makeResponse(param, route) {
 }
 
 function make(siteName, data) {
+  var favicon = data.favicon;
   return Http.createServer((function (request, response) {
                 var url = Relude_Option.getOrElse("/", Caml_option.undefined_to_opt(request.url));
                 return Relude_IO.unsafeRunAsync((function (prim) {
@@ -61,7 +62,7 @@ function make(siteName, data) {
                                       res[/* stream */0].pipe(response);
                                       return ;
                                     }
-                                    var body = Render.render(siteName, res[/* data */0]);
+                                    var body = Render.render(siteName, favicon, res[/* data */0]);
                                     var length = Buffer.byteLength(body);
                                     HTTP.$$Response.setStatusCode(res[/* status */1], response);
                                     HTTP.$$Response.setContentType("text/html; charset=utf-8")(response);

@@ -6,6 +6,7 @@ import * as BootstrapRebootScss from "bootstrap/scss/bootstrap-reboot.scss";
 function Page(Props) {
   var title = Props.title;
   var css = Props.css;
+  var param = Props.favicon;
   var children = Props.children;
   return React.createElement("html", {
               lang: "en"
@@ -14,6 +15,10 @@ function Page(Props) {
                     }), React.createElement("meta", {
                       content: "width=device-width, initial-scale=1, shrink-to-fit=no",
                       name: "viewport"
+                    }), React.createElement("link", {
+                      href: param.uri,
+                      rel: "icon",
+                      type: param.mimeType
                     }), React.createElement("title", undefined, title), React.createElement("style", undefined, BootstrapRebootScss + css)), React.createElement("body", undefined, React.createElement("div", {
                       dangerouslySetInnerHTML: {
                         __html: children

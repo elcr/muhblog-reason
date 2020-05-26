@@ -1,4 +1,5 @@
 open Relude.Globals;
+open NodeFS;
 
 
 let parseTitle = metadata: option(string) =>
@@ -83,14 +84,12 @@ let parseEntry = markdown => {
 
 
 type readAndParseEntriesDirectoryError =
-    | ReadDirectoryError(NodeFS.Error.t)
-    | ReadEntryError({ name: string, error: NodeFS.Error.t })
+    | ReadDirectoryError(Error.t)
+    | ReadEntryError({ name: string, error: Error.t })
     | ParseError({ name: string, error: parseEntryError });
 
 
-let readAndParseEntriesDirectory = directory => {
-    open NodeFS;
-
+let readAndParseEntriesDirectory = directory =>
     IO.Suspend(() => Js.Console.log({j|Reading from entries directory "$directory"|j}))
         |> IO.flatMap(() => ReadDir.readDir(directory))
         |> IO.mapError(error => ReadDirectoryError(error))
@@ -104,7 +103,7 @@ let readAndParseEntriesDirectory = directory => {
                 |> Js.Array.map(({ name }: ReadDir.DirectoryEntry.t) => {
                     let path = Node.Path.join2(directory, name);
                     IO.Suspend(() => Js.Console.log({j|Reading entry from "$path"|j}))
-                        |> IO.flatMap(() => ReadFile.readFile(path))
+                        |> IO.flatMap(() => ReadFile.readText(path))
                         |> IO.mapError(error => ReadEntryError({ name, error }))
                         |> IO.flatMap(text =>
                             parseEntry(text)
@@ -125,33 +124,77 @@ let readAndParseEntriesDirectory = directory => {
                         ),
                     IO.Pure([])
                 )
-        )
-};
+        );
 
 
 let readAndParseAboutPath = path =>
     IO.Suspend(() => Js.Console.log({j|Reading about text from "$path"|j}))
-        |> IO.flatMap(() => NodeFS.ReadFile.readFile(path));
+        |> IO.flatMap(() => ReadFile.readText(path));
+
+
+type readAndEncodeFaviconPathError =
+    | MimeTypeNotFound
+    | ReadError(Error.t);
+
+
+type favicon = {
+    uri: string,
+    mimeType: string
+};
+
+
+let readAndEncodeFaviconPath = path =>
+    IO.Suspend(() => Js.Console.log({j|Reading favicon from "$path"|j}))
+        |> IO.flatMap(() =>
+            Node.Path.basename(path)
+                |> MimeTypes.contentType
+                |> IO.fromOption(() => MimeTypeNotFound)
+        )
+        |> IO.flatMap(mimeType =>
+            ReadFile.readBuffer(path)
+                |> IO.bimap(
+                    buffer => {
+                        let base64 = Node.Buffer.toStringWithEncoding(
+                            buffer,
+                            `base64
+                        );
+                        {
+                            uri: {j|data:$mimeType;base64,$base64|j},
+                            mimeType
+                        }
+                    },
+                    error => ReadError(error)
+                )
+        );
 
 
 type parsedData = {
     about: string,
-    entries: list(parsedEntry)
+    entries: list(parsedEntry),
+    favicon
 };
 
 
 type readAndParseAllError =
-    | AboutFileError(NodeFS.Error.t)
-    | EntriesDirectoryError(readAndParseEntriesDirectoryError);
+    | AboutFileError(Error.t)
+    | EntriesDirectoryError(readAndParseEntriesDirectoryError)
+    | FaviconError(readAndEncodeFaviconPathError);
 
 
-let readAndParseAll = (~aboutPath, ~entriesDirectory) =>
+let readAndParseAll = (~aboutPath, ~entriesDirectory, ~faviconPath) =>
     readAndParseEntriesDirectory(entriesDirectory)
         |> IO.mapError(error => EntriesDirectoryError(error))
         |> IO.flatMap(entries =>
             readAndParseAboutPath(aboutPath)
                 |> IO.bimap(
-                    about => { about, entries },
+                    about => (about, entries),
                     error => AboutFileError(error)
+                )
+        )
+        |> IO.flatMap(((about, entries)) =>
+            readAndEncodeFaviconPath(faviconPath)
+                |> IO.bimap(
+                    favicon => { about, entries, favicon },
+                    error => FaviconError(error)
                 )
         );

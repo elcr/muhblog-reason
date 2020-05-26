@@ -26,10 +26,10 @@ type _addArgumentArguments = {
 external _addArgument: (array(string), _addArgumentArguments) => unit = "addArgument";
 
 
-let addArgument = (~shortName, ~longName, ~dest, ~required, ~metavar, parser) =>
+let addArgument = (~shortName, ~longName, ~dest, ~metavar, parser) =>
     _addArgument(
         [| shortName, longName |],
-        { dest, required, metavar },
+        { dest, required: true, metavar },
         parser
     );
 

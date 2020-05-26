@@ -5,21 +5,17 @@ module StringBooleanUnion: {
         | String(string)
         | Boolean(bool);
 
-    let string: string => t;
-    let boolean: bool => t;
-
     let classify: t => case;
 } = {
     [@unboxed]
     type t =
         | Any('a): t;
 
+    let _ = () => Any();
+
     type case =
         | String(string)
         | Boolean(bool);
-
-    let string = string => Any(string);
-    let boolean = boolean => Any(boolean);
 
     let classify = (Any(value)) =>
         Js.Types.test(value, String)

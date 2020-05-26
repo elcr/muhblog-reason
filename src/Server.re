@@ -29,7 +29,7 @@ let makeResponse = (
     };
 
 
-let make = (~siteName, ~data: Parse.parsedData) =>
+let make = (~siteName, ~data as { favicon } as data: Parse.parsedData) =>
     HTTP.Server.make((request, response) => {
         let url = HTTP.Request.getURL(request)
             |> Option.getOrElse("/");
@@ -57,6 +57,7 @@ let make = (~siteName, ~data: Parse.parsedData) =>
                     | Page({ data, status }) => {
                         let body = Render.render(
                             ~siteName,
+                            ~favicon,
                             ~pageData=data
                         );
                         let length = Buffer.byteLength(body);

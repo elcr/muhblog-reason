@@ -9,40 +9,61 @@ import * as Relude_IO from "relude/src/Relude_IO.bs.js";
 
 function printError(error) {
   var message;
-  if (error.tag) {
-    var match = error[0];
-    switch (match.tag | 0) {
-      case /* ReadDirectoryError */0 :
-          switch (match[0].tag | 0) {
-            case /* NoSuchFileOrDirectory */7 :
-                message = "Entries path does not exist";
+  switch (error.tag | 0) {
+    case /* AboutFileError */0 :
+        switch (error[0].tag | 0) {
+          case /* IsADirectory */5 :
+              message = "About path is a directory";
+              break;
+          case /* NoSuchFileOrDirectory */7 :
+              message = "About path does not exist";
+              break;
+          default:
+            message = "Error reading about path";
+        }
+        break;
+    case /* EntriesDirectoryError */1 :
+        var match = error[0];
+        switch (match.tag | 0) {
+          case /* ReadDirectoryError */0 :
+              switch (match[0].tag | 0) {
+                case /* NoSuchFileOrDirectory */7 :
+                    message = "Entries path does not exist";
+                    break;
+                case /* NotADirectory */8 :
+                    message = "Entries path is not a directory";
+                    break;
+                default:
+                  message = "Error reading entries directory";
+              }
+              break;
+          case /* ReadEntryError */1 :
+              message = "Error reading entry: " + match[/* name */0];
+              break;
+          case /* ParseError */2 :
+              message = "Error parsing entry: " + match[/* name */0];
+              break;
+          
+        }
+        break;
+    case /* FaviconError */2 :
+        var match$1 = error[0];
+        if (match$1) {
+          switch (match$1[0].tag | 0) {
+            case /* IsADirectory */5 :
+                message = "Favicon path is a directory";
                 break;
-            case /* NotADirectory */8 :
-                message = "Entries path is not a directory";
+            case /* NoSuchFileOrDirectory */7 :
+                message = "Favicon path does not exist";
                 break;
             default:
-              message = "Error reading entries directory";
+              message = "Error reading favicon path";
           }
-          break;
-      case /* ReadEntryError */1 :
-          message = "Error reading entry: " + match[/* name */0];
-          break;
-      case /* ParseError */2 :
-          message = "Error parsing entry: " + match[/* name */0];
-          break;
-      
-    }
-  } else {
-    switch (error[0].tag | 0) {
-      case /* IsADirectory */5 :
-          message = "About path is a directory";
-          break;
-      case /* NoSuchFileOrDirectory */7 :
-          message = "About file does not exist";
-          break;
-      default:
-        message = "Error reading about file";
-    }
+        } else {
+          message = "Error identifying favicon mimetype";
+        }
+        break;
+    
   }
   console.error(message);
   
@@ -55,7 +76,7 @@ function main(param) {
                 
               }), Relude_IO.bitap(Server.listen, printError, Relude_IO.map((function (data) {
                         return Server.make(siteName, data);
-                      }), Parse.readAndParseAll(match.aboutPath, match.entriesDirectory))));
+                      }), Parse.readAndParseAll(match.aboutPath, match.entriesDirectory, match.faviconPath))));
 }
 
 main(undefined);

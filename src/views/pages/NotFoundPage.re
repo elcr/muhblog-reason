@@ -1,6 +1,3 @@
-open Relude.Globals;
-
-
 [@react.component]
 let make = () => {
     <div>

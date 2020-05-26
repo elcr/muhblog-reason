@@ -1,7 +1,8 @@
 type arguments = {
     siteName: string,
     entriesDirectory: string,
-    aboutPath: string
+    aboutPath: string,
+    faviconPath: string
 };
 
 
@@ -13,7 +14,6 @@ let parseArguments = (): arguments => {
         ~longName="--site-name",
         ~dest="siteName",
         ~metavar="STRING",
-        ~required=true,
         parser
     );
     ArgParse.addArgument(
@@ -21,7 +21,6 @@ let parseArguments = (): arguments => {
         ~longName="--entries-directory",
         ~dest="entriesDirectory",
         ~metavar="PATH",
-        ~required=true,
         parser
     );
     ArgParse.addArgument(
@@ -29,8 +28,14 @@ let parseArguments = (): arguments => {
         ~longName="--about-path",
         ~dest="aboutPath",
         ~metavar="PATH",
-        ~required=true,
         parser
     );
+    ArgParse.addArgument(
+        ~shortName="-f",
+        ~longName="--favicon-path",
+        ~dest="faviconPath",
+        ~metavar="PATH",
+        parser
+    )
     ArgParse.parseArgs(parser);
 };

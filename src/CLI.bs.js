@@ -5,9 +5,10 @@ import * as ArgParse from "./bindings/ArgParse.bs.js";
 
 function parseArguments(param) {
   var parser = ArgParse.make(Package.json.version, Package.json.name);
-  ArgParse.addArgument("-s", "--site-name", "siteName", true, "STRING", parser);
-  ArgParse.addArgument("-e", "--entries-directory", "entriesDirectory", true, "PATH", parser);
-  ArgParse.addArgument("-a", "--about-path", "aboutPath", true, "PATH", parser);
+  ArgParse.addArgument("-s", "--site-name", "siteName", "STRING", parser);
+  ArgParse.addArgument("-e", "--entries-directory", "entriesDirectory", "PATH", parser);
+  ArgParse.addArgument("-a", "--about-path", "aboutPath", "PATH", parser);
+  ArgParse.addArgument("-f", "--favicon-path", "faviconPath", "PATH", parser);
   return parser.parseArgs();
 }
 

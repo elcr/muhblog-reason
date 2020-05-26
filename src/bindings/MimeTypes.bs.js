@@ -4,14 +4,6 @@ import * as Block from "bs-platform/lib/es6/block.js";
 import * as Js_types from "bs-platform/lib/es6/js_types.js";
 import * as MimeTypes from "mime-types";
 
-function string(string$1) {
-  return string$1;
-}
-
-function $$boolean($$boolean$1) {
-  return $$boolean$1;
-}
-
 function classify(value) {
   if (Js_types.test(value, /* String */4)) {
     return /* String */Block.__(0, [value]);
@@ -21,8 +13,6 @@ function classify(value) {
 }
 
 var StringBooleanUnion = {
-  string: string,
-  $$boolean: $$boolean,
   classify: classify
 };
 

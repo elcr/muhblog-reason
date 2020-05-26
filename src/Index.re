@@ -11,9 +11,9 @@ let printError = (error: Parse.readAndParseAllError) => {
         | AboutFileError(IsADirectory(_)) =>
             "About path is a directory"
         | AboutFileError(NoSuchFileOrDirectory(_)) =>
-            "About file does not exist"
+            "About path does not exist"
         | AboutFileError(_) =>
-            "Error reading about file"
+            "Error reading about path"
         | EntriesDirectoryError(ReadDirectoryError(NotADirectory(_))) =>
             "Entries path is not a directory"
         | EntriesDirectoryError(ReadDirectoryError(NoSuchFileOrDirectory(_))) =>
@@ -24,6 +24,14 @@ let printError = (error: Parse.readAndParseAllError) => {
             "Error reading entry: " ++ name
         | EntriesDirectoryError(ParseError({ name })) =>
             "Error parsing entry: " ++ name
+        | FaviconError(MimeTypeNotFound) =>
+            "Error identifying favicon mimetype"
+        | FaviconError(ReadError(IsADirectory(_))) =>
+            "Favicon path is a directory"
+        | FaviconError(ReadError(NoSuchFileOrDirectory(_))) =>
+            "Favicon path does not exist"
+        | FaviconError(ReadError(_)) =>
+            "Error reading favicon path"
     };
     Js.Console.error(message)
 }
@@ -33,10 +41,11 @@ let main = () => {
     let {
         siteName,
         aboutPath,
-        entriesDirectory
+        entriesDirectory,
+        faviconPath
     }: CLI.arguments = CLI.parseArguments();
 
-    Parse.readAndParseAll(~aboutPath, ~entriesDirectory)
+    Parse.readAndParseAll(~aboutPath, ~entriesDirectory, ~faviconPath)
         |> IO.map(data => Server.make(~siteName, ~data))
         |> IO.bitap(Server.listen, printError)
         |> IO.unsafeRunAsync(ignore)

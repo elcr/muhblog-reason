@@ -2934,7 +2934,7 @@ nice-try@^1.0.4:
 
 "node-fs-bs@ssh://git@github.com:elcr/node-fs-bs.git":
   version "0.1.0"
-  resolved "ssh://git@github.com:elcr/node-fs-bs.git#04b61e045818a6a78f45833e9b5b54960f14ad7a"
+  resolved "ssh://git@github.com:elcr/node-fs-bs.git#7fb03f7729e1978ac4c7526bbbcd53ecb4698d8e"
   dependencies:
     bs-bastet "ssh://git@github.com:elcr/bs-bastet-without-bisect.git"
     bs-platform "^7.3.2"

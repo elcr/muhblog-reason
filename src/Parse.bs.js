@@ -5,6 +5,7 @@ import * as Path from "path";
 import * as Block from "bs-platform/lib/es6/block.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Js_dict from "bs-platform/lib/es6/js_dict.js";
+import * as MimeTypes from "./bindings/MimeTypes.bs.js";
 import * as Relude_IO from "relude/src/Relude_IO.bs.js";
 import * as Relude_Int from "relude/src/Relude_Int.bs.js";
 import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
@@ -125,7 +126,7 @@ function readAndParseEntriesDirectory(directory) {
                                                             /* error */error
                                                           ]);
                                                 }), Relude_IO.flatMap((function (param) {
-                                                      return NodeFS__ReadFile.readFile(undefined, path);
+                                                      return NodeFS__ReadFile.readText(undefined, path);
                                                     }), /* Suspend */Block.__(2, [(function (param) {
                                                           console.log("Reading entry from \"" + (String(path) + "\""));
                                                           
@@ -152,26 +153,59 @@ function readAndParseEntriesDirectory(directory) {
 
 function readAndParseAboutPath(path) {
   return Relude_IO.flatMap((function (param) {
-                return NodeFS__ReadFile.readFile(undefined, path);
+                return NodeFS__ReadFile.readText(undefined, path);
               }), /* Suspend */Block.__(2, [(function (param) {
                     console.log("Reading about text from \"" + (String(path) + "\""));
                     
                   })]));
 }
 
-function readAndParseAll(aboutPath, entriesDirectory) {
-  return Relude_IO.flatMap((function (entries) {
-                return Relude_IO.bimap((function (about) {
+function readAndEncodeFaviconPath(path) {
+  return Relude_IO.flatMap((function (mimeType) {
+                return Relude_IO.bimap((function (buffer) {
+                              var base64 = buffer.toString("base64");
                               return {
-                                      about: about,
-                                      entries: entries
+                                      uri: "data:" + (String(mimeType) + (";base64," + (String(base64) + ""))),
+                                      mimeType: mimeType
                                     };
                             }), (function (error) {
-                              return /* AboutFileError */Block.__(0, [error]);
-                            }), readAndParseAboutPath(aboutPath));
-              }), Curry._2(Relude_IO.mapError, (function (error) {
-                    return /* EntriesDirectoryError */Block.__(1, [error]);
-                  }), readAndParseEntriesDirectory(entriesDirectory)));
+                              return /* ReadError */[error];
+                            }), NodeFS__ReadFile.readBuffer(path));
+              }), Relude_IO.flatMap((function (param) {
+                    return Relude_IO.fromOption((function (param) {
+                                  return /* MimeTypeNotFound */0;
+                                }), MimeTypes.contentType(Path.basename(path)));
+                  }), /* Suspend */Block.__(2, [(function (param) {
+                        console.log("Reading favicon from \"" + (String(path) + "\""));
+                        
+                      })])));
+}
+
+function readAndParseAll(aboutPath, entriesDirectory, faviconPath) {
+  return Relude_IO.flatMap((function (param) {
+                var entries = param[1];
+                var about = param[0];
+                return Relude_IO.bimap((function (favicon) {
+                              return {
+                                      about: about,
+                                      entries: entries,
+                                      favicon: favicon
+                                    };
+                            }), (function (error) {
+                              return /* FaviconError */Block.__(2, [error]);
+                            }), readAndEncodeFaviconPath(faviconPath));
+              }), Relude_IO.flatMap((function (entries) {
+                    return Relude_IO.bimap((function (about) {
+                                  return /* tuple */[
+                                          about,
+                                          entries
+                                        ];
+                                }), (function (error) {
+                                  return /* AboutFileError */Block.__(0, [error]);
+                                }), readAndParseAboutPath(aboutPath));
+                  }), Curry._2(Relude_IO.mapError, (function (error) {
+                        return /* EntriesDirectoryError */Block.__(1, [error]);
+                      }), readAndParseEntriesDirectory(entriesDirectory))));
 }
 
 export {
@@ -182,6 +216,7 @@ export {
   parseEntry ,
   readAndParseEntriesDirectory ,
   readAndParseAboutPath ,
+  readAndEncodeFaviconPath ,
   readAndParseAll ,
   
 }

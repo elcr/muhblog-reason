@@ -9,14 +9,14 @@ function make(version, prog) {
             });
 }
 
-function addArgument(shortName, longName, dest, required, metavar, parser) {
+function addArgument(shortName, longName, dest, metavar, parser) {
   parser.addArgument([
         shortName,
         longName
       ], {
         dest: dest,
         metavar: metavar,
-        required: required
+        required: true
       });
   
 }

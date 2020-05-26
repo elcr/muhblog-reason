@@ -7,7 +7,7 @@ import * as React from "react";
 import * as EmotionServer from "emotion-server";
 import * as Server from "react-dom/server";
 
-function render(siteName, pageData) {
+function render(siteName, favicon, pageData) {
   Style.registerGlobalStyles(undefined);
   var renderedApp = Server.renderToString(React.createElement(App.make, {
             siteName: siteName,
@@ -37,6 +37,7 @@ function render(siteName, pageData) {
   var renderedPage = Server.renderToString(React.createElement(Page.make, {
             title: title,
             css: match.css,
+            favicon: favicon,
             children: match.html
           }));
   return "<!DOCTYPE html>" + renderedPage;
