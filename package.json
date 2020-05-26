@@ -28,6 +28,7 @@
     "react-syntax-highlighter": "^12.2.1",
     "reason-react": "^0.8.0",
     "relude": "ssh://git@github.com:elcr/relude-without-bisect.git",
+    "sanitize-filename": "^1.6.3",
     "slugify-bs": "ssh://git@github.com:elcr/slugify-bs.git",
     "source-map-support": "^0.5.19",
     "squel": "^5.13.0",

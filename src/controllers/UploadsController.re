@@ -3,7 +3,8 @@ open NodeFS;
 
 
 let makeResponse = (~directory, ~filename) => {
-    let path = Node.Path.join([| directory, filename |]);
+    let sanitisedFilename = Sanitise.sanitiseFilename(filename);
+    let path = Node.Path.join([| directory, sanitisedFilename |]);
     Stat.stat(path)
         |> IO.flatMap(({ size, mtime }: Stat.t) =>
             ReadStream.make(path)
@@ -12,7 +13,7 @@ let makeResponse = (~directory, ~filename) => {
                         stream,
                         length: size,
                         modified: mtime,
-                        type_: MimeTypes.contentType(filename)
+                        type_: MimeTypes.contentType(sanitisedFilename)
                     })
                 )
         )

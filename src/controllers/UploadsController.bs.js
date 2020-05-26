@@ -6,10 +6,12 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as MimeTypes from "../bindings/MimeTypes.bs.js";
 import * as Relude_IO from "relude/src/Relude_IO.bs.js";
 import * as NodeFS__Stat from "node-fs-bs/src/NodeFS__Stat.bs.js";
+import * as SanitizeFilename from "sanitize-filename";
 import * as NodeFS__ReadStream from "node-fs-bs/src/NodeFS__ReadStream.bs.js";
 
 function makeResponse(directory, filename) {
-  var path = Path.join(directory, filename);
+  var sanitisedFilename = SanitizeFilename(filename);
+  var path = Path.join(directory, sanitisedFilename);
   return Curry._2(Relude_IO.mapError, (function (prim) {
                 
               }), Relude_IO.flatMap((function (param) {
@@ -18,7 +20,7 @@ function makeResponse(directory, filename) {
                     return Relude_IO.map((function (stream) {
                                   return /* Stream */Block.__(1, [
                                             /* stream */stream,
-                                            /* type_ */MimeTypes.contentType(filename),
+                                            /* type_ */MimeTypes.contentType(sanitisedFilename),
                                             /* length */size,
                                             /* modified */mtime
                                           ]);
