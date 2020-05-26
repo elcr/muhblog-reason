@@ -95,6 +95,18 @@ var StyledCode = {
   make: Markdown$StyledCode
 };
 
+function Markdown$LazyImage(Props) {
+  var src = Props.src;
+  return React.createElement("img", {
+              src: src,
+              loading: "lazy"
+            });
+}
+
+var LazyImage = {
+  make: Markdown$LazyImage
+};
+
 function Markdown(Props) {
   var renderParagraph = Props.renderParagraph;
   var text = Props.text;
@@ -116,7 +128,8 @@ function Markdown(Props) {
                     url: props.href,
                     children: props.children
                   });
-      })
+      }),
+    image: Markdown$LazyImage
   };
   return React.createElement(ReactMarkdown, {
               source: text,
@@ -131,6 +144,7 @@ export {
   $$HTMLElement ,
   StyledHeading ,
   StyledCode ,
+  LazyImage ,
   make ,
   
 }

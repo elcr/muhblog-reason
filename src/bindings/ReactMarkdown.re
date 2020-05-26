@@ -32,6 +32,10 @@ external make: (
             .
             "href": string,
             "children": React.element
+        } => React.element,
+        "image": {
+            .
+            "src": string
         } => React.element
     }
 ) => React.element = "react-markdown";

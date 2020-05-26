@@ -74,6 +74,20 @@ module StyledCode = {
 };
 
 
+module LazyImage = {
+    [@react.component]
+    let make = (~src) =>
+        ReactDOMRe.createElement(
+            "img",
+            ~props=ReactDOMRe.objToDOMProps({
+                "src": src,
+                "loading": "lazy"
+            }),
+            [||]
+        );
+};
+
+
 [@react.component]
 let make = (~renderParagraph=?, ~text) => {
     let renderers = {
@@ -89,7 +103,8 @@ let make = (~renderParagraph=?, ~text) => {
         "link": props =>
             <Link url=(props##href)>
                 (props##children)
-            </Link>
+            </Link>,
+        "image": LazyImage.make
     };
 
     <ReactMarkdown renderers source=text escapeHtml=false/>
