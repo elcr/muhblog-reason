@@ -25,9 +25,12 @@ let make = (~activeRoute, ~data as { tag, page, total, entries }: PageData.tagSe
             page
         });
 
+    let plural = total === 1
+        ? "entry"
+        : "entries";
     <>
         <Label>
-            ({j|$total entries tagged "$tag"|j} |> React.string)
+            ({j|$total $plural tagged "$tag"|j} |> React.string)
         </Label>
         <EntriesList activeRoute page total entries buildPageRoute/>
     </>;

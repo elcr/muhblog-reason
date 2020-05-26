@@ -45,8 +45,9 @@ function TagSearchPage(Props) {
               /* page */page
             ]);
   };
+  var plural = total === 1 ? "entry" : "entries";
   return React.createElement(React.Fragment, undefined, React.createElement(TagSearchPage$Label, {
-                  children: "" + (String(total) + (" entries tagged \"" + (String(tag) + "\"")))
+                  children: "" + (String(total) + (" " + (String(plural) + (" tagged \"" + (String(tag) + "\"")))))
                 }), React.createElement(EntriesList.make, {
                   buildPageRoute: buildPageRoute,
                   activeRoute: activeRoute,
