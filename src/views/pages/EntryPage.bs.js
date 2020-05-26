@@ -43,16 +43,7 @@ var className$1 = Curry._1(Css.style, /* :: */[
       Css.fontSize(Css.rem(1.75)),
       /* :: */[
         Css.marginBottom(Css.rem(1.0)),
-        /* :: */[
-          Css.textAlign(Css.center),
-          /* :: */[
-            Style.desktopMediaQuery(/* :: */[
-                  Css.textAlign(Css.unset),
-                  /* [] */0
-                ]),
-            /* [] */0
-          ]
-        ]
+        /* [] */0
       ]
     ]);
 
@@ -193,7 +184,16 @@ var className$6 = Curry._1(Css.style, /* :: */[
       Css.display(Css.flexBox),
       /* :: */[
         Css.alignItems(Css.center),
-        /* [] */0
+        /* :: */[
+          Css.margin2(Css.rem(1.0), Css.zero),
+          /* :: */[
+            Style.desktopMediaQuery(/* :: */[
+                  Css.margin(Css.zero),
+                  /* [] */0
+                ]),
+            /* [] */0
+          ]
+        ]
       ]
     ]);
 
@@ -215,12 +215,27 @@ var className$7 = Curry._1(Css.merge, /* :: */[
         Curry._1(Css.style, /* :: */[
               Css.display(Css.flexBox),
               /* :: */[
-                Css.justifyContent(Css.spaceBetween),
+                Css.flexDirection(Css.columnReverse),
                 /* :: */[
-                  Css.margin2(Css.rem(3.0), Css.zero),
+                  Css.justifyContent(Css.spaceBetween),
                   /* :: */[
-                    Css.fontSize(Css.rem(1.1)),
-                    /* [] */0
+                    Css.alignItems(Css.center),
+                    /* :: */[
+                      Css.margin2(Css.rem(1.0), Css.zero),
+                      /* :: */[
+                        Css.fontSize(Css.rem(1.1)),
+                        /* :: */[
+                          Style.desktopMediaQuery(/* :: */[
+                                Css.flexDirection(Css.row),
+                                /* :: */[
+                                  Css.margin2(Css.rem(3.0), Css.zero),
+                                  /* [] */0
+                                ]
+                              ]),
+                          /* [] */0
+                        ]
+                      ]
+                    ]
                   ]
                 ]
               ]
@@ -262,6 +277,26 @@ var Navigation = {
   make: EntryPage$Navigation
 };
 
+var className$8 = Curry._1(Css.style, /* :: */[
+      Css.lastOfType(/* :: */[
+            Css.marginBottom(Css.zero),
+            /* [] */0
+          ]),
+      /* [] */0
+    ]);
+
+function EntryPage$StyledParagraph(Props) {
+  var children = Props.children;
+  return React.createElement("p", {
+              className: className$8
+            }, children);
+}
+
+var StyledParagraph = {
+  className: className$8,
+  make: EntryPage$StyledParagraph
+};
+
 function EntryPage(Props) {
   var param = Props.data;
   return React.createElement("article", undefined, React.createElement(EntryPage$Header, {
@@ -273,6 +308,7 @@ function EntryPage(Props) {
                     }), React.createElement(EntryPage$TagList, {
                       tags: param.tags
                     })), React.createElement("section", undefined, React.createElement(Markdown.make, {
+                      renderParagraph: EntryPage$StyledParagraph,
                       text: param.text
                     })), React.createElement(EntryPage$Navigation, {
                   previous: param.previous,
@@ -291,6 +327,7 @@ export {
   NavigationLink ,
   NavigationLinkContainer ,
   Navigation ,
+  StyledParagraph ,
   make ,
   
 }

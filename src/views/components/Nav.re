@@ -39,11 +39,12 @@ let className = Css.(
         style([
             display(flexBox),
             justifyContent(center),
-            padding2(
-                ~v=rem(0.5),
-                ~h=zero
+            margin4(
+                ~top=rem(0.5),
+                ~right=rem(0.5),
+                ~bottom=rem(1.5),
+                ~left=rem(0.5)
             ),
-            marginBottom(rem(1.6)),
             Relude.Function.uncurry3(borderBottom, Style.border)
         ])
     ])

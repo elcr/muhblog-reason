@@ -11,7 +11,10 @@ var className = Curry._1(Css.style, /* :: */[
         Css.flexGrow(1.0),
         /* :: */[
           Css.justifyContent(Css.center),
-          /* [] */0
+          /* :: */[
+            Css.margin2(Css.zero, Css.rem(0.5)),
+            /* [] */0
+          ]
         ]
       ]
     ]);

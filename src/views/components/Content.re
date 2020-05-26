@@ -3,7 +3,11 @@ module Container = {
         style([
             display(flexBox),
             flexGrow(1.0),
-            justifyContent(center)
+            justifyContent(center),
+            margin2(
+                ~v=zero,
+                ~h=rem(0.5)
+            )
         ])
     );
 

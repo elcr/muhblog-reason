@@ -22,11 +22,7 @@ module StyledHeading = {
     let className = Css.(
         style([
             fontSize(rem(1.75)),
-            marginBottom(rem(1.0)),
-            textAlign(center),
-            Style.desktopMediaQuery([
-                textAlign(unset)
-            ])
+            marginBottom(rem(1.0))
         ])
     );
 
@@ -137,7 +133,14 @@ module NavigationLinkContainer = {
     let className = Css.(
         style([
             display(flexBox),
-            alignItems(center)
+            alignItems(center),
+            margin2(
+                ~v=rem(1.0),
+                ~h=zero
+            ),
+            Style.desktopMediaQuery([
+                margin(zero)
+            ])
         ])
     );
 
@@ -155,12 +158,21 @@ module Navigation = {
             Style.smallCapsClassName,
             style([
                 display(flexBox),
+                flexDirection(columnReverse),
                 justifyContent(spaceBetween),
+                alignItems(center),
                 margin2(
-                    ~v=rem(3.0),
+                    ~v=rem(1.0),
                     ~h=zero
                 ),
-                fontSize(rem(1.1))
+                fontSize(rem(1.1)),
+                Style.desktopMediaQuery([
+                    flexDirection(row),
+                    margin2(
+                        ~v=rem(3.0),
+                        ~h=zero
+                    ),
+                ])
             ])
         ])
     );
@@ -197,8 +209,25 @@ module Navigation = {
 };
 
 
+module StyledParagraph = {
+    let className = Css.(
+        style([
+            lastOfType([
+                marginBottom(zero)
+            ])
+        ])
+    );
+
+    [@react.component]
+    let make = (~children) =>
+        <p className>
+            children
+        </p>;
+};
+
+
 [@react.component]
-let make = (~data as { title, text, date, tags, previous, next }: PageData.entryData) => {
+let make = (~data as { title, text, date, tags, previous, next }: PageData.entryData) =>
     <article>
         <Header>
             <StyledHeading>
@@ -208,8 +237,7 @@ let make = (~data as { title, text, date, tags, previous, next }: PageData.entry
             <TagList tags/>
         </Header>
         <section>
-            <Markdown text/>
+            <Markdown renderParagraph=StyledParagraph.make text/>
         </section>
         <Navigation previous next/>
-    </article>
-};
+    </article>;

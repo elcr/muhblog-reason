@@ -65,13 +65,10 @@ var className$2 = Curry._1(Css.merge, /* :: */[
               /* :: */[
                 Css.justifyContent(Css.center),
                 /* :: */[
-                  Css.padding2(Css.rem(0.5), Css.zero),
+                  Css.margin4(Css.rem(0.5), Css.rem(0.5), Css.rem(1.5), Css.rem(0.5)),
                   /* :: */[
-                    Css.marginBottom(Css.rem(1.6)),
-                    /* :: */[
-                      Relude_Function.uncurry3(Css.borderBottom, Style.border),
-                      /* [] */0
-                    ]
+                    Relude_Function.uncurry3(Css.borderBottom, Style.border),
+                    /* [] */0
                   ]
                 ]
               ]
