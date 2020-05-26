@@ -102,13 +102,13 @@ function route(segments) {
 
 function build(route) {
   if (typeof route === "number") {
-    return "/about";
+    return "/about/";
   }
   switch (route.tag | 0) {
     case /* Index */0 :
         var page = route[/* page */0];
         if (page !== 1) {
-          return "/" + (String(page) + "");
+          return "/" + (String(page) + "/");
         } else {
           return "/";
         }
@@ -116,12 +116,12 @@ function build(route) {
         var page$1 = route[/* page */1];
         var slug = route[/* slug */0];
         if (page$1 !== 1) {
-          return "/tag/" + (String(slug) + ("/" + (String(page$1) + "")));
+          return "/tag/" + (String(slug) + ("/" + (String(page$1) + "/")));
         } else {
-          return "/tag/" + (String(slug) + "");
+          return "/tag/" + (String(slug) + "/");
         }
     case /* Entry */2 :
-        return "/" + (String(route[/* year */0]) + ("/" + (String(route[/* month */1]) + ("/" + (String(route[/* day */2]) + ("/" + (String(route[/* slug */3]) + "")))))));
+        return "/" + (String(route[/* year */0]) + ("/" + (String(route[/* month */1]) + ("/" + (String(route[/* day */2]) + ("/" + (String(route[/* slug */3]) + "/")))))));
     case /* Uploads */3 :
         return "/uploads/" + (String(route[/* filename */0]) + "");
     

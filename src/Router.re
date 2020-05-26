@@ -49,10 +49,10 @@ let route = segments =>
 let build = route =>
     switch (route) {
         | Index({ page: 1 }) => "/"
-        | Index({ page }) => {j|/$page|j}
-        | TagSearch({ slug, page: 1 }) => {j|/tag/$slug|j}
-        | TagSearch({ slug, page }) => {j|/tag/$slug/$page|j}
-        | About => "/about"
-        | Entry({ year, month, day, slug }) => {j|/$year/$month/$day/$slug|j}
+        | Index({ page }) => {j|/$page/|j}
+        | TagSearch({ slug, page: 1 }) => {j|/tag/$slug/|j}
+        | TagSearch({ slug, page }) => {j|/tag/$slug/$page/|j}
+        | About => "/about/"
+        | Entry({ year, month, day, slug }) => {j|/$year/$month/$day/$slug/|j}
         | Uploads({ filename }) => {j|/uploads/$filename|j}
     };
