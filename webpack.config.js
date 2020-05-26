@@ -31,6 +31,13 @@ const config = {
                         }
                     },
                     {
+                        loader: 'string-replace-loader',
+                        options: {
+                            search: /^\/\*!.+?\*\//s,
+                            replace: ''
+                        }
+                    },
+                    {
                         loader: 'postcss-loader',
                         options: {
                             plugins: () => [
