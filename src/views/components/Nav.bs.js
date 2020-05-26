@@ -7,7 +7,6 @@ import * as Style from "../Style.bs.js";
 import * as React from "react";
 import * as RouteLink from "./RouteLink.bs.js";
 import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
-import * as Relude_Function from "relude/src/Relude_Function.bs.js";
 
 var className = Curry._1(Css.style, /* :: */[
       Css.marginRight(Css.auto),
@@ -60,20 +59,29 @@ var Container = {
 var className$2 = Curry._1(Css.merge, /* :: */[
       Style.smallCapsClassName,
       /* :: */[
-        Curry._1(Css.style, /* :: */[
-              Css.display(Css.flexBox),
-              /* :: */[
-                Css.justifyContent(Css.center),
+        Style.bottomBorderClassName,
+        /* :: */[
+          Curry._1(Css.style, /* :: */[
+                Css.display(Css.flexBox),
                 /* :: */[
-                  Css.margin4(Css.rem(0.5), Css.rem(0.5), Css.rem(1.5), Css.rem(0.5)),
+                  Css.justifyContent(Css.center),
                   /* :: */[
-                    Relude_Function.uncurry3(Css.borderBottom, Style.border),
-                    /* [] */0
+                    Css.margin4(Css.rem(0.5), Css.rem(0.5), Css.rem(1.5), Css.rem(0.5)),
+                    /* :: */[
+                      Css.padding2(Css.rem(0.5), Css.zero),
+                      /* :: */[
+                        Style.desktopMediaQuery(/* :: */[
+                              Css.margin4(Css.zero, Css.zero, Css.rem(1.5), Css.zero),
+                              /* [] */0
+                            ]),
+                        /* [] */0
+                      ]
+                    ]
                   ]
                 ]
-              ]
-            ]),
-        /* [] */0
+              ]),
+          /* [] */0
+        ]
       ]
     ]);
 

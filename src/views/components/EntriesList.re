@@ -19,24 +19,26 @@ module StyledHeading = {
 
 module Article = {
     let className = Css.(
-        style([
-            Relude.Function.uncurry3(borderBottom, Style.border),
-            paddingBottom(rem(1.6)),
-            margin2(
-                ~v=rem(0.5),
-                ~h=zero
-            ),
-            Style.desktopMediaQuery([
+        merge([
+            Style.bottomBorderClassName,
+            style([
+                paddingBottom(rem(1.6)),
                 margin2(
-                    ~v=rem(0.8),
+                    ~v=rem(0.5),
                     ~h=zero
-                )
-            ]),
-            firstOfType([
-                marginTop(zero)
-            ]),
-            lastOfType([
-                marginBottom(zero)
+                ),
+                Style.desktopMediaQuery([
+                    margin2(
+                        ~v=rem(0.8),
+                        ~h=zero
+                    )
+                ]),
+                firstOfType([
+                    marginTop(zero)
+                ]),
+                lastOfType([
+                    marginBottom(zero)
+                ])
             ])
         ])
     );

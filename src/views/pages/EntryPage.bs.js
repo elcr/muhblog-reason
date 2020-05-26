@@ -14,16 +14,18 @@ import * as RouteLink from "../components/RouteLink.bs.js";
 import * as Timestamp from "../components/Timestamp.bs.js";
 import * as Relude_List from "relude/src/Relude_List.bs.js";
 import * as Relude_Option from "relude/src/Relude_Option.bs.js";
-import * as Relude_Function from "relude/src/Relude_Function.bs.js";
 
-var className = Curry._1(Css.style, /* :: */[
-      Css.marginBottom(Css.rem(1.6)),
+var className = Curry._1(Css.merge, /* :: */[
+      Style.bottomBorderClassName,
       /* :: */[
-        Css.paddingBottom(Css.rem(0.3)),
-        /* :: */[
-          Relude_Function.uncurry3(Css.borderBottom, Style.border),
-          /* [] */0
-        ]
+        Curry._1(Css.style, /* :: */[
+              Css.marginBottom(Css.rem(1.6)),
+              /* :: */[
+                Css.paddingBottom(Css.rem(0.3)),
+                /* [] */0
+              ]
+            ]),
+        /* [] */0
       ]
     ]);
 
@@ -228,7 +230,7 @@ var className$7 = Curry._1(Css.merge, /* :: */[
                           Style.desktopMediaQuery(/* :: */[
                                 Css.flexDirection(Css.row),
                                 /* :: */[
-                                  Css.margin2(Css.rem(3.0), Css.zero),
+                                  Css.margin4(Css.rem(2.0), Css.zero, Css.rem(3.0), Css.zero),
                                   /* [] */0
                                 ]
                               ]),
@@ -297,6 +299,32 @@ var StyledParagraph = {
   make: EntryPage$StyledParagraph
 };
 
+var className$9 = Curry._1(Css.merge, /* :: */[
+      Style.bottomBorderClassName,
+      /* :: */[
+        Curry._1(Css.style, /* :: */[
+              Css.paddingBottom(Css.rem(2.0)),
+              /* [] */0
+            ]),
+        /* [] */0
+      ]
+    ]);
+
+function EntryPage$StyledMarkdown(Props) {
+  var text = Props.text;
+  return React.createElement("section", {
+              className: className$9
+            }, React.createElement(Markdown.make, {
+                  renderParagraph: EntryPage$StyledParagraph,
+                  text: text
+                }));
+}
+
+var StyledMarkdown = {
+  className: className$9,
+  make: EntryPage$StyledMarkdown
+};
+
 function EntryPage(Props) {
   var param = Props.data;
   return React.createElement("article", undefined, React.createElement(EntryPage$Header, {
@@ -307,10 +335,9 @@ function EntryPage(Props) {
                       date: param.date
                     }), React.createElement(EntryPage$TagList, {
                       tags: param.tags
-                    })), React.createElement("section", undefined, React.createElement(Markdown.make, {
-                      renderParagraph: EntryPage$StyledParagraph,
-                      text: param.text
-                    })), React.createElement(EntryPage$Navigation, {
+                    })), React.createElement(EntryPage$StyledMarkdown, {
+                  text: param.text
+                }), React.createElement(EntryPage$Navigation, {
                   previous: param.previous,
                   next: param.next
                 }));
@@ -328,6 +355,7 @@ export {
   NavigationLinkContainer ,
   Navigation ,
   StyledParagraph ,
+  StyledMarkdown ,
   make ,
   
 }

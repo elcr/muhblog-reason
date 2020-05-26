@@ -3,10 +3,12 @@ open Relude.Globals;
 
 module Header = {
     let className = Css.(
-        style([
-            marginBottom(rem(1.6)),
-            paddingBottom(rem(0.3)),
-            Relude.Function.uncurry3(borderBottom, Style.border)
+        merge([
+            Style.bottomBorderClassName,
+            style([
+                marginBottom(rem(1.6)),
+                paddingBottom(rem(0.3))
+            ])
         ])
     );
 
@@ -168,9 +170,11 @@ module Navigation = {
                 fontSize(rem(1.1)),
                 Style.desktopMediaQuery([
                     flexDirection(row),
-                    margin2(
-                        ~v=rem(3.0),
-                        ~h=zero
+                    margin4(
+                        ~top=rem(2.0),
+                        ~right=zero,
+                        ~bottom=rem(3.0),
+                        ~left=zero
                     ),
                 ])
             ])
@@ -226,6 +230,24 @@ module StyledParagraph = {
 };
 
 
+module StyledMarkdown = {
+    let className = Css.(
+        merge([
+            Style.bottomBorderClassName,
+            style([
+                paddingBottom(rem(2.0))
+            ])
+        ])
+    );
+
+    [@react.component]
+    let make = (~text) =>
+        <section className>
+            <Markdown renderParagraph=StyledParagraph.make text/>
+        </section>;
+};
+
+
 [@react.component]
 let make = (~data as { title, text, date, tags, previous, next }: PageData.entryData) =>
     <article>
@@ -236,8 +258,6 @@ let make = (~data as { title, text, date, tags, previous, next }: PageData.entry
             <StyledTimestamp date/>
             <TagList tags/>
         </Header>
-        <section>
-            <Markdown renderParagraph=StyledParagraph.make text/>
-        </section>
+        <StyledMarkdown text/>
         <Navigation previous next/>
     </article>;

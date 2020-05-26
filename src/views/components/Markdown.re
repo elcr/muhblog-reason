@@ -15,17 +15,19 @@ module HTMLElement = {
 
 module StyledHeading = {
     let classNameH2 = Css.(
-        style([
-            margin4(
-                ~top=rem(1.5),
-                ~right=zero,
-                ~bottom=rem(0.6),
-                ~left=zero
-            ),
-            fontSize(rem(1.5)),
-            Relude.Function.uncurry3(borderBottom, Style.border),
-            firstChild([
-                marginTop(zero)
+        merge([
+            Style.bottomBorderClassName,
+            style([
+                margin4(
+                    ~top=rem(1.5),
+                    ~right=zero,
+                    ~bottom=rem(0.6),
+                    ~left=zero
+                ),
+                fontSize(rem(1.5)),
+                firstChild([
+                    marginTop(zero)
+                ])
             ])
         ])
     );

@@ -11,7 +11,6 @@ import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
 import * as Relude_Option from "relude/src/Relude_Option.bs.js";
 import * as ReactMarkdown from "react-markdown";
 import * as HighlightedCode from "./HighlightedCode.bs.js";
-import * as Relude_Function from "relude/src/Relude_Function.bs.js";
 
 function Markdown$HTMLElement(Props) {
   var tag = Props.tag;
@@ -29,20 +28,23 @@ var $$HTMLElement = {
   make: Markdown$HTMLElement
 };
 
-var classNameH2 = Curry._1(Css.style, /* :: */[
-      Css.margin4(Css.rem(1.5), Css.zero, Css.rem(0.6), Css.zero),
+var classNameH2 = Curry._1(Css.merge, /* :: */[
+      Style.bottomBorderClassName,
       /* :: */[
-        Css.fontSize(Css.rem(1.5)),
-        /* :: */[
-          Relude_Function.uncurry3(Css.borderBottom, Style.border),
-          /* :: */[
-            Css.firstChild(/* :: */[
-                  Css.marginTop(Css.zero),
+        Curry._1(Css.style, /* :: */[
+              Css.margin4(Css.rem(1.5), Css.zero, Css.rem(0.6), Css.zero),
+              /* :: */[
+                Css.fontSize(Css.rem(1.5)),
+                /* :: */[
+                  Css.firstChild(/* :: */[
+                        Css.marginTop(Css.zero),
+                        /* [] */0
+                      ]),
                   /* [] */0
-                ]),
-            /* [] */0
-          ]
-        ]
+                ]
+              ]
+            ]),
+        /* [] */0
       ]
     ]);
 

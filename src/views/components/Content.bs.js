@@ -13,7 +13,13 @@ var className = Curry._1(Css.style, /* :: */[
           Css.justifyContent(Css.center),
           /* :: */[
             Css.margin2(Css.zero, Css.rem(0.5)),
-            /* [] */0
+            /* :: */[
+              Style.desktopMediaQuery(/* :: */[
+                    Css.margin(Css.zero),
+                    /* [] */0
+                  ]),
+              /* [] */0
+            ]
           ]
         ]
       ]

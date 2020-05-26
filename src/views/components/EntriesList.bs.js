@@ -19,7 +19,6 @@ import * as Relude_List from "relude/src/Relude_List.bs.js";
 import * as Relude_Array from "relude/src/Relude_Array.bs.js";
 import * as Relude_Float from "relude/src/Relude_Float.bs.js";
 import * as Relude_Option from "relude/src/Relude_Option.bs.js";
-import * as Relude_Function from "relude/src/Relude_Function.bs.js";
 
 var className = Curry._1(Css.style, /* :: */[
       Css.fontSize(Css.rem(1.5)),
@@ -42,32 +41,35 @@ var StyledHeading = {
   make: EntriesList$StyledHeading
 };
 
-var className$1 = Curry._1(Css.style, /* :: */[
-      Relude_Function.uncurry3(Css.borderBottom, Style.border),
+var className$1 = Curry._1(Css.merge, /* :: */[
+      Style.bottomBorderClassName,
       /* :: */[
-        Css.paddingBottom(Css.rem(1.6)),
-        /* :: */[
-          Css.margin2(Css.rem(0.5), Css.zero),
-          /* :: */[
-            Style.desktopMediaQuery(/* :: */[
-                  Css.margin2(Css.rem(0.8), Css.zero),
-                  /* [] */0
-                ]),
-            /* :: */[
-              Css.firstOfType(/* :: */[
-                    Css.marginTop(Css.zero),
-                    /* [] */0
-                  ]),
+        Curry._1(Css.style, /* :: */[
+              Css.paddingBottom(Css.rem(1.6)),
               /* :: */[
-                Css.lastOfType(/* :: */[
-                      Css.marginBottom(Css.zero),
+                Css.margin2(Css.rem(0.5), Css.zero),
+                /* :: */[
+                  Style.desktopMediaQuery(/* :: */[
+                        Css.margin2(Css.rem(0.8), Css.zero),
+                        /* [] */0
+                      ]),
+                  /* :: */[
+                    Css.firstOfType(/* :: */[
+                          Css.marginTop(Css.zero),
+                          /* [] */0
+                        ]),
+                    /* :: */[
+                      Css.lastOfType(/* :: */[
+                            Css.marginBottom(Css.zero),
+                            /* [] */0
+                          ]),
                       /* [] */0
-                    ]),
-                /* [] */0
+                    ]
+                  ]
+                ]
               ]
-            ]
-          ]
-        ]
+            ]),
+        /* [] */0
       ]
     ]);
 

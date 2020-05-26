@@ -7,7 +7,10 @@ module Container = {
             margin2(
                 ~v=zero,
                 ~h=rem(0.5)
-            )
+            ),
+            Style.desktopMediaQuery([
+                margin(zero)
+            ])
         ])
     );
 

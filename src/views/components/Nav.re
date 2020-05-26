@@ -36,6 +36,7 @@ module Container = {
 let className = Css.(
     merge([
         Style.smallCapsClassName,
+        Style.bottomBorderClassName,
         style([
             display(flexBox),
             justifyContent(center),
@@ -45,7 +46,18 @@ let className = Css.(
                 ~bottom=rem(1.5),
                 ~left=rem(0.5)
             ),
-            Relude.Function.uncurry3(borderBottom, Style.border)
+            padding2(
+                ~v=rem(0.5),
+                ~h=zero
+            ),
+            Style.desktopMediaQuery([
+                margin4(
+                    ~top=zero,
+                    ~right=zero,
+                    ~bottom=rem(1.5),
+                    ~left=zero
+                )
+            ])
         ])
     ])
 );

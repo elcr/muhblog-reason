@@ -9,14 +9,11 @@ let backgroundColour = black;
 let textColour = rgb(173, 175, 174);
 let linkColour = rgb(222, 226, 230);
 let linkHoverColour = white;
-let border = (px(1), `solid, rgb(40, 40, 40));
-
 
 let smallCapsClassName = style([
     fontFamily(`serif),
     unsafe("fontVariant", "small-caps")
 ]);
-
 
 let centredColumnClassName = style([
     display(flexBox),
@@ -24,6 +21,10 @@ let centredColumnClassName = style([
     desktopMediaQuery([
         maxWidth(desktopColumnWidth)
     ])
+]);
+
+let bottomBorderClassName = style([
+    borderBottom(px(1), `solid, rgb(40, 40, 40))
 ]);
 
 
