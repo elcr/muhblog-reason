@@ -10,11 +10,11 @@ external make: (
             "tag": string,
             "children": React.element
         } => React.element,
-        // "code": {
-        //     .
-        //     "language": string,
-        //     "value": string
-        // } => React.element,
+        "code": {
+            .
+            "language": string,
+            "value": string
+        } => React.element,
         "heading": {
             .
             "level": int,

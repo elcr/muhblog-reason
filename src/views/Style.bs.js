@@ -3,6 +3,7 @@
 import * as Css from "bs-css-emotion/src/Css.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Relude_List from "relude/src/Relude_List.bs.js";
+import * as HighlightedCode from "./components/HighlightedCode.bs.js";
 import * as Relude_Function from "relude/src/Relude_Function.bs.js";
 
 var desktopColumnWidth = Css.rem(48.0);
@@ -55,6 +56,8 @@ var backgroundColour = Css.black;
 
 var linkHoverColour = Css.white;
 
+var registerGlobalStyles = HighlightedCode.registerStyles;
+
 export {
   desktopColumnWidth ,
   desktopMediaQuery ,
@@ -66,6 +69,7 @@ export {
   smallCapsClassName ,
   centredColumnClassName ,
   combineClassNames ,
+  registerGlobalStyles ,
   
 }
 /* desktopColumnWidth Not a pure module */

@@ -1,34 +1,34 @@
 module Style = {
     type t;
 
-    [@bs.module]
-    external tomorrow: t = "react-syntax-highlighter/dist/esm/styles/prism/tomorrow";
+    [@bs.module "react-syntax-highlighter/dist/esm/styles/prism/tomorrow"]
+    external tomorrow: t = "default";
 };
 
 
 module Language = {
     type t;
 
-    [@bs.module]
-    external bash: t = "react-syntax-highlighter/dist/esm/languages/prism/bash"
+    [@bs.module "react-syntax-highlighter/dist/esm/languages/prism/bash"]
+    external bash: t = "default";
 
-    [@bs.module]
-    external javascript: t = "react-syntax-highlighter/dist/esm/languages/prism/javascript"
+    [@bs.module "react-syntax-highlighter/dist/esm/languages/prism/javascript"]
+    external javascript: t = "default";
 
-    [@bs.module]
-    external json: t = "react-syntax-highlighter/dist/esm/languages/prism/json"
+    [@bs.module "react-syntax-highlighter/dist/esm/languages/prism/json"]
+    external json: t = "default";
 
-    [@bs.module]
-    external python: t = "react-syntax-highlighter/dist/esm/languages/prism/python"
+    [@bs.module "react-syntax-highlighter/dist/esm/languages/prism/python"]
+    external python: t = "default";
 
-    [@bs.module]
-    external reason: t = "react-syntax-highlighter/dist/esm/languages/prism/reason"
+    [@bs.module "react-syntax-highlighter/dist/esm/languages/prism/reason"]
+    external reason: t = "default";
 
-    [@bs.module]
-    external typescript: t = "react-syntax-highlighter/dist/esm/languages/prism/typescript"
+    [@bs.module "react-syntax-highlighter/dist/esm/languages/prism/typescript"]
+    external typescript: t = "default";
 
-    [@bs.module]
-    external tsx: t = "react-syntax-highlighter/dist/esm/languages/prism/tsx"
+    [@bs.module "react-syntax-highlighter/dist/esm/languages/prism/tsx"]
+    external tsx: t = "default";
 
     [@bs.module "react-syntax-highlighter/dist/esm/prism-light"]
     [@bs.scope "default"]
@@ -47,10 +47,11 @@ module Language = {
 };
 
 
-[@bs.module]
+[@bs.module "react-syntax-highlighter/dist/esm/prism-light"]
 [@react.component]
 external make : (
+    ~className: string,
     ~language: string,
     ~style: Style.t,
     ~children: React.element
-) => React.element = "react-syntax-highlighter/dist/esm/prism-light";
+) => React.element = "default";

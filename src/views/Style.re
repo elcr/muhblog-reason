@@ -31,3 +31,6 @@ let combineClassNames = classNames =>
     classNames
         |> List.mapOption(Relude.Function.identity)
         |> merge;
+
+
+let registerGlobalStyles = HighlightedCode.registerStyles;

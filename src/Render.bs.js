@@ -2,11 +2,13 @@
 
 import * as App from "./views/App.bs.js";
 import * as Page from "./views/Page.bs.js";
+import * as Style from "./views/Style.bs.js";
 import * as React from "react";
 import * as EmotionServer from "emotion-server";
 import * as Server from "react-dom/server";
 
 function render(siteName, pageData) {
+  Style.registerGlobalStyles(undefined);
   var renderedApp = Server.renderToString(React.createElement(App.make, {
             siteName: siteName,
             pageData: pageData

@@ -1,4 +1,6 @@
 let render = (~siteName, ~pageData: option(PageData.t)) => {
+    Style.registerGlobalStyles();
+
     let renderedApp = ReactDOMServerRe.renderToString(
         <App siteName pageData/>
     );

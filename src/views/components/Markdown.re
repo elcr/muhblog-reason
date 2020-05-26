@@ -23,7 +23,10 @@ module StyledHeading = {
                 ~left=zero
             ),
             fontSize(rem(1.5)),
-            Relude.Function.uncurry3(borderBottom, Style.border)
+            Relude.Function.uncurry3(borderBottom, Style.border),
+            firstChild([
+                marginTop(zero)
+            ])
         ])
     );
 
@@ -58,8 +61,8 @@ module StyledHeading = {
 let make = (~renderParagraph=?, ~text) => {
     let renderers = {
         "virtualHtml": HTMLElement.make,
-        // "code": props =>
-        //     <HighlightedCode language=(props##language) text=(props##value)/>,
+        "code": props =>
+            <HighlightedCode language=(props##language) text=(props##value)/>,
         "heading": StyledHeading.make,
         "paragraph": Option.getOrElse(
             props => <p>(props##children)</p>,

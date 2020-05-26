@@ -13,8 +13,16 @@ let registerStyles = () => {
 };
 
 
+let className = Css.(
+    style([
+        fontSize(rem(0.8)),
+        important(marginBottom(rem(1.0)))
+    ])
+);
+
+
 [@react.component]
 let make = (~language, ~text) =>
-    <ReactSyntaxHighlighter language style=tomorrow>
+    <ReactSyntaxHighlighter className language style=tomorrow >
         (text |> React.string)
     </ReactSyntaxHighlighter>;
