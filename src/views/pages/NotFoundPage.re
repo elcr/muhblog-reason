@@ -1,6 +1,3 @@
 [@react.component]
-let make = () => {
-    <div>
-        ("not found" |> React.string)
-    </div>
-};
+let make = () =>
+    React.string("The requested page could not be found");
