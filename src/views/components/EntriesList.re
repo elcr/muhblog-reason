@@ -67,6 +67,7 @@ module Header = {
 module PageItem = {
     let className = Css.(
         style([
+            display(flexBox),
             margin2(
                 ~v=auto,
                 ~h=rem(0.375)
@@ -202,6 +203,7 @@ module Pagination = {
         merge([
             Style.smallCapsClassName,
             style([
+                display(flexBox),
                 fontSize(rem(1.125)),
                 margin2(
                     ~v=rem(2.4),

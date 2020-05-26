@@ -101,13 +101,16 @@ var Header = {
 };
 
 var className$3 = Curry._1(Css.style, /* :: */[
-      Css.margin2(Css.auto, Css.rem(0.375)),
+      Css.display(Css.flexBox),
       /* :: */[
-        Style.desktopMediaQuery(/* :: */[
-              Css.margin2(Css.auto, Css.rem(0.5)),
-              /* [] */0
-            ]),
-        /* [] */0
+        Css.margin2(Css.auto, Css.rem(0.375)),
+        /* :: */[
+          Style.desktopMediaQuery(/* :: */[
+                Css.margin2(Css.auto, Css.rem(0.5)),
+                /* [] */0
+              ]),
+          /* [] */0
+        ]
       ]
     ]);
 
@@ -267,10 +270,13 @@ var className$4 = Curry._1(Css.merge, /* :: */[
       Style.smallCapsClassName,
       /* :: */[
         Curry._1(Css.style, /* :: */[
-              Css.fontSize(Css.rem(1.125)),
+              Css.display(Css.flexBox),
               /* :: */[
-                Css.margin2(Css.rem(2.4), Css.auto),
-                /* [] */0
+                Css.fontSize(Css.rem(1.125)),
+                /* :: */[
+                  Css.margin2(Css.rem(2.4), Css.auto),
+                  /* [] */0
+                ]
               ]
             ]),
         /* [] */0
