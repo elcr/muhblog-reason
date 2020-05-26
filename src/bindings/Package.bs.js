@@ -2,7 +2,7 @@
 
 import * as PackageJson from "../../package.json";
 
-var json = PackageJson;
+var json = PackageJson.default;
 
 export {
   json ,

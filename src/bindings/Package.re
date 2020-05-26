@@ -4,5 +4,5 @@ type t = {
 };
 
 
-[@bs.module]
-external json: t = "../../package.json";
+[@bs.module "../../package.json"]
+external json: t = "default";
