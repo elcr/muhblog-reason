@@ -40,24 +40,8 @@ let className = Css.(
         style([
             display(flexBox),
             justifyContent(center),
-            margin4(
-                ~top=rem(0.5),
-                ~right=rem(0.5),
-                ~bottom=rem(1.5),
-                ~left=rem(0.5)
-            ),
-            padding2(
-                ~v=rem(0.5),
-                ~h=zero
-            ),
-            Style.desktopMediaQuery([
-                margin4(
-                    ~top=zero,
-                    ~right=zero,
-                    ~bottom=rem(1.5),
-                    ~left=zero
-                )
-            ])
+            marginBottom(rem(1.5)),
+            padding(rem(0.5))
         ])
     ])
 );

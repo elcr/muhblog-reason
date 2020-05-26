@@ -66,16 +66,10 @@ var className$2 = Curry._1(Css.merge, /* :: */[
                 /* :: */[
                   Css.justifyContent(Css.center),
                   /* :: */[
-                    Css.margin4(Css.rem(0.5), Css.rem(0.5), Css.rem(1.5), Css.rem(0.5)),
+                    Css.marginBottom(Css.rem(1.5)),
                     /* :: */[
-                      Css.padding2(Css.rem(0.5), Css.zero),
-                      /* :: */[
-                        Style.desktopMediaQuery(/* :: */[
-                              Css.margin4(Css.zero, Css.zero, Css.rem(1.5), Css.zero),
-                              /* [] */0
-                            ]),
-                        /* [] */0
-                      ]
+                      Css.padding(Css.rem(0.5)),
+                      /* [] */0
                     ]
                   ]
                 ]
