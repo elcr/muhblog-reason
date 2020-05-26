@@ -3,8 +3,15 @@
 import * as Css from "bs-css-emotion/src/Css.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Relude_List from "relude/src/Relude_List.bs.js";
-import * as HighlightedCode from "./components/HighlightedCode.bs.js";
 import * as Relude_Function from "relude/src/Relude_Function.bs.js";
+import * as PrismLight from "react-syntax-highlighter/dist/esm/prism-light";
+import * as Tsx from "react-syntax-highlighter/dist/esm/languages/prism/tsx";
+import * as Bash from "react-syntax-highlighter/dist/esm/languages/prism/bash";
+import * as Json from "react-syntax-highlighter/dist/esm/languages/prism/json";
+import * as Python from "react-syntax-highlighter/dist/esm/languages/prism/python";
+import * as Reason from "react-syntax-highlighter/dist/esm/languages/prism/reason";
+import * as Javascript from "react-syntax-highlighter/dist/esm/languages/prism/javascript";
+import * as Typescript from "react-syntax-highlighter/dist/esm/languages/prism/typescript";
 
 var desktopColumnWidth = Css.rem(48.0);
 
@@ -47,11 +54,20 @@ function combineClassNames(classNames) {
   return Curry._1(Css.merge, Relude_List.mapOption(Relude_Function.identity, classNames));
 }
 
+function registerGlobalStyles(param) {
+  PrismLight.default.registerLanguage("bash", Bash.default);
+  PrismLight.default.registerLanguage("javascript", Javascript.default);
+  PrismLight.default.registerLanguage("json", Json.default);
+  PrismLight.default.registerLanguage("python", Python.default);
+  PrismLight.default.registerLanguage("reason", Reason.default);
+  PrismLight.default.registerLanguage("typescript", Typescript.default);
+  PrismLight.default.registerLanguage("tsx", Tsx.default);
+  
+}
+
 var backgroundColour = Css.black;
 
 var linkHoverColour = Css.white;
-
-var registerGlobalStyles = HighlightedCode.registerStyles;
 
 export {
   desktopColumnWidth ,

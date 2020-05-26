@@ -1,13 +1,23 @@
 open Relude.Globals;
 
 
-module HTMLElement = {
+module SpoilerHTML = {
+    let className = Css.(
+        style([
+            backgroundColor(black),
+            color(black),
+            hover([
+                color(white)
+            ])
+        ])
+    );
+
     [@react.component]
     let make = (~tag, ~children) =>
         if (tag === "spoiler")
-            <Spoiler>
+            <span className>
                 children
-            </Spoiler>
+            </span>
         else
             ReactDOMRe.createElement(tag, [| children |]);
 };
@@ -88,10 +98,26 @@ module LazyImage = {
 };
 
 
+module HighlightedCode = {
+    let className = Css.(
+        style([
+            fontSize(rem(0.8)),
+            important(marginBottom(rem(1.0)))
+        ])
+    );
+
+    [@react.component]
+    let make = (~language, ~text) =>
+        <ReactSyntaxHighlighter className language style=ReactSyntaxHighlighter.Style.tomorrow >
+            (text |> React.string)
+        </ReactSyntaxHighlighter>;
+};
+
+
 [@react.component]
 let make = (~renderParagraph=?, ~text) => {
     let renderers = {
-        "virtualHtml": HTMLElement.make,
+        "virtualHtml": SpoilerHTML.make,
         "code": props =>
             <HighlightedCode language=(props##language) text=(props##value)/>,
         "heading": StyledHeading.make,

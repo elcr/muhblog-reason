@@ -34,4 +34,14 @@ let combineClassNames = classNames =>
         |> merge;
 
 
-let registerGlobalStyles = HighlightedCode.registerStyles;
+let registerGlobalStyles = () => {
+    open ReactSyntaxHighlighter.Language;
+
+    register(`bash, bash);
+    register(`javascript, javascript);
+    register(`json, json);
+    register(`python, python);
+    register(`reason, reason);
+    register(`typescript, typescript);
+    register(`tsx, tsx);
+};

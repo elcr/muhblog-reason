@@ -6,26 +6,41 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Style from "../Style.bs.js";
 import * as React from "react";
 import * as Heading from "./Heading.bs.js";
-import * as Spoiler from "./Spoiler.bs.js";
 import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
 import * as Relude_Option from "relude/src/Relude_Option.bs.js";
 import * as ReactMarkdown from "react-markdown";
-import * as HighlightedCode from "./HighlightedCode.bs.js";
+import * as PrismLight from "react-syntax-highlighter/dist/esm/prism-light";
+import * as Tomorrow from "react-syntax-highlighter/dist/esm/styles/prism/tomorrow";
 
-function Markdown$HTMLElement(Props) {
+var className = Curry._1(Css.style, /* :: */[
+      Css.backgroundColor(Css.black),
+      /* :: */[
+        Css.color(Css.black),
+        /* :: */[
+          Css.hover(/* :: */[
+                Css.color(Css.white),
+                /* [] */0
+              ]),
+          /* [] */0
+        ]
+      ]
+    ]);
+
+function Markdown$SpoilerHTML(Props) {
   var tag = Props.tag;
   var children = Props.children;
   if (tag === "spoiler") {
-    return React.createElement(Spoiler.make, {
-                children: children
-              });
+    return React.createElement("span", {
+                className: className
+              }, children);
   } else {
     return React.createElement(tag, undefined, children);
   }
 }
 
-var $$HTMLElement = {
-  make: Markdown$HTMLElement
+var SpoilerHTML = {
+  className: className,
+  make: Markdown$SpoilerHTML
 };
 
 var classNameH2 = Curry._1(Css.merge, /* :: */[
@@ -78,7 +93,7 @@ var StyledHeading = {
   make: Markdown$StyledHeading
 };
 
-var className = Curry._1(Css.style, /* :: */[
+var className$1 = Curry._1(Css.style, /* :: */[
       Css.fontSize(Css.rem(1.1)),
       /* [] */0
     ]);
@@ -86,12 +101,12 @@ var className = Curry._1(Css.style, /* :: */[
 function Markdown$StyledCode(Props) {
   var children = Props.children;
   return React.createElement("code", {
-              className: className
+              className: className$1
             }, children);
 }
 
 var StyledCode = {
-  className: className,
+  className: className$1,
   make: Markdown$StyledCode
 };
 
@@ -107,13 +122,37 @@ var LazyImage = {
   make: Markdown$LazyImage
 };
 
+var className$2 = Curry._1(Css.style, /* :: */[
+      Css.fontSize(Css.rem(0.8)),
+      /* :: */[
+        Css.important(Css.marginBottom(Css.rem(1.0))),
+        /* [] */0
+      ]
+    ]);
+
+function Markdown$HighlightedCode(Props) {
+  var language = Props.language;
+  var text = Props.text;
+  return React.createElement(PrismLight.default, {
+              className: className$2,
+              language: language,
+              style: Tomorrow.default,
+              children: text
+            });
+}
+
+var HighlightedCode = {
+  className: className$2,
+  make: Markdown$HighlightedCode
+};
+
 function Markdown(Props) {
   var renderParagraph = Props.renderParagraph;
   var text = Props.text;
   var renderers = {
-    virtualHtml: Markdown$HTMLElement,
+    virtualHtml: Markdown$SpoilerHTML,
     code: (function (props) {
-        return React.createElement(HighlightedCode.make, {
+        return React.createElement(Markdown$HighlightedCode, {
                     language: props.language,
                     text: props.value
                   });
@@ -141,11 +180,12 @@ function Markdown(Props) {
 var make = Markdown;
 
 export {
-  $$HTMLElement ,
+  SpoilerHTML ,
   StyledHeading ,
   StyledCode ,
   LazyImage ,
+  HighlightedCode ,
   make ,
   
 }
-/* classNameH2 Not a pure module */
+/* className Not a pure module */

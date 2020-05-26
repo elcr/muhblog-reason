@@ -21,6 +21,105 @@ module Root = {
 };
 
 
+module MainContainer = {
+    let className = Css.(
+        style([
+            display(flexBox),
+            flexGrow(1.0),
+            justifyContent(center),
+            margin2(
+                ~v=zero,
+                ~h=rem(0.5)
+            ),
+            Style.desktopMediaQuery([
+                margin(zero)
+            ])
+        ])
+    );
+
+    [@react.component]
+    let make = (~children) =>
+        <div className>
+            children
+        </div>;
+};
+
+
+module Main = {
+    let className = Css.(
+        merge([
+            Style.centredColumnClassName,
+            style([
+                flexDirection(column)
+            ])
+        ])
+    );
+
+    [@react.component]
+    let make = (~children) =>
+        <main className>
+            children
+        </main>;
+};
+
+
+module HomeLink = {
+    let className = Css.(
+        style([
+            marginRight(auto),
+            fontSize(rem(1.125)),
+            color(Style.linkHoverColour)
+        ])
+    );
+
+    [@react.component]
+    let make = (~children) =>
+        <RouteLink className route=Router.Index({ page: 1 })>
+            children
+        </RouteLink>;
+};
+
+
+module NavLinks = {
+    let className = Css.(
+        merge([
+            Style.centredColumnClassName,
+            style([
+                alignItems(center)
+            ])
+        ])
+    );
+
+    [@react.component]
+    let make = (~children) =>
+        <div className>
+            children
+        </div>;
+};
+
+
+module Nav = {
+    let className = Css.(
+        merge([
+            Style.smallCapsClassName,
+            Style.bottomBorderClassName,
+            style([
+                display(flexBox),
+                justifyContent(center),
+                marginBottom(rem(1.5)),
+                padding(rem(0.5))
+            ])
+        ])
+    );
+
+    [@react.component]
+    let make = (~children) =>
+        <nav className>
+            children
+        </nav>;
+};
+
+
 [@react.component]
 let make = (~siteName, ~pageData) => {
     let activeRoute = Option.map(PageData.toRoute, pageData);
@@ -33,9 +132,20 @@ let make = (~siteName, ~pageData) => {
     };
 
     <Root>
-        <Nav siteName activeRoute/>
-        <Content>
-            page
-        </Content>
+        <Nav>
+            <NavLinks>
+                <HomeLink>
+                    (siteName |> React.string)
+                </HomeLink>
+                <RouteLink activeRoute=?activeRoute route=Router.About>
+                    ("About" |> React.string)
+                </RouteLink>
+            </NavLinks>
+        </Nav>
+        <MainContainer>
+            <Main>
+                page
+            </Main>
+        </MainContainer>
     </Root>
 };
