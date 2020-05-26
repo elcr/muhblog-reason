@@ -25,13 +25,19 @@ type aboutData = {
 };
 
 
+type navigationEntry = {
+    title: string,
+    date: Date.t
+};
+
+
 type entryData = {
     title: string,
     date: Date.t,
     text: string,
     tags: list(string),
-    previous: option(string),
-    next: option(string)
+    previous: option(navigationEntry),
+    next: option(navigationEntry)
 };
 
 

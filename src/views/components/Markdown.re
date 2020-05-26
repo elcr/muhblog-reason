@@ -57,6 +57,21 @@ module StyledHeading = {
 };
 
 
+module StyledCode = {
+    let className = Css.(
+        style([
+            fontSize(rem(1.1))
+        ])
+    );
+
+    [@react.component]
+    let make = (~children) =>
+        <code className>
+            children
+        </code>;
+};
+
+
 [@react.component]
 let make = (~renderParagraph=?, ~text) => {
     let renderers = {
@@ -68,6 +83,7 @@ let make = (~renderParagraph=?, ~text) => {
             props => <p>(props##children)</p>,
             renderParagraph
         ),
+        "inlineCode": StyledCode.make,
         "link": props =>
             <Link url=(props##href)>
                 (props##children)

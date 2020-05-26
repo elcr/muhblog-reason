@@ -39,7 +39,12 @@ let makeResponse = (~entries, ~year, ~month, ~day, ~slug) => {
                         |> List.find((entry: Parse.parsedEntry) =>
                             dayTimestamp(entry.date) < timestamp
                         )
-                        |> Option.map((entry: Parse.parsedEntry) => entry.title),
+                        |> Option.map((entry: Parse.parsedEntry) =>
+                            ({
+                                date: entry.date,
+                                title: entry.title
+                            }: PageData.navigationEntry)
+                        ),
                     next: entries
                         |> List.sortBy((a: Parse.parsedEntry, b) =>
                             Int.compare(
@@ -50,7 +55,12 @@ let makeResponse = (~entries, ~year, ~month, ~day, ~slug) => {
                         |> List.find((entry: Parse.parsedEntry) =>
                             dayTimestamp(entry.date) > timestamp
                         )
-                        |> Option.map((entry: Parse.parsedEntry) => entry.title)
+                        |> Option.map((entry: Parse.parsedEntry) =>
+                            ({
+                                date: entry.date,
+                                title: entry.title
+                            }: PageData.navigationEntry)
+                        )
                 }))
             })
         )

@@ -76,6 +76,23 @@ var StyledHeading = {
   make: Markdown$StyledHeading
 };
 
+var className = Curry._1(Css.style, /* :: */[
+      Css.fontSize(Css.rem(1.1)),
+      /* [] */0
+    ]);
+
+function Markdown$StyledCode(Props) {
+  var children = Props.children;
+  return React.createElement("code", {
+              className: className
+            }, children);
+}
+
+var StyledCode = {
+  className: className,
+  make: Markdown$StyledCode
+};
+
 function Markdown(Props) {
   var renderParagraph = Props.renderParagraph;
   var text = Props.text;
@@ -91,6 +108,7 @@ function Markdown(Props) {
     paragraph: Relude_Option.getOrElse((function (props) {
             return React.createElement("p", undefined, props.children);
           }), renderParagraph),
+    inlineCode: Markdown$StyledCode,
     link: (function (props) {
         return React.createElement(Link.make, {
                     url: props.href,
@@ -110,6 +128,7 @@ var make = Markdown;
 export {
   $$HTMLElement ,
   StyledHeading ,
+  StyledCode ,
   make ,
   
 }

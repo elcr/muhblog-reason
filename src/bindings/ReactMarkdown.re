@@ -24,6 +24,10 @@ external make: (
             .
             "children": React.element
         } => React.element,
+        "inlineCode": {
+            .
+            "children": React.element
+        } => React.element,
         "link": {
             .
             "href": string,

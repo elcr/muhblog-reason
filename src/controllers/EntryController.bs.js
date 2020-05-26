@@ -23,14 +23,20 @@ function makeResponse(entries, year, month, day, slug) {
                                 text: entry.text,
                                 tags: entry.tags,
                                 previous: Relude_Option.map((function (entry) {
-                                        return entry.title;
+                                        return {
+                                                title: entry.title,
+                                                date: entry.date
+                                              };
                                       }), Curry._2(Relude_List.find, (function (entry) {
                                             return dayTimestamp(entry.date) < timestamp;
                                           }), Relude_List.sortBy((function (a, b) {
                                                 return Curry._2(Relude_Int.compare, b.date.getTime(), a.date.getTime());
                                               }), entries))),
                                 next: Relude_Option.map((function (entry) {
-                                        return entry.title;
+                                        return {
+                                                title: entry.title,
+                                                date: entry.date
+                                              };
                                       }), Curry._2(Relude_List.find, (function (entry) {
                                             return dayTimestamp(entry.date) > timestamp;
                                           }), Relude_List.sortBy((function (a, b) {
