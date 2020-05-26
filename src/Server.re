@@ -13,6 +13,7 @@ let splitURLSegments = url =>
 
 let makeResponse = (
     ~data as { about, entries }: Parse.parsedData,
+    ~uploadsDirectory,
     route: Router.route
 ) =>
     switch (route) {
@@ -24,19 +25,19 @@ let makeResponse = (
             AboutController.makeResponse(~about)
         | Entry({ year, month, day, slug }) =>
             EntryController.makeResponse(~entries, ~year, ~month, ~day, ~slug)
-        | Static({ directory, filename }) =>
-            StaticController.makeResponse(~directory, ~filename)
+        | Uploads({ filename }) =>
+            UploadsController.makeResponse(~directory=uploadsDirectory, ~filename)
     };
 
 
-let make = (~siteName, ~data as { favicon } as data: Parse.parsedData) =>
+let make = (~siteName, ~uploadsDirectory, ~data as { favicon } as data: Parse.parsedData) =>
     HTTP.Server.make((request, response) => {
         let url = HTTP.Request.getURL(request)
             |> Option.getOrElse("/");
         splitURLSegments(url)
             |> Router.route
             |> IO.fromOption(ignore)
-            |> IO.flatMap(makeResponse(~data))
+            |> IO.flatMap(makeResponse(~data, ~uploadsDirectory))
             |> IO.handleError(() => Response.notFound)
             |> IO.tap((res: Response.t) => {
                 open HTTP;

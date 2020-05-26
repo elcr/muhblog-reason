@@ -9,6 +9,7 @@ function parseArguments(param) {
   ArgParse.addArgument("-e", "--entries-directory", "entriesDirectory", "PATH", parser);
   ArgParse.addArgument("-a", "--about-path", "aboutPath", "PATH", parser);
   ArgParse.addArgument("-f", "--favicon-path", "faviconPath", "PATH", parser);
+  ArgParse.addArgument("-u", "--uploads-directory", "uploadsDirectory", "PATH", parser);
   return parser.parseArgs();
 }
 

@@ -32,6 +32,12 @@ let printError = (error: Parse.readAndParseAllError) => {
             "Favicon path does not exist"
         | FaviconError(ReadError(_)) =>
             "Error reading favicon path"
+        | UploadsDirectoryError(NotADirectory(_)) =>
+            "Uploads path is not a directory"
+        | UploadsDirectoryError(NoSuchFileOrDirectory(_)) =>
+            "Uploads directory does not exist"
+        | UploadsDirectoryError(_) =>
+            "Error checking existence of uploads directory"
     };
     Js.Console.error(message)
 }
@@ -42,11 +48,12 @@ let main = () => {
         siteName,
         aboutPath,
         entriesDirectory,
-        faviconPath
+        faviconPath,
+        uploadsDirectory
     }: CLI.arguments = CLI.parseArguments();
 
-    Parse.readAndParseAll(~aboutPath, ~entriesDirectory, ~faviconPath)
-        |> IO.map(data => Server.make(~siteName, ~data))
+    Parse.readAndParseAll(~aboutPath, ~entriesDirectory, ~faviconPath, ~uploadsDirectory)
+        |> IO.map(data => Server.make(~siteName, ~uploadsDirectory, ~data))
         |> IO.bitap(Server.listen, printError)
         |> IO.unsafeRunAsync(ignore)
 };

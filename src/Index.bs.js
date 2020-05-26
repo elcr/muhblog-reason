@@ -63,6 +63,18 @@ function printError(error) {
           message = "Error identifying favicon mimetype";
         }
         break;
+    case /* UploadsDirectoryError */3 :
+        switch (error[0].tag | 0) {
+          case /* NoSuchFileOrDirectory */7 :
+              message = "Uploads directory does not exist";
+              break;
+          case /* NotADirectory */8 :
+              message = "Uploads path is not a directory";
+              break;
+          default:
+            message = "Error checking existence of uploads directory";
+        }
+        break;
     
   }
   console.error(message);
@@ -71,12 +83,13 @@ function printError(error) {
 
 function main(param) {
   var match = CLI.parseArguments(undefined);
+  var uploadsDirectory = match.uploadsDirectory;
   var siteName = match.siteName;
   return Relude_IO.unsafeRunAsync((function (prim) {
                 
               }), Relude_IO.bitap(Server.listen, printError, Relude_IO.map((function (data) {
-                        return Server.make(siteName, data);
-                      }), Parse.readAndParseAll(match.aboutPath, match.entriesDirectory, match.faviconPath))));
+                        return Server.make(siteName, uploadsDirectory, data);
+                      }), Parse.readAndParseAll(match.aboutPath, match.entriesDirectory, match.faviconPath, uploadsDirectory))));
 }
 
 main(undefined);

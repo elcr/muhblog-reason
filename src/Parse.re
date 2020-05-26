@@ -168,6 +168,12 @@ let readAndEncodeFaviconPath = path =>
         );
 
 
+let checkUploadsDirectoryExistence = path =>
+    IO.Suspend(() => Js.Console.log({j|Checking existence of uploads directory "$path"|j}))
+        |> IO.flatMap(() => NodeFS.ReadDir.readDir(path))
+        |> IO.map(ignore);
+
+
 type parsedData = {
     about: string,
     entries: list(parsedEntry),
@@ -178,10 +184,11 @@ type parsedData = {
 type readAndParseAllError =
     | AboutFileError(Error.t)
     | EntriesDirectoryError(readAndParseEntriesDirectoryError)
-    | FaviconError(readAndEncodeFaviconPathError);
+    | FaviconError(readAndEncodeFaviconPathError)
+    | UploadsDirectoryError(NodeFS.Error.t);
 
 
-let readAndParseAll = (~aboutPath, ~entriesDirectory, ~faviconPath) =>
+let readAndParseAll = (~aboutPath, ~entriesDirectory, ~faviconPath, ~uploadsDirectory) =>
     readAndParseEntriesDirectory(entriesDirectory)
         |> IO.mapError(error => EntriesDirectoryError(error))
         |> IO.flatMap(entries =>
@@ -196,5 +203,12 @@ let readAndParseAll = (~aboutPath, ~entriesDirectory, ~faviconPath) =>
                 |> IO.bimap(
                     favicon => { about, entries, favicon },
                     error => FaviconError(error)
+                )
+        )
+        |> IO.flatMap(parsed =>
+            checkUploadsDirectoryExistence(uploadsDirectory)
+                |> IO.bimap(
+                    () => parsed,
+                    error => UploadsDirectoryError(error)
                 )
         );

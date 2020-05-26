@@ -2,7 +2,8 @@ type arguments = {
     siteName: string,
     entriesDirectory: string,
     aboutPath: string,
-    faviconPath: string
+    faviconPath: string,
+    uploadsDirectory: string
 };
 
 
@@ -34,6 +35,13 @@ let parseArguments = (): arguments => {
         ~shortName="-f",
         ~longName="--favicon-path",
         ~dest="faviconPath",
+        ~metavar="PATH",
+        parser
+    )
+    ArgParse.addArgument(
+        ~shortName="-u",
+        ~longName="--uploads-directory",
+        ~dest="uploadsDirectory",
         ~metavar="PATH",
         parser
     )

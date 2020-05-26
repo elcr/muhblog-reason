@@ -9,7 +9,7 @@ import * as NodeFS__Stat from "node-fs-bs/src/NodeFS__Stat.bs.js";
 import * as NodeFS__ReadStream from "node-fs-bs/src/NodeFS__ReadStream.bs.js";
 
 function makeResponse(directory, filename) {
-  var path = Path.join(__dirname, directory, filename);
+  var path = Path.join(directory, filename);
   return Curry._2(Relude_IO.mapError, (function (prim) {
                 
               }), Relude_IO.flatMap((function (param) {

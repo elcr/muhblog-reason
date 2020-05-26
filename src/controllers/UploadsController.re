@@ -3,8 +3,7 @@ open NodeFS;
 
 
 let makeResponse = (~directory, ~filename) => {
-    let path = [| Dirname.name, directory, filename |]
-        |> Node.Path.join;
+    let path = Node.Path.join([| directory, filename |]);
     Stat.stat(path)
         |> IO.flatMap(({ size, mtime }: Stat.t) =>
             ReadStream.make(path)

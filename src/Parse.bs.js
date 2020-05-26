@@ -181,31 +181,48 @@ function readAndEncodeFaviconPath(path) {
                       })])));
 }
 
-function readAndParseAll(aboutPath, entriesDirectory, faviconPath) {
-  return Relude_IO.flatMap((function (param) {
-                var entries = param[1];
-                var about = param[0];
-                return Relude_IO.bimap((function (favicon) {
-                              return {
-                                      about: about,
-                                      entries: entries,
-                                      favicon: favicon
-                                    };
+function checkUploadsDirectoryExistence(path) {
+  return Relude_IO.map((function (prim) {
+                
+              }), Relude_IO.flatMap((function (param) {
+                    return NodeFS__ReadDir.readDir(undefined, path);
+                  }), /* Suspend */Block.__(2, [(function (param) {
+                        console.log("Checking existence of uploads directory \"" + (String(path) + "\""));
+                        
+                      })])));
+}
+
+function readAndParseAll(aboutPath, entriesDirectory, faviconPath, uploadsDirectory) {
+  return Relude_IO.flatMap((function (parsed) {
+                return Relude_IO.bimap((function (param) {
+                              return parsed;
                             }), (function (error) {
-                              return /* FaviconError */Block.__(2, [error]);
-                            }), readAndEncodeFaviconPath(faviconPath));
-              }), Relude_IO.flatMap((function (entries) {
-                    return Relude_IO.bimap((function (about) {
-                                  return /* tuple */[
-                                          about,
-                                          entries
-                                        ];
+                              return /* UploadsDirectoryError */Block.__(3, [error]);
+                            }), checkUploadsDirectoryExistence(uploadsDirectory));
+              }), Relude_IO.flatMap((function (param) {
+                    var entries = param[1];
+                    var about = param[0];
+                    return Relude_IO.bimap((function (favicon) {
+                                  return {
+                                          about: about,
+                                          entries: entries,
+                                          favicon: favicon
+                                        };
                                 }), (function (error) {
-                                  return /* AboutFileError */Block.__(0, [error]);
-                                }), readAndParseAboutPath(aboutPath));
-                  }), Curry._2(Relude_IO.mapError, (function (error) {
-                        return /* EntriesDirectoryError */Block.__(1, [error]);
-                      }), readAndParseEntriesDirectory(entriesDirectory))));
+                                  return /* FaviconError */Block.__(2, [error]);
+                                }), readAndEncodeFaviconPath(faviconPath));
+                  }), Relude_IO.flatMap((function (entries) {
+                        return Relude_IO.bimap((function (about) {
+                                      return /* tuple */[
+                                              about,
+                                              entries
+                                            ];
+                                    }), (function (error) {
+                                      return /* AboutFileError */Block.__(0, [error]);
+                                    }), readAndParseAboutPath(aboutPath));
+                      }), Curry._2(Relude_IO.mapError, (function (error) {
+                            return /* EntriesDirectoryError */Block.__(1, [error]);
+                          }), readAndParseEntriesDirectory(entriesDirectory)))));
 }
 
 export {
@@ -217,6 +234,7 @@ export {
   readAndParseEntriesDirectory ,
   readAndParseAboutPath ,
   readAndEncodeFaviconPath ,
+  checkUploadsDirectoryExistence ,
   readAndParseAll ,
   
 }

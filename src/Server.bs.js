@@ -11,7 +11,7 @@ import * as Relude_Option from "relude/src/Relude_Option.bs.js";
 import * as AboutController from "./controllers/AboutController.bs.js";
 import * as EntryController from "./controllers/EntryController.bs.js";
 import * as IndexController from "./controllers/IndexController.bs.js";
-import * as StaticController from "./controllers/StaticController.bs.js";
+import * as UploadsController from "./controllers/UploadsController.bs.js";
 import * as TagSearchController from "./controllers/TagSearchController.bs.js";
 
 function splitURLSegments(url) {
@@ -22,7 +22,7 @@ function splitURLSegments(url) {
               }));
 }
 
-function makeResponse(param, route) {
+function makeResponse(param, uploadsDirectory, route) {
   var entries = param.entries;
   if (typeof route === "number") {
     return AboutController.makeResponse(param.about);
@@ -34,13 +34,13 @@ function makeResponse(param, route) {
         return TagSearchController.makeResponse(entries, route[/* slug */0], route[/* page */1]);
     case /* Entry */2 :
         return EntryController.makeResponse(entries, route[/* year */0], route[/* month */1], route[/* day */2], route[/* slug */3]);
-    case /* Static */3 :
-        return StaticController.makeResponse(route[/* directory */0], route[/* filename */1]);
+    case /* Uploads */3 :
+        return UploadsController.makeResponse(uploadsDirectory, route[/* filename */0]);
     
   }
 }
 
-function make(siteName, data) {
+function make(siteName, uploadsDirectory, data) {
   var favicon = data.favicon;
   return Http.createServer((function (request, response) {
                 var url = Relude_Option.getOrElse("/", Caml_option.undefined_to_opt(request.url));
@@ -72,7 +72,7 @@ function make(siteName, data) {
                                   }))(Relude_IO.handleError((function (param) {
                                       return $$Response.notFound;
                                     }), Relude_IO.flatMap((function (param) {
-                                          return makeResponse(data, param);
+                                          return makeResponse(data, uploadsDirectory, param);
                                         }), Relude_IO.fromOption((function (prim) {
                                               
                                             }), Router.route(splitURLSegments(url)))))));
