@@ -9,7 +9,5 @@ let make = (~title, ~css, ~favicon as { uri, mimeType }: Parse.favicon, ~childre
             <title>(title |> React.string)</title>
             <style>(Reboot.css ++ css |> React.string)</style>
         </head>
-        <body>
-            <div dangerouslySetInnerHTML={ "__html": children }/>
-        </body>
+        <body dangerouslySetInnerHTML={ "__html": children }/>
     </html>;

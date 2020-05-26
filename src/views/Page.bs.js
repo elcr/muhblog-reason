@@ -19,11 +19,11 @@ function Page(Props) {
                       href: param.uri,
                       rel: "icon",
                       type: param.mimeType
-                    }), React.createElement("title", undefined, title), React.createElement("style", undefined, BootstrapRebootScss + css)), React.createElement("body", undefined, React.createElement("div", {
-                      dangerouslySetInnerHTML: {
-                        __html: children
-                      }
-                    })));
+                    }), React.createElement("title", undefined, title), React.createElement("style", undefined, BootstrapRebootScss + css)), React.createElement("body", {
+                  dangerouslySetInnerHTML: {
+                    __html: children
+                  }
+                }));
 }
 
 var make = Page;
