@@ -24,12 +24,7 @@ const config = {
             {
                 test: /\.s?css$/,
                 use: [
-                    {
-                        loader: 'raw-loader',
-                        options: {
-                            esModule: false
-                        }
-                    },
+                    {loader: 'raw-loader'},
                     {
                         loader: 'string-replace-loader',
                         options: {
