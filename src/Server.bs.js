@@ -24,17 +24,16 @@ function splitURLSegments(url) {
 
 function makeResponse(param, uploadsDirectory, route) {
   var entries = param.entries;
-  if (typeof route === "number") {
-    return AboutController.makeResponse(param.about);
-  }
   switch (route.tag | 0) {
     case /* Index */0 :
         return IndexController.makeResponse(entries, route[/* page */0]);
     case /* TagSearch */1 :
         return TagSearchController.makeResponse(entries, route[/* slug */0], route[/* page */1]);
-    case /* Entry */2 :
+    case /* About */2 :
+        return AboutController.makeResponse(param.about);
+    case /* Entry */3 :
         return EntryController.makeResponse(entries, route[/* year */0], route[/* month */1], route[/* day */2], route[/* slug */3]);
-    case /* Uploads */3 :
+    case /* Uploads */4 :
         return UploadsController.makeResponse(uploadsDirectory, route[/* filename */0]);
     
   }

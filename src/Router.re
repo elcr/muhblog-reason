@@ -4,8 +4,8 @@ open Relude.Globals;
 type route =
     | Index({ page: int })
     | TagSearch({ slug: string, page: int })
-    | About
-    | Entry({ year: int, month: int, day: int, slug: string })
+    | About({ id: option(string) })
+    | Entry({ year: int, month: int, day: int, slug: string, id: option(string) })
     | Uploads({ filename: string });
 
 
@@ -24,7 +24,7 @@ let route = segments =>
                         |> Option.map(day => (year, month, day))
                 )
                 |> Option.map(((year, month, day)) =>
-                    Entry({ year, month, day, slug })
+                    Entry({ year, month, day, slug, id: None })
                 )
         | [| "tag", slug, page |] =>
             Int.fromString(page)
@@ -35,7 +35,7 @@ let route = segments =>
         | [| "uploads", filename |] =>
             Some(Uploads({ filename: filename }))
         | [| "about" |] =>
-            Some(About)
+            Some(About({ id: None }))
         | [| page |] =>
             Int.fromString(page)
                 |> Option.filter(page => page >= 1)
@@ -46,19 +46,36 @@ let route = segments =>
     };
 
 
+let buildEntryRoute = (~date, ~title, ~id) =>
+    Entry({
+        year: Date.getYear(date),
+        month: Date.getMonth(date),
+        day: Date.getDay(date),
+        slug: Utils.slug(title),
+        id
+    });
+
+
+let _buildEntry = (~year: int, ~month, ~day, ~slug: string) => {
+    let month = Int.toString(month)
+        |> String.padStart(~targetLength=2, ~padWith="0");
+    let day = Int.toString(day)
+        |> String.padStart(~targetLength=2, ~padWith="0");
+    {j|/$year/$month/$day/$slug/|j}
+};
+
+
 let build = route =>
     switch (route) {
         | Index({ page: 1 }) => "/"
         | Index({ page }) => {j|/$page/|j}
         | TagSearch({ slug, page: 1 }) => {j|/tag/$slug/|j}
         | TagSearch({ slug, page }) => {j|/tag/$slug/$page/|j}
-        | About => "/about/"
-        | Entry({ year, month, day, slug }) => {
-            let month = Int.toString(month)
-                |> String.padStart(~targetLength=2, ~padWith="0");
-            let day = Int.toString(day)
-                |> String.padStart(~targetLength=2, ~padWith="0");
-            {j|/$year/$month/$day/$slug/|j}
-        }
+        | About({ id: Some(id) }) => "/about/" ++ "#" ++ id
+        | About({ id: None }) => "/about/"
+        | Entry({ year, month, day, slug, id: Some(id) }) =>
+            _buildEntry(~year, ~month, ~day, ~slug) ++ "#" ++ id
+        | Entry({ year, month, day, slug, id: None }) =>
+            _buildEntry(~year, ~month, ~day, ~slug)
         | Uploads({ filename }) => {j|/uploads/$filename|j}
     };

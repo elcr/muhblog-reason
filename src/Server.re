@@ -21,7 +21,7 @@ let makeResponse = (
             IndexController.makeResponse(~entries, ~page)
         | TagSearch({ slug, page }) =>
             TagSearchController.makeResponse(~entries, ~slug, ~page)
-        | About =>
+        | About(_) =>
             AboutController.makeResponse(~about)
         | Entry({ year, month, day, slug }) =>
             EntryController.makeResponse(~entries, ~year, ~month, ~day, ~slug)

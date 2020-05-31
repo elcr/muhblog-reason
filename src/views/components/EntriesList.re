@@ -249,17 +249,13 @@ module Paragraph = {
 let make = (~buildPageRoute, ~activeRoute, ~page, ~total, ~entries) =>
     entries
         |> List.map((({ title, date, text }): PageData.indexEntry) => {
-            let route = Router.Entry({
-                year: Date.getYear(date),
-                month: Date.getMonth(date),
-                day: Date.getDay(date),
-                slug: Utils.slug(title)
-            });
+            let route = Router.buildEntryRoute(~date, ~title, ~id=None);
             let preview = Js.Re.exec_([%re {|/^(.+?)\n\n/|}], text)
                 |> Option.map(Js.Re.captures)
                 |> Option.flatMap(Array.at(1))
                 |> Option.flatMap(Js.Nullable.toOption)
                 |> Option.getOrElse(text);
+            let buildHeadingRoute = Router.buildEntryRoute(~date, ~title);
 
             <Article key=(Date.toISOTimestamp(date) ++ title)>
                 <Header>
@@ -271,7 +267,9 @@ let make = (~buildPageRoute, ~activeRoute, ~page, ~total, ~entries) =>
                     <Timestamp date/>
                 </Header>
                 <section>
-                    <Markdown renderParagraph=Paragraph.make text=preview/>
+                    <Markdown buildHeadingRoute
+                        renderParagraph=Paragraph.make
+                        text=preview/>
                 </section>
             </Article>
         })

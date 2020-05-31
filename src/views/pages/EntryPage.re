@@ -121,7 +121,8 @@ module NavigationLink = {
             year: Date.getYear(date),
             month: Date.getMonth(date),
             day: Date.getDay(date),
-            slug: Utils.slug(title)
+            slug: Utils.slug(title),
+            id: None
         });
 
         <RouteLink className route>
@@ -237,15 +238,17 @@ module StyledMarkdown = {
     );
 
     [@react.component]
-    let make = (~text) =>
+    let make = (~buildHeadingRoute, ~text) =>
         <section className>
-            <Markdown renderParagraph=StyledParagraph.make text/>
+            <Markdown buildHeadingRoute renderParagraph=StyledParagraph.make text/>
         </section>;
 };
 
 
 [@react.component]
-let make = (~data as { title, text, date, tags, previous, next }: PageData.entryData) =>
+let make = (~data as { title, text, date, tags, previous, next }: PageData.entryData) => {
+    let buildHeadingRoute = Router.buildEntryRoute(~date, ~title);
+
     <article>
         <Header>
             <StyledHeading>
@@ -254,6 +257,7 @@ let make = (~data as { title, text, date, tags, previous, next }: PageData.entry
             <StyledTimestamp date/>
             <TagList tags/>
         </Header>
-        <StyledMarkdown text/>
+        <StyledMarkdown buildHeadingRoute text/>
         <Navigation previous next/>
-    </article>;
+    </article>
+};

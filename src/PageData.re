@@ -55,12 +55,13 @@ let toRoute = pageData: Router.route =>
         | TagSearch({ tag, page }) =>
             TagSearch({ slug: Utils.slug(tag), page })
         | About(_) =>
-            About
+            About({ id: None })
         | Entry({ date, title }) =>
             Entry({
                 year: Date.getYear(date),
                 month: Date.getMonth(date),
                 day: Date.getDay(date),
-                slug: Utils.slug(title)
+                slug: Utils.slug(title),
+                id: None
             })
     };

@@ -220,7 +220,7 @@ function App(Props) {
     page = React.createElement(NotFoundPage.make, { });
   }
   var tmp = {
-    route: /* About */0,
+    route: /* About */Block.__(2, [/* id */undefined]),
     children: "About"
   };
   if (activeRoute !== undefined) {

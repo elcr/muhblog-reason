@@ -8,6 +8,7 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Style from "../Style.bs.js";
 import * as Utils from "../../Utils.bs.js";
 import * as React from "react";
+import * as Router from "../../Router.bs.js";
 import * as Heading from "../components/Heading.bs.js";
 import * as Markdown from "../components/Markdown.bs.js";
 import * as RouteLink from "../components/RouteLink.bs.js";
@@ -164,11 +165,12 @@ function EntryPage$NavigationLink(Props) {
   var route_001 = /* month */$$Date.getMonth(date);
   var route_002 = /* day */date.getDate();
   var route_003 = /* slug */Utils.slug(title);
-  var route = /* Entry */Block.__(2, [
+  var route = /* Entry */Block.__(3, [
       route_000,
       route_001,
       route_002,
-      route_003
+      route_003,
+      /* id */undefined
     ]);
   return React.createElement(RouteLink.make, {
               route: route,
@@ -311,10 +313,12 @@ var className$9 = Curry._1(Css.merge, /* :: */[
     ]);
 
 function EntryPage$StyledMarkdown(Props) {
+  var buildHeadingRoute = Props.buildHeadingRoute;
   var text = Props.text;
   return React.createElement("section", {
               className: className$9
             }, React.createElement(Markdown.make, {
+                  buildHeadingRoute: buildHeadingRoute,
                   renderParagraph: EntryPage$StyledParagraph,
                   text: text
                 }));
@@ -327,15 +331,21 @@ var StyledMarkdown = {
 
 function EntryPage(Props) {
   var param = Props.data;
+  var date = param.date;
+  var title = param.title;
+  var buildHeadingRoute = function (param) {
+    return Router.buildEntryRoute(date, title, param);
+  };
   return React.createElement("article", undefined, React.createElement(EntryPage$Header, {
                   children: null
                 }, React.createElement(EntryPage$StyledHeading, {
-                      children: param.title
+                      children: title
                     }), React.createElement(EntryPage$StyledTimestamp, {
-                      date: param.date
+                      date: date
                     }), React.createElement(EntryPage$TagList, {
                       tags: param.tags
                     })), React.createElement(EntryPage$StyledMarkdown, {
+                  buildHeadingRoute: buildHeadingRoute,
                   text: param.text
                 }), React.createElement(EntryPage$Navigation, {
                   previous: param.previous,

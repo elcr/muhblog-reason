@@ -7,7 +7,7 @@ let make = (~title, ~css, ~favicon as { uri, mimeType }: Parse.favicon, ~childre
                 content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
             <link href=uri rel="icon" type_=mimeType/>
             <title>(title |> React.string)</title>
-            <style>(Reboot.css ++ css |> React.string)</style>
+            <style dangerouslySetInnerHTML={ "__html": Reboot.css ++ css }/>
         </head>
         <body dangerouslySetInnerHTML={ "__html": children }/>
     </html>;

@@ -24,8 +24,37 @@ module SpoilerHTML = {
 
 
 module StyledHeading = {
+    module IDLink = {
+        let className = Css.(
+            style([
+                display(none),
+                fontSize(rem(0.8))
+            ])
+        );
+
+        [@react.component]
+        let make = (~buildRoute, ~id) =>
+            <RouteLink className route=buildRoute(~id)>
+                ({j|🔗|j} |> React.string)
+            </RouteLink>;
+    };
+
+    let baseClassName = Css.(
+        style([
+            display(flexBox),
+            justifyContent(spaceBetween),
+            alignItems(flexEnd),
+            hover([
+                child("a", [
+                    display(block)
+                ])
+            ])
+        ])
+    );
+
     let classNameH2 = Css.(
         merge([
+            baseClassName,
             Style.bottomBorderClassName,
             style([
                 margin4(
@@ -43,27 +72,38 @@ module StyledHeading = {
     );
 
     let classNameH3 = Css.(
-        style([
-            margin4(
-                ~top=rem(1.25),
-                ~right=zero,
-                ~bottom=rem(0.5),
-                ~left=zero
-            ),
-            fontSize(rem(1.25))
+        merge([
+            baseClassName,
+            style([
+                margin4(
+                    ~top=rem(1.25),
+                    ~right=zero,
+                    ~bottom=rem(0.5),
+                    ~left=zero
+                ),
+                fontSize(rem(1.25))
+            ])
         ])
     );
 
     [@react.component]
-    let make = (~level, ~children) => {
+    let make = (~buildRoute, ~level, ~children) => {
         let className = switch (level) {
             | 2 => Some(classNameH2)
             | 3 => Some(classNameH3)
             | _ => None
         };
+        let text: option(string) = Obj.magic(children)
+            |> Array.at(0)
+            |> Option.map(child => child##props##children)
+            |> Option.filter(child => Js.Types.test(child, String));
+        let id = Option.map(Utils.slug, text);
 
-        <Heading className=?className level>
-            children
+        <Heading id=?id className=?className level>
+            (text
+                |> Option.map(React.string)
+                |> Option.getOrElse(React.null))
+            <IDLink id buildRoute/>
         </Heading>
     };
 };
@@ -115,12 +155,15 @@ module HighlightedCode = {
 
 
 [@react.component]
-let make = (~renderParagraph=?, ~text) => {
+let make = (~buildHeadingRoute, ~renderParagraph=?, ~text) => {
     let renderers = {
         "virtualHtml": SpoilerHTML.make,
         "code": props =>
             <HighlightedCode language=(props##language) text=(props##value)/>,
-        "heading": StyledHeading.make,
+        "heading": props =>
+            <StyledHeading buildRoute=buildHeadingRoute level=(props##level)>
+                (props##children)
+            </StyledHeading>,
         "paragraph": Option.getOrElse(
             props => <p>(props##children)</p>,
             renderParagraph

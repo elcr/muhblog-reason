@@ -137,7 +137,7 @@ let make = (~siteName, ~pageData) => {
                 <HomeLink>
                     (siteName |> React.string)
                 </HomeLink>
-                <RouteLink activeRoute=?activeRoute route=Router.About>
+                <RouteLink activeRoute=?activeRoute route=Router.About({ id: None })>
                     ("About" |> React.string)
                 </RouteLink>
             </NavLinks>

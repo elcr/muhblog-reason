@@ -4,9 +4,13 @@ import * as Css from "bs-css-emotion/src/Css.js";
 import * as Link from "./Link.bs.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Style from "../Style.bs.js";
+import * as Utils from "../../Utils.bs.js";
 import * as React from "react";
 import * as Heading from "./Heading.bs.js";
+import * as Js_types from "bs-platform/lib/es6/js_types.js";
+import * as RouteLink from "./RouteLink.bs.js";
 import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
+import * as Relude_Array from "relude/src/Relude_Array.bs.js";
 import * as Relude_Option from "relude/src/Relude_Option.bs.js";
 import * as ReactMarkdown from "react-markdown";
 import * as PrismLight from "react-syntax-highlighter/dist/esm/prism-light";
@@ -43,57 +47,126 @@ var SpoilerHTML = {
   make: Markdown$SpoilerHTML
 };
 
-var classNameH2 = Curry._1(Css.merge, /* :: */[
-      Style.bottomBorderClassName,
+var className$1 = Curry._1(Css.style, /* :: */[
+      Css.display(Css.none),
       /* :: */[
-        Curry._1(Css.style, /* :: */[
-              Css.margin4(Css.rem(1.5), Css.zero, Css.rem(0.6), Css.zero),
-              /* :: */[
-                Css.fontSize(Css.rem(1.5)),
-                /* :: */[
-                  Css.firstChild(/* :: */[
-                        Css.marginTop(Css.zero),
+        Css.fontSize(Css.rem(0.8)),
+        /* [] */0
+      ]
+    ]);
+
+function Markdown$StyledHeading$IDLink(Props) {
+  var buildRoute = Props.buildRoute;
+  var id = Props.id;
+  return React.createElement(RouteLink.make, {
+              route: Curry._1(buildRoute, id),
+              className: className$1,
+              children: "🔗"
+            });
+}
+
+var IDLink = {
+  className: className$1,
+  make: Markdown$StyledHeading$IDLink
+};
+
+var baseClassName = Curry._1(Css.style, /* :: */[
+      Css.display(Css.flexBox),
+      /* :: */[
+        Css.justifyContent(Css.spaceBetween),
+        /* :: */[
+          Css.alignItems(Css.flexEnd),
+          /* :: */[
+            Css.hover(/* :: */[
+                  Css.child("a")(/* :: */[
+                        Css.display(Css.block),
                         /* [] */0
                       ]),
                   /* [] */0
+                ]),
+            /* [] */0
+          ]
+        ]
+      ]
+    ]);
+
+var classNameH2 = Curry._1(Css.merge, /* :: */[
+      baseClassName,
+      /* :: */[
+        Style.bottomBorderClassName,
+        /* :: */[
+          Curry._1(Css.style, /* :: */[
+                Css.margin4(Css.rem(1.5), Css.zero, Css.rem(0.6), Css.zero),
+                /* :: */[
+                  Css.fontSize(Css.rem(1.5)),
+                  /* :: */[
+                    Css.firstChild(/* :: */[
+                          Css.marginTop(Css.zero),
+                          /* [] */0
+                        ]),
+                    /* [] */0
+                  ]
                 ]
+              ]),
+          /* [] */0
+        ]
+      ]
+    ]);
+
+var classNameH3 = Curry._1(Css.merge, /* :: */[
+      baseClassName,
+      /* :: */[
+        Curry._1(Css.style, /* :: */[
+              Css.margin4(Css.rem(1.25), Css.zero, Css.rem(0.5), Css.zero),
+              /* :: */[
+                Css.fontSize(Css.rem(1.25)),
+                /* [] */0
               ]
             ]),
         /* [] */0
       ]
     ]);
 
-var classNameH3 = Curry._1(Css.style, /* :: */[
-      Css.margin4(Css.rem(1.25), Css.zero, Css.rem(0.5), Css.zero),
-      /* :: */[
-        Css.fontSize(Css.rem(1.25)),
-        /* [] */0
-      ]
-    ]);
-
 function Markdown$StyledHeading(Props) {
+  var buildRoute = Props.buildRoute;
   var level = Props.level;
   var children = Props.children;
   var className = level !== 2 ? (
       level !== 3 ? undefined : classNameH3
     ) : classNameH2;
+  var text = Relude_Option.filter((function (child) {
+            return Js_types.test(child, /* String */4);
+          }))(Relude_Option.map((function (child) {
+              return child.props.children;
+            }), Relude_Array.at(0, children)));
+  var id = Relude_Option.map(Utils.slug, text);
   var tmp = {
     level: level,
-    children: children
+    children: null
   };
   if (className !== undefined) {
     tmp.className = Caml_option.valFromOption(className);
   }
-  return React.createElement(Heading.make, tmp);
+  if (id !== undefined) {
+    tmp.id = Caml_option.valFromOption(id);
+  }
+  return React.createElement(Heading.make, tmp, Relude_Option.getOrElse(null, Relude_Option.map((function (prim) {
+                        return prim;
+                      }), text)), React.createElement(Markdown$StyledHeading$IDLink, {
+                  buildRoute: buildRoute,
+                  id: id
+                }));
 }
 
 var StyledHeading = {
+  IDLink: IDLink,
+  baseClassName: baseClassName,
   classNameH2: classNameH2,
   classNameH3: classNameH3,
   make: Markdown$StyledHeading
 };
 
-var className$1 = Curry._1(Css.style, /* :: */[
+var className$2 = Curry._1(Css.style, /* :: */[
       Css.fontSize(Css.rem(1.1)),
       /* [] */0
     ]);
@@ -101,12 +174,12 @@ var className$1 = Curry._1(Css.style, /* :: */[
 function Markdown$StyledCode(Props) {
   var children = Props.children;
   return React.createElement("code", {
-              className: className$1
+              className: className$2
             }, children);
 }
 
 var StyledCode = {
-  className: className$1,
+  className: className$2,
   make: Markdown$StyledCode
 };
 
@@ -122,7 +195,7 @@ var LazyImage = {
   make: Markdown$LazyImage
 };
 
-var className$2 = Curry._1(Css.style, /* :: */[
+var className$3 = Curry._1(Css.style, /* :: */[
       Css.fontSize(Css.rem(0.8)),
       /* :: */[
         Css.important(Css.marginBottom(Css.rem(1.0))),
@@ -134,7 +207,7 @@ function Markdown$HighlightedCode(Props) {
   var language = Props.language;
   var text = Props.text;
   return React.createElement(PrismLight.default, {
-              className: className$2,
+              className: className$3,
               language: language,
               style: Tomorrow.default,
               children: text
@@ -142,11 +215,12 @@ function Markdown$HighlightedCode(Props) {
 }
 
 var HighlightedCode = {
-  className: className$2,
+  className: className$3,
   make: Markdown$HighlightedCode
 };
 
 function Markdown(Props) {
+  var buildHeadingRoute = Props.buildHeadingRoute;
   var renderParagraph = Props.renderParagraph;
   var text = Props.text;
   var renderers = {
@@ -157,7 +231,13 @@ function Markdown(Props) {
                     text: props.value
                   });
       }),
-    heading: Markdown$StyledHeading,
+    heading: (function (props) {
+        return React.createElement(Markdown$StyledHeading, {
+                    buildRoute: buildHeadingRoute,
+                    level: props.level,
+                    children: props.children
+                  });
+      }),
     paragraph: Relude_Option.getOrElse((function (props) {
             return React.createElement("p", undefined, props.children);
           }), renderParagraph),

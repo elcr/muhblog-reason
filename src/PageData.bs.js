@@ -15,15 +15,16 @@ function toRoute(pageData) {
                   /* page */match.page
                 ]);
     case /* About */2 :
-        return /* About */0;
+        return /* About */Block.__(2, [/* id */undefined]);
     case /* Entry */3 :
         var match$1 = pageData[0];
         var date = match$1.date;
-        return /* Entry */Block.__(2, [
+        return /* Entry */Block.__(3, [
                   /* year */date.getFullYear(),
                   /* month */$$Date.getMonth(date),
                   /* day */date.getDate(),
-                  /* slug */Utils.slug(match$1.title)
+                  /* slug */Utils.slug(match$1.title),
+                  /* id */undefined
                 ]);
     
   }
