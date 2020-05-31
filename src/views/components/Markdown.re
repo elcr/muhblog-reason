@@ -43,7 +43,7 @@ module StyledHeading = {
         style([
             display(flexBox),
             justifyContent(spaceBetween),
-            alignItems(flexEnd),
+            alignItems(center),
             hover([
                 child("a", [
                     display(block)
@@ -109,21 +109,6 @@ module StyledHeading = {
 };
 
 
-module StyledCode = {
-    let className = Css.(
-        style([
-            fontSize(rem(1.1))
-        ])
-    );
-
-    [@react.component]
-    let make = (~children) =>
-        <code className>
-            children
-        </code>;
-};
-
-
 module LazyImage = {
     [@react.component]
     let make = (~src) =>
@@ -168,7 +153,6 @@ let make = (~buildHeadingRoute, ~renderParagraph=?, ~text) => {
             props => <p>(props##children)</p>,
             renderParagraph
         ),
-        "inlineCode": StyledCode.make,
         "link": props =>
             <Link url=(props##href)>
                 (props##children)

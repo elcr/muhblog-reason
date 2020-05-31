@@ -75,7 +75,7 @@ var baseClassName = Curry._1(Css.style, /* :: */[
       /* :: */[
         Css.justifyContent(Css.spaceBetween),
         /* :: */[
-          Css.alignItems(Css.flexEnd),
+          Css.alignItems(Css.center),
           /* :: */[
             Css.hover(/* :: */[
                   Css.child("a")(/* :: */[
@@ -166,23 +166,6 @@ var StyledHeading = {
   make: Markdown$StyledHeading
 };
 
-var className$2 = Curry._1(Css.style, /* :: */[
-      Css.fontSize(Css.rem(1.1)),
-      /* [] */0
-    ]);
-
-function Markdown$StyledCode(Props) {
-  var children = Props.children;
-  return React.createElement("code", {
-              className: className$2
-            }, children);
-}
-
-var StyledCode = {
-  className: className$2,
-  make: Markdown$StyledCode
-};
-
 function Markdown$LazyImage(Props) {
   var src = Props.src;
   return React.createElement("img", {
@@ -195,7 +178,7 @@ var LazyImage = {
   make: Markdown$LazyImage
 };
 
-var className$3 = Curry._1(Css.style, /* :: */[
+var className$2 = Curry._1(Css.style, /* :: */[
       Css.fontSize(Css.rem(0.8)),
       /* :: */[
         Css.important(Css.marginBottom(Css.rem(1.0))),
@@ -207,7 +190,7 @@ function Markdown$HighlightedCode(Props) {
   var language = Props.language;
   var text = Props.text;
   return React.createElement(PrismLight.default, {
-              className: className$3,
+              className: className$2,
               language: language,
               style: Tomorrow.default,
               children: text
@@ -215,7 +198,7 @@ function Markdown$HighlightedCode(Props) {
 }
 
 var HighlightedCode = {
-  className: className$3,
+  className: className$2,
   make: Markdown$HighlightedCode
 };
 
@@ -241,7 +224,6 @@ function Markdown(Props) {
     paragraph: Relude_Option.getOrElse((function (props) {
             return React.createElement("p", undefined, props.children);
           }), renderParagraph),
-    inlineCode: Markdown$StyledCode,
     link: (function (props) {
         return React.createElement(Link.make, {
                     url: props.href,
@@ -262,7 +244,6 @@ var make = Markdown;
 export {
   SpoilerHTML ,
   StyledHeading ,
-  StyledCode ,
   LazyImage ,
   HighlightedCode ,
   make ,
