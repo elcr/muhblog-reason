@@ -8,7 +8,7 @@ import * as Relude_Option from "relude/src/Relude_Option.bs.js";
 
 var partial_arg = true;
 
-var partial_arg$1 = Caml_option.some(/:/);
+var partial_arg$1 = Caml_option.some(/[:\?]/g);
 
 var partial_arg$2 = "-";
 

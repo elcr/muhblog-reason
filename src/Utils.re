@@ -3,7 +3,7 @@ open Relude.Globals;
 
 let slug = Slugify.slugify(
     ~replacement="-",
-    ~remove=[%bs.re {|/:/|}],
+    ~remove=[%bs.re {|/[:\?]/g|}],
     ~lower=true
 );
 
