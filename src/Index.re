@@ -49,12 +49,14 @@ let main = () => {
         aboutPath,
         entriesDirectory,
         faviconPath,
-        uploadsDirectory
+        uploadsDirectory,
+        host,
+        port
     }: CLI.arguments = CLI.parseArguments();
 
     Parse.readAndParseAll(~aboutPath, ~entriesDirectory, ~faviconPath, ~uploadsDirectory)
         |> IO.map(data => Server.make(~siteName, ~uploadsDirectory, ~data))
-        |> IO.bitap(Server.listen, printError)
+        |> IO.bitap(Server.listen(~host, ~port), printError)
         |> IO.unsafeRunAsync(ignore)
 };
 

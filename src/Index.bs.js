@@ -87,7 +87,7 @@ function main(param) {
   var siteName = match.siteName;
   return Relude_IO.unsafeRunAsync((function (prim) {
                 
-              }), Relude_IO.bitap(Server.listen, printError, Relude_IO.map((function (data) {
+              }), Relude_IO.bitap(Server.listen(match.host, match.port), printError, Relude_IO.map((function (data) {
                         return Server.make(siteName, uploadsDirectory, data);
                       }), Parse.readAndParseAll(match.aboutPath, match.entriesDirectory, match.faviconPath, uploadsDirectory))));
 }

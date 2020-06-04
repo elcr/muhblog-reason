@@ -78,12 +78,14 @@ function make(siteName, uploadsDirectory, data) {
               }));
 }
 
-function listen(param) {
-  param.listen(5000, "127.0.0.1", (function (param) {
-          console.log("Listening");
-          
-        }));
-  
+function listen(host, port) {
+  return (function (param) {
+      param.listen(port, host, (function (param) {
+              console.log("Listening on " + (String(host) + (":" + (String(port) + ""))));
+              
+            }));
+      
+    });
 }
 
 export {

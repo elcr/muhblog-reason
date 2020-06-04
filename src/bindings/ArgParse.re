@@ -18,7 +18,8 @@ let make = (~version, ~prog) => _make({ version, prog });
 type _addArgumentArguments = {
     dest: string,
     metavar: string,
-    required: bool
+    required: Js.Undefined.t(bool),
+    [@bs.as "defaultValue"] default: Js.Undefined.t(string)
 };
 
 
@@ -26,13 +27,35 @@ type _addArgumentArguments = {
 external _addArgument: (array(string), _addArgumentArguments) => unit = "addArgument";
 
 
-let addArgument = (~shortName, ~longName, ~dest, ~metavar, parser) =>
+let addRequiredArgument = (~shortName, ~longName, ~dest, ~metavar, parser) =>
     _addArgument(
         [| shortName, longName |],
-        { dest, required: true, metavar },
+        {
+            dest,
+            metavar,
+            required: Js.Undefined.return(true),
+            default: Js.Undefined.empty
+        },
+        parser
+    );
+
+
+let addOptionalArgument = (~shortName, ~longName, ~dest, ~metavar, ~default, parser) =>
+    _addArgument(
+        [| shortName, longName |],
+        {
+            dest,
+            metavar,
+            required: Js.Undefined.empty,
+            default: Js.Undefined.return(default)
+        },
         parser
     );
 
 
 [@bs.send]
 external parseArgs: t => 'a = "parseArgs";
+
+
+[@bs.send.pipe: t]
+external exit_: (~code: int, ~message: string) => unit = "exit";

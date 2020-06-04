@@ -82,8 +82,9 @@ let make = (~siteName, ~uploadsDirectory, ~data as { favicon } as data: Parse.pa
     });
 
 
-let listen = HTTP.Server.listen(
-    ~port=5000,
-    ~host="127.0.0.1",
-    () => Js.Console.log("Listening")
-);
+let listen = (~host, ~port) =>
+    HTTP.Server.listen(
+        ~port,
+        ~host,
+        () => Js.Console.log({j|Listening on $host:$port|j})
+    );

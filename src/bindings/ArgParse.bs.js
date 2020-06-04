@@ -9,21 +9,36 @@ function make(version, prog) {
             });
 }
 
-function addArgument(shortName, longName, dest, metavar, parser) {
+function addRequiredArgument(shortName, longName, dest, metavar, parser) {
   parser.addArgument([
         shortName,
         longName
       ], {
         dest: dest,
         metavar: metavar,
-        required: true
+        required: true,
+        defaultValue: undefined
+      });
+  
+}
+
+function addOptionalArgument(shortName, longName, dest, metavar, $$default, parser) {
+  parser.addArgument([
+        shortName,
+        longName
+      ], {
+        dest: dest,
+        metavar: metavar,
+        required: undefined,
+        defaultValue: $$default
       });
   
 }
 
 export {
   make ,
-  addArgument ,
+  addRequiredArgument ,
+  addOptionalArgument ,
   
 }
 /* argparse Not a pure module */
