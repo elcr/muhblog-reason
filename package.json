@@ -12,7 +12,10 @@
     "build": "bsb -make-world -clean-world"
   },
   "dependencies": {
+  },
+  "devDependencies": {
     "argparse": "^1.0.10",
+    "autoprefixer": "^9.8.0",
     "bootstrap": "^4.5.0",
     "bs-bastet": "https://github.com/elcr/bastet.git",
     "bs-css-emotion": "^1.2.0",
@@ -21,29 +24,26 @@
     "markdown-metadata-bs": "https://github.com/elcr/markdown-metadata-bs.git",
     "mime-types": "^2.1.27",
     "node-fs-bs": "https://github.com/elcr/node-fs-bs.git",
-    "node-stream-bs": "https://github.com/elcr/node-stream-bs.git",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-markdown": "^4.3.1",
-    "react-syntax-highlighter": "^12.2.1",
-    "reason-react": "^0.8.0",
-    "relude": "https://github.com/elcr/relude.git",
-    "sanitize-filename": "^1.6.3",
-    "slugify-bs": "https://github.com/elcr/slugify-bs.git",
-    "source-map-support": "^0.5.19",
-    "squel": "^5.13.0",
-    "strftime": "^0.10.0"
-  },
-  "devDependencies": {
-    "autoprefixer": "^9.8.0",
     "node-sass": "^4.14.1",
+    "node-stream-bs": "https://github.com/elcr/node-stream-bs.git",
     "postcss-loader": "^3.0.0",
     "precss": "^4.0.0",
     "raw-loader": "^4.0.1",
+    "react-dom": "^16.13.1",
+    "react-markdown": "^4.3.1",
+    "react-syntax-highlighter": "^12.2.1",
+    "react": "^16.13.1",
+    "reason-react": "^0.8.0",
+    "relude": "https://github.com/elcr/relude.git",
+    "sanitize-filename": "^1.6.3",
     "sass-loader": "^8.0.2",
+    "slugify-bs": "https://github.com/elcr/slugify-bs.git",
     "source-map-loader": "^0.2.4",
+    "source-map-support": "^0.5.19",
+    "squel": "^5.13.0",
+    "strftime": "^0.10.0",
     "string-replace-loader": "^2.3.0",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "webpack": "^4.43.0"
   }
 }
