@@ -9,7 +9,7 @@
   },
   "author": "elcr",
   "scripts": {
-    "build": "bsb -make-world -clean-world"
+    "build": "bsb -make-world -clean-world && webpack -p"
   },
   "dependencies": {
   },
