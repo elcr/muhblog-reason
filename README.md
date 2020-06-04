@@ -6,7 +6,7 @@ Each page is server-rendered `reason-react` with `bs-css` for styling. Entry tex
 
 The site is styled to my own edgy tastes with a solid black background, high contrast everywhere and seriffed fonts out the ass. It's not configurable at all right now. That might change in the future, but I wouldn't bet on it. If you actually want to use this thing for your own blog, I recommend forking it and changing the styles manually. There are some global styles in [`Style.re`](https://github.com/elcr/muhblog-reason/blob/master/src/views/Style.re), but most are defined in the same module as their associated component, [like so](https://github.com/elcr/muhblog-reason/blob/master/src/views/pages/EntryPage.re).
 
-Although technically dynamic, this site is only intended to be run as long as needed to freeze static HTML for each page with `wget`. It's not designed to be server publicly - requests are handled by a plain old Node `http` server, and entries are read from disk at startup and stored in memory.
+Although technically dynamic, this site is only intended to be run as long as needed to freeze static HTML for each page with `wget`. It's not designed to serve publicly - requests are handled by a plain old Node `http` server, and entries are read from disk at startup and stored in memory.
 
 ## Installation
 If you have Node installed, you can just save and run [the file in `dist`](https://github.com/elcr/muhblog-reason/blob/master/dist/index.js). It has no dependencies. It should run on all the [currently supported versions of Node](https://en.wikipedia.org/wiki/Node.js#Releases) as of 2020, although I've only tried it on version 13.
@@ -15,8 +15,7 @@ It's easy enough to build from scratch:
 ```sh
 git clone https://github.com/elcr/muhblog-reason.git
 cd muhblog-reason
-# dev flag is required because there are no runtime dependencies
-yarn install --dev
+yarn install --dev  # dev flag is required because there are no runtime dependencies
 yarn build
 ```
 
