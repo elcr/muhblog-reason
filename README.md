@@ -11,6 +11,9 @@ Although technically dynamic, this site is only intended to be run as long as ne
 ## Installation
 If you have Node installed, you can just save and run [the file in `dist`](https://github.com/elcr/muhblog-reason/blob/master/dist/index.js). It has no dependencies. It should run on all the [currently supported versions of Node](https://en.wikipedia.org/wiki/Node.js#Releases) as of 2020, although I've only tried it on version 13.
 
+If you don't have Node installed, you can try the standalone binaries [on the Releases page](https://github.com/elcr/muhblog-reason/releases). I don't use them myself so your mileage may vary.
+
+## Building
 It's easy enough to build from scratch:
 ```sh
 git clone https://github.com/elcr/muhblog-reason.git
