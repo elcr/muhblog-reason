@@ -2,6 +2,7 @@
   "name": "muhblog-reason",
   "version": "0.1.0",
   "main": "dist/index.js",
+  "bin": "dist/index.js",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -9,10 +10,10 @@
   },
   "author": "elcr",
   "scripts": {
-    "build": "bsb -make-world -clean-world && webpack -p"
+    "build": "bsb -make-world -clean-world && webpack -p",
+    "build-binaries": "pkg --out-path ./bin ."
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "argparse": "^1.0.10",
     "autoprefixer": "^9.8.0",
@@ -26,13 +27,14 @@
     "node-fs-bs": "https://github.com/elcr/node-fs-bs.git",
     "node-sass": "^4.14.1",
     "node-stream-bs": "https://github.com/elcr/node-stream-bs.git",
+    "pkg": "^4.4.8",
     "postcss-loader": "^3.0.0",
     "precss": "^4.0.0",
     "raw-loader": "^4.0.1",
+    "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-markdown": "^4.3.1",
     "react-syntax-highlighter": "^12.2.1",
-    "react": "^16.13.1",
     "reason-react": "^0.8.0",
     "relude": "https://github.com/elcr/relude.git",
     "sanitize-filename": "^1.6.3",
@@ -43,7 +45,7 @@
     "squel": "^5.13.0",
     "strftime": "^0.10.0",
     "string-replace-loader": "^2.3.0",
-    "webpack-cli": "^3.3.11",
-    "webpack": "^4.43.0"
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   }
 }
