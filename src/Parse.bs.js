@@ -5,7 +5,7 @@ import * as Path from "path";
 import * as Block from "bs-platform/lib/es6/block.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Js_dict from "bs-platform/lib/es6/js_dict.js";
-import * as MimeTypes from "./bindings/MimeTypes.bs.js";
+import * as MimeTypes from "mime-types-bs/src/MimeTypes.bs.js";
 import * as Relude_IO from "relude/src/Relude_IO.bs.js";
 import * as Relude_Int from "relude/src/Relude_Int.bs.js";
 import * as Caml_option from "bs-platform/lib/es6/caml_option.js";

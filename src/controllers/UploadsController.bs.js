@@ -3,7 +3,7 @@
 import * as Path from "path";
 import * as Block from "bs-platform/lib/es6/block.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
-import * as MimeTypes from "../bindings/MimeTypes.bs.js";
+import * as MimeTypes from "mime-types-bs/src/MimeTypes.bs.js";
 import * as Relude_IO from "relude/src/Relude_IO.bs.js";
 import * as NodeFS__Stat from "node-fs-bs/src/NodeFS__Stat.bs.js";
 import * as SanitizeFilename from "sanitize-filename";
