@@ -42,7 +42,6 @@
     "slugify-bs": "https://github.com/elcr/slugify-bs.git",
     "source-map-loader": "^0.2.4",
     "source-map-support": "^0.5.19",
-    "squel": "^5.13.0",
     "strftime": "^0.10.0",
     "string-replace-loader": "^2.3.0",
     "webpack": "^4.43.0",
