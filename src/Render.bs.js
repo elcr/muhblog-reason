@@ -16,23 +16,23 @@ function render(siteName, favicon, pageData) {
   var match = EmotionServer.extractCritical(renderedApp);
   var title;
   if (pageData !== undefined) {
-    switch (pageData.tag | 0) {
+    switch (pageData.TAG | 0) {
       case /* Index */0 :
           title = siteName;
           break;
       case /* TagSearch */1 :
-          title = "" + (String(pageData[0].tag) + (" | " + (String(siteName) + "")));
+          title = "" + pageData._0.tag + " | " + siteName;
           break;
       case /* About */2 :
-          title = "About | " + (String(siteName) + "");
+          title = "About | " + siteName;
           break;
       case /* Entry */3 :
-          title = "" + (String(pageData[0].title) + (" | " + (String(siteName) + "")));
+          title = "" + pageData._0.title + " | " + siteName;
           break;
       
     }
   } else {
-    title = "Not found | " + (String(siteName) + "");
+    title = "Not found | " + siteName;
   }
   var renderedPage = Server.renderToString(React.createElement(Page.make, {
             title: title,

@@ -19,13 +19,13 @@ import * as Relude_Array from "relude/src/Relude_Array.bs.js";
 import * as Relude_Float from "relude/src/Relude_Float.bs.js";
 import * as Relude_Option from "relude/src/Relude_Option.bs.js";
 
-var className = Curry._1(Css.style, /* :: */[
-      Css.fontSize(Css.rem(1.5)),
-      /* :: */[
-        Css.marginBottom(Css.zero),
-        /* [] */0
-      ]
-    ]);
+var className = Curry._1(Css.style, {
+      hd: Css.fontSize(Css.rem(1.5)),
+      tl: {
+        hd: Css.marginBottom(Css.zero),
+        tl: /* [] */0
+      }
+    });
 
 function EntriesList$StyledHeading(Props) {
   var children = Props.children;
@@ -40,37 +40,37 @@ var StyledHeading = {
   make: EntriesList$StyledHeading
 };
 
-var className$1 = Curry._1(Css.merge, /* :: */[
-      Style.bottomBorderClassName,
-      /* :: */[
-        Curry._1(Css.style, /* :: */[
-              Css.paddingBottom(Css.rem(1.6)),
-              /* :: */[
-                Css.margin2(Css.rem(0.5), Css.zero),
-                /* :: */[
-                  Style.desktopMediaQuery(/* :: */[
-                        Css.margin2(Css.rem(0.8), Css.zero),
-                        /* [] */0
-                      ]),
-                  /* :: */[
-                    Css.firstOfType(/* :: */[
-                          Css.marginTop(Css.zero),
-                          /* [] */0
-                        ]),
-                    /* :: */[
-                      Css.lastOfType(/* :: */[
-                            Css.marginBottom(Css.zero),
-                            /* [] */0
-                          ]),
-                      /* [] */0
-                    ]
-                  ]
-                ]
-              ]
-            ]),
-        /* [] */0
-      ]
-    ]);
+var className$1 = Curry._1(Css.merge, {
+      hd: Style.bottomBorderClassName,
+      tl: {
+        hd: Curry._1(Css.style, {
+              hd: Css.paddingBottom(Css.rem(1.6)),
+              tl: {
+                hd: Css.margin2(Css.rem(0.5), Css.zero),
+                tl: {
+                  hd: Style.desktopMediaQuery({
+                        hd: Css.margin2(Css.rem(0.8), Css.zero),
+                        tl: /* [] */0
+                      }),
+                  tl: {
+                    hd: Css.firstOfType({
+                          hd: Css.marginTop(Css.zero),
+                          tl: /* [] */0
+                        }),
+                    tl: {
+                      hd: Css.lastOfType({
+                            hd: Css.marginBottom(Css.zero),
+                            tl: /* [] */0
+                          }),
+                      tl: /* [] */0
+                    }
+                  }
+                }
+              }
+            }),
+        tl: /* [] */0
+      }
+    });
 
 function EntriesList$Article(Props) {
   var children = Props.children;
@@ -84,10 +84,10 @@ var Article = {
   make: EntriesList$Article
 };
 
-var className$2 = Curry._1(Css.style, /* :: */[
-      Css.marginBottom(Css.rem(1.0)),
-      /* [] */0
-    ]);
+var className$2 = Curry._1(Css.style, {
+      hd: Css.marginBottom(Css.rem(1.0)),
+      tl: /* [] */0
+    });
 
 function EntriesList$Header(Props) {
   var children = Props.children;
@@ -101,19 +101,19 @@ var Header = {
   make: EntriesList$Header
 };
 
-var className$3 = Curry._1(Css.style, /* :: */[
-      Css.display(Css.flexBox),
-      /* :: */[
-        Css.margin2(Css.auto, Css.rem(0.375)),
-        /* :: */[
-          Style.desktopMediaQuery(/* :: */[
-                Css.margin2(Css.auto, Css.rem(0.5)),
-                /* [] */0
-              ]),
-          /* [] */0
-        ]
-      ]
-    ]);
+var className$3 = Curry._1(Css.style, {
+      hd: Css.display(Css.flexBox),
+      tl: {
+        hd: Css.margin2(Css.auto, Css.rem(0.375)),
+        tl: {
+          hd: Style.desktopMediaQuery({
+                hd: Css.margin2(Css.auto, Css.rem(0.5)),
+                tl: /* [] */0
+              }),
+          tl: /* [] */0
+        }
+      }
+    });
 
 function EntriesList$PageItem(Props) {
   var children = Props.children;
@@ -247,42 +247,42 @@ function EntriesList$PageNumberLinks(Props) {
     }
     
   }
-  return Utils.range(startPage, endPage, undefined, undefined).map((function (p) {
-                if (p === page) {
-                  return React.createElement(EntriesList$PageItem, {
-                              children: p
-                            });
-                } else {
-                  return React.createElement(EntriesList$PageLink, {
-                              buildPageRoute: buildPageRoute,
-                              activeRoute: activeRoute,
-                              page: p,
-                              children: p
-                            });
-                }
-              }));
+  return Utils.range(startPage, endPage, undefined, undefined).map(function (p) {
+              if (p === page) {
+                return React.createElement(EntriesList$PageItem, {
+                            children: p
+                          });
+              } else {
+                return React.createElement(EntriesList$PageLink, {
+                            buildPageRoute: buildPageRoute,
+                            activeRoute: activeRoute,
+                            page: p,
+                            children: p
+                          });
+              }
+            });
 }
 
 var PageNumberLinks = {
   make: EntriesList$PageNumberLinks
 };
 
-var className$4 = Curry._1(Css.merge, /* :: */[
-      Style.smallCapsClassName,
-      /* :: */[
-        Curry._1(Css.style, /* :: */[
-              Css.display(Css.flexBox),
-              /* :: */[
-                Css.fontSize(Css.rem(1.125)),
-                /* :: */[
-                  Css.margin2(Css.rem(2.4), Css.auto),
-                  /* [] */0
-                ]
-              ]
-            ]),
-        /* [] */0
-      ]
-    ]);
+var className$4 = Curry._1(Css.merge, {
+      hd: Style.smallCapsClassName,
+      tl: {
+        hd: Curry._1(Css.style, {
+              hd: Css.display(Css.flexBox),
+              tl: {
+                hd: Css.fontSize(Css.rem(1.125)),
+                tl: {
+                  hd: Css.margin2(Css.rem(2.4), Css.auto),
+                  tl: /* [] */0
+                }
+              }
+            }),
+        tl: /* [] */0
+      }
+    });
 
 function EntriesList$Pagination(Props) {
   var buildPageRoute = Props.buildPageRoute;
@@ -314,10 +314,10 @@ var Pagination = {
   make: EntriesList$Pagination
 };
 
-var className$5 = Curry._1(Css.style, /* :: */[
-      Css.marginBottom(Css.zero),
-      /* [] */0
-    ]);
+var className$5 = Curry._1(Css.style, {
+      hd: Css.marginBottom(Css.zero),
+      tl: /* [] */0
+    });
 
 function EntriesList$Paragraph(Props) {
   var children = Props.children;
@@ -342,43 +342,43 @@ function EntriesList(Props) {
                       activeRoute: activeRoute,
                       total: total,
                       page: page
-                    }), Relude_List.map((function (param) {
-                          var text = param.text;
-                          var date = param.date;
-                          var title = param.title;
-                          var route = Router.buildEntryRoute(date, title, undefined);
-                          var preview = Relude_Option.getOrElse(text, Curry._2(Relude_Option.flatMap, (function (prim) {
-                                      if (prim == null) {
-                                        return ;
-                                      } else {
-                                        return Caml_option.some(prim);
-                                      }
-                                    }), Curry._2(Relude_Option.flatMap, (function (param) {
-                                          return Relude_Array.at(1, param);
-                                        }), Relude_Option.map((function (prim) {
-                                              return prim;
-                                            }), Caml_option.null_to_opt(/^(.+?)\n\n/.exec(text))))));
-                          var buildHeadingRoute = function (param) {
-                            return Router.buildEntryRoute(date, title, param);
-                          };
-                          return React.createElement(EntriesList$Article, {
-                                      children: null,
-                                      key: date.toISOString() + title
-                                    }, React.createElement(EntriesList$Header, {
-                                          children: null
-                                        }, React.createElement(EntriesList$StyledHeading, {
-                                              children: React.createElement(RouteLink.make, {
-                                                    route: route,
-                                                    children: title
-                                                  })
-                                            }), React.createElement(Timestamp.make, {
-                                              date: date
-                                            })), React.createElement("section", undefined, React.createElement(Markdown.make, {
-                                              buildHeadingRoute: buildHeadingRoute,
-                                              renderParagraph: EntriesList$Paragraph,
-                                              text: preview
-                                            })));
-                        }))(entries)));
+                    }), Relude_List.map(function (param) {
+                        var text = param.text;
+                        var date = param.date;
+                        var title = param.title;
+                        var route = Router.buildEntryRoute(date, title, undefined);
+                        var preview = Relude_Option.getOrElse(text, Curry._2(Relude_Option.flatMap, (function (prim) {
+                                    if (prim == null) {
+                                      return ;
+                                    } else {
+                                      return Caml_option.some(prim);
+                                    }
+                                  }), Curry._2(Relude_Option.flatMap, (function (param) {
+                                        return Relude_Array.at(1, param);
+                                      }), Relude_Option.map((function (prim) {
+                                            return prim;
+                                          }), Caml_option.null_to_opt(/^(.+?)\n\n/.exec(text))))));
+                        var buildHeadingRoute = function (param) {
+                          return Router.buildEntryRoute(date, title, param);
+                        };
+                        return React.createElement(EntriesList$Article, {
+                                    children: null,
+                                    key: date.toISOString() + title
+                                  }, React.createElement(EntriesList$Header, {
+                                        children: null
+                                      }, React.createElement(EntriesList$StyledHeading, {
+                                            children: React.createElement(RouteLink.make, {
+                                                  route: route,
+                                                  children: title
+                                                })
+                                          }), React.createElement(Timestamp.make, {
+                                            date: date
+                                          })), React.createElement("section", undefined, React.createElement(Markdown.make, {
+                                            buildHeadingRoute: buildHeadingRoute,
+                                            renderParagraph: EntriesList$Paragraph,
+                                            text: preview
+                                          })));
+                      })(entries)));
 }
 
 var make = EntriesList;

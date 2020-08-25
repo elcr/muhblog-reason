@@ -3,7 +3,6 @@
 import * as Css from "bs-css-emotion/src/Css.js";
 import * as $$Date from "../../bindings/Date.bs.js";
 import * as Arrow from "../components/Arrow.bs.js";
-import * as Block from "bs-platform/lib/es6/block.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Style from "../Style.bs.js";
 import * as Utils from "../../Utils.bs.js";
@@ -16,19 +15,19 @@ import * as Timestamp from "../components/Timestamp.bs.js";
 import * as Relude_List from "relude/src/Relude_List.bs.js";
 import * as Relude_Option from "relude/src/Relude_Option.bs.js";
 
-var className = Curry._1(Css.merge, /* :: */[
-      Style.bottomBorderClassName,
-      /* :: */[
-        Curry._1(Css.style, /* :: */[
-              Css.marginBottom(Css.rem(1.6)),
-              /* :: */[
-                Css.paddingBottom(Css.rem(0.3)),
-                /* [] */0
-              ]
-            ]),
-        /* [] */0
-      ]
-    ]);
+var className = Curry._1(Css.merge, {
+      hd: Style.bottomBorderClassName,
+      tl: {
+        hd: Curry._1(Css.style, {
+              hd: Css.marginBottom(Css.rem(1.6)),
+              tl: {
+                hd: Css.paddingBottom(Css.rem(0.3)),
+                tl: /* [] */0
+              }
+            }),
+        tl: /* [] */0
+      }
+    });
 
 function EntryPage$Header(Props) {
   var children = Props.children;
@@ -42,13 +41,13 @@ var Header = {
   make: EntryPage$Header
 };
 
-var className$1 = Curry._1(Css.style, /* :: */[
-      Css.fontSize(Css.rem(1.75)),
-      /* :: */[
-        Css.marginBottom(Css.rem(1.0)),
-        /* [] */0
-      ]
-    ]);
+var className$1 = Curry._1(Css.style, {
+      hd: Css.fontSize(Css.rem(1.75)),
+      tl: {
+        hd: Css.marginBottom(Css.rem(1.0)),
+        tl: /* [] */0
+      }
+    });
 
 function EntryPage$StyledHeading(Props) {
   var children = Props.children;
@@ -63,30 +62,31 @@ var StyledHeading = {
   make: EntryPage$StyledHeading
 };
 
-var className$2 = Curry._1(Css.style, /* :: */[
-      Css.display(Css.inlineBlock),
-      /* :: */[
-        Css.fontStyle(Css.italic),
-        /* :: */[
-          Css.margin2(Css.zero, Css.rem(0.3)),
-          /* :: */[
-            Css.firstOfType(/* :: */[
-                  Css.marginLeft(Css.zero),
-                  /* [] */0
-                ]),
-            /* [] */0
-          ]
-        ]
-      ]
-    ]);
+var className$2 = Curry._1(Css.style, {
+      hd: Css.display(Css.inlineBlock),
+      tl: {
+        hd: Css.fontStyle(Css.italic),
+        tl: {
+          hd: Css.margin2(Css.zero, Css.rem(0.3)),
+          tl: {
+            hd: Css.firstOfType({
+                  hd: Css.marginLeft(Css.zero),
+                  tl: /* [] */0
+                }),
+            tl: /* [] */0
+          }
+        }
+      }
+    });
 
 function EntryPage$TagItem(Props) {
   var tag = Props.tag;
-  var route_000 = /* slug */Utils.slug(tag);
-  var route = /* TagSearch */Block.__(1, [
-      route_000,
-      /* page */1
-    ]);
+  var route_0 = Utils.slug(tag);
+  var route = {
+    TAG: /* TagSearch */1,
+    slug: route_0,
+    page: 1
+  };
   return React.createElement("li", {
               className: className$2
             }, React.createElement(RouteLink.make, {
@@ -100,28 +100,28 @@ var TagItem = {
   make: EntryPage$TagItem
 };
 
-var className$3 = Curry._1(Css.style, /* :: */[
-      Css.display(Css.flexBox),
-      /* :: */[
-        Css.flexWrap(Css.wrap),
-        /* :: */[
-          Css.margin(Css.zero),
-          /* :: */[
-            Css.padding(Css.zero),
-            /* [] */0
-          ]
-        ]
-      ]
-    ]);
+var className$3 = Curry._1(Css.style, {
+      hd: Css.display(Css.flexBox),
+      tl: {
+        hd: Css.flexWrap(Css.wrap),
+        tl: {
+          hd: Css.margin(Css.zero),
+          tl: {
+            hd: Css.padding(Css.zero),
+            tl: /* [] */0
+          }
+        }
+      }
+    });
 
 function EntryPage$TagList(Props) {
   var tags = Props.tags;
-  var tags$1 = Relude_List.map((function (tag) {
-            return React.createElement(EntryPage$TagItem, {
-                        tag: tag,
-                        key: tag
-                      });
-          }))(tags);
+  var tags$1 = Relude_List.map(function (tag) {
+          return React.createElement(EntryPage$TagItem, {
+                      tag: tag,
+                      key: tag
+                    });
+        })(tags);
   return React.createElement("ul", {
               className: className$3
             }, Utils.reactList(tags$1));
@@ -132,13 +132,13 @@ var TagList = {
   make: EntryPage$TagList
 };
 
-var className$4 = Curry._1(Css.style, /* :: */[
-      Css.display(Css.block),
-      /* :: */[
-        Css.marginBottom(Css.rem(0.3)),
-        /* [] */0
-      ]
-    ]);
+var className$4 = Curry._1(Css.style, {
+      hd: Css.display(Css.block),
+      tl: {
+        hd: Css.marginBottom(Css.rem(0.3)),
+        tl: /* [] */0
+      }
+    });
 
 function EntryPage$StyledTimestamp(Props) {
   var date = Props.date;
@@ -153,25 +153,26 @@ var StyledTimestamp = {
   make: EntryPage$StyledTimestamp
 };
 
-var className$5 = Curry._1(Css.style, /* :: */[
-      Css.margin2(Css.zero, Css.rem(0.5)),
-      /* [] */0
-    ]);
+var className$5 = Curry._1(Css.style, {
+      hd: Css.margin2(Css.zero, Css.rem(0.5)),
+      tl: /* [] */0
+    });
 
 function EntryPage$NavigationLink(Props) {
   var title = Props.title;
   var date = Props.date;
-  var route_000 = /* year */date.getFullYear();
-  var route_001 = /* month */$$Date.getMonth(date);
-  var route_002 = /* day */date.getDate();
-  var route_003 = /* slug */Utils.slug(title);
-  var route = /* Entry */Block.__(3, [
-      route_000,
-      route_001,
-      route_002,
-      route_003,
-      /* id */undefined
-    ]);
+  var route_0 = date.getFullYear();
+  var route_1 = $$Date.getMonth(date);
+  var route_2 = date.getDate();
+  var route_3 = Utils.slug(title);
+  var route = {
+    TAG: /* Entry */3,
+    year: route_0,
+    month: route_1,
+    day: route_2,
+    slug: route_3,
+    id: undefined
+  };
   return React.createElement(RouteLink.make, {
               route: route,
               className: className$5,
@@ -184,22 +185,22 @@ var NavigationLink = {
   make: EntryPage$NavigationLink
 };
 
-var className$6 = Curry._1(Css.style, /* :: */[
-      Css.display(Css.flexBox),
-      /* :: */[
-        Css.alignItems(Css.center),
-        /* :: */[
-          Css.margin2(Css.rem(1.0), Css.zero),
-          /* :: */[
-            Style.desktopMediaQuery(/* :: */[
-                  Css.margin(Css.zero),
-                  /* [] */0
-                ]),
-            /* [] */0
-          ]
-        ]
-      ]
-    ]);
+var className$6 = Curry._1(Css.style, {
+      hd: Css.display(Css.flexBox),
+      tl: {
+        hd: Css.alignItems(Css.center),
+        tl: {
+          hd: Css.margin2(Css.rem(1.0), Css.zero),
+          tl: {
+            hd: Style.desktopMediaQuery({
+                  hd: Css.margin(Css.zero),
+                  tl: /* [] */0
+                }),
+            tl: /* [] */0
+          }
+        }
+      }
+    });
 
 function EntryPage$NavigationLinkContainer(Props) {
   var children = Props.children;
@@ -213,40 +214,40 @@ var NavigationLinkContainer = {
   make: EntryPage$NavigationLinkContainer
 };
 
-var className$7 = Curry._1(Css.merge, /* :: */[
-      Style.smallCapsClassName,
-      /* :: */[
-        Curry._1(Css.style, /* :: */[
-              Css.display(Css.flexBox),
-              /* :: */[
-                Css.flexDirection(Css.columnReverse),
-                /* :: */[
-                  Css.justifyContent(Css.spaceBetween),
-                  /* :: */[
-                    Css.alignItems(Css.center),
-                    /* :: */[
-                      Css.margin2(Css.rem(1.0), Css.zero),
-                      /* :: */[
-                        Css.fontSize(Css.rem(1.1)),
-                        /* :: */[
-                          Style.desktopMediaQuery(/* :: */[
-                                Css.flexDirection(Css.row),
-                                /* :: */[
-                                  Css.margin4(Css.rem(2.0), Css.zero, Css.rem(3.0), Css.zero),
-                                  /* [] */0
-                                ]
-                              ]),
-                          /* [] */0
-                        ]
-                      ]
-                    ]
-                  ]
-                ]
-              ]
-            ]),
-        /* [] */0
-      ]
-    ]);
+var className$7 = Curry._1(Css.merge, {
+      hd: Style.smallCapsClassName,
+      tl: {
+        hd: Curry._1(Css.style, {
+              hd: Css.display(Css.flexBox),
+              tl: {
+                hd: Css.flexDirection(Css.columnReverse),
+                tl: {
+                  hd: Css.justifyContent(Css.spaceBetween),
+                  tl: {
+                    hd: Css.alignItems(Css.center),
+                    tl: {
+                      hd: Css.margin2(Css.rem(1.0), Css.zero),
+                      tl: {
+                        hd: Css.fontSize(Css.rem(1.1)),
+                        tl: {
+                          hd: Style.desktopMediaQuery({
+                                hd: Css.flexDirection(Css.row),
+                                tl: {
+                                  hd: Css.margin4(Css.rem(2.0), Css.zero, Css.rem(3.0), Css.zero),
+                                  tl: /* [] */0
+                                }
+                              }),
+                          tl: /* [] */0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }),
+        tl: /* [] */0
+      }
+    });
 
 function EntryPage$Navigation(Props) {
   var previous = Props.previous;
@@ -281,13 +282,13 @@ var Navigation = {
   make: EntryPage$Navigation
 };
 
-var className$8 = Curry._1(Css.style, /* :: */[
-      Css.lastOfType(/* :: */[
-            Css.marginBottom(Css.zero),
-            /* [] */0
-          ]),
-      /* [] */0
-    ]);
+var className$8 = Curry._1(Css.style, {
+      hd: Css.lastOfType({
+            hd: Css.marginBottom(Css.zero),
+            tl: /* [] */0
+          }),
+      tl: /* [] */0
+    });
 
 function EntryPage$StyledParagraph(Props) {
   var children = Props.children;
@@ -301,16 +302,16 @@ var StyledParagraph = {
   make: EntryPage$StyledParagraph
 };
 
-var className$9 = Curry._1(Css.merge, /* :: */[
-      Style.bottomBorderClassName,
-      /* :: */[
-        Curry._1(Css.style, /* :: */[
-              Css.paddingBottom(Css.rem(2.0)),
-              /* [] */0
-            ]),
-        /* [] */0
-      ]
-    ]);
+var className$9 = Curry._1(Css.merge, {
+      hd: Style.bottomBorderClassName,
+      tl: {
+        hd: Curry._1(Css.style, {
+              hd: Css.paddingBottom(Css.rem(2.0)),
+              tl: /* [] */0
+            }),
+        tl: /* [] */0
+      }
+    });
 
 function EntryPage$StyledMarkdown(Props) {
   var buildHeadingRoute = Props.buildHeadingRoute;

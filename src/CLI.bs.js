@@ -28,13 +28,13 @@ function parseArguments(param) {
                                 host: $$arguments.host,
                                 port: port
                               };
-                      }), Relude_Option.filter((function (port) {
-                              if (port >= 0) {
-                                return port <= 65535;
-                              } else {
-                                return false;
-                              }
-                            }))(Relude_Int.fromString($$arguments.port)))));
+                      }), Relude_Option.filter(function (port) {
+                            if (port >= 0) {
+                              return port <= 65535;
+                            } else {
+                              return false;
+                            }
+                          })(Relude_Int.fromString($$arguments.port)))));
 }
 
 export {

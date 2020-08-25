@@ -6,23 +6,23 @@ import * as Style from "../Style.bs.js";
 import * as React from "react";
 import * as Strftime from "strftime";
 
-var baseClassName = Curry._1(Css.style, /* :: */[
-      Css.fontStyle(Css.italic),
-      /* [] */0
-    ]);
+var baseClassName = Curry._1(Css.style, {
+      hd: Css.fontStyle(Css.italic),
+      tl: /* [] */0
+    });
 
 function Timestamp(Props) {
   var className = Props.className;
   var date = Props.date;
   var iso = date.toISOString();
   var formatted = Strftime("%d/%m/%Y %H:%M", date);
-  var className$1 = Style.combineClassNames(/* :: */[
-        baseClassName,
-        /* :: */[
-          className,
-          /* [] */0
-        ]
-      ]);
+  var className$1 = Style.combineClassNames({
+        hd: baseClassName,
+        tl: {
+          hd: className,
+          tl: /* [] */0
+        }
+      });
   return React.createElement("time", {
               className: className$1,
               dateTime: iso

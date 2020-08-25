@@ -9,9 +9,9 @@ import * as Relude_IO from "relude/src/Relude_IO.bs.js";
 
 function printError(error) {
   var message;
-  switch (error.tag | 0) {
+  switch (error.TAG | 0) {
     case /* AboutFileError */0 :
-        switch (error[0].tag | 0) {
+        switch (error._0.TAG | 0) {
           case /* IsADirectory */5 :
               message = "About path is a directory";
               break;
@@ -23,10 +23,10 @@ function printError(error) {
         }
         break;
     case /* EntriesDirectoryError */1 :
-        var match = error[0];
-        switch (match.tag | 0) {
+        var match = error._0;
+        switch (match.TAG | 0) {
           case /* ReadDirectoryError */0 :
-              switch (match[0].tag | 0) {
+              switch (match._0.TAG | 0) {
                 case /* NoSuchFileOrDirectory */7 :
                     message = "Entries path does not exist";
                     break;
@@ -38,18 +38,18 @@ function printError(error) {
               }
               break;
           case /* ReadEntryError */1 :
-              message = "Error reading entry: " + match[/* name */0];
+              message = "Error reading entry: " + match.name;
               break;
           case /* ParseError */2 :
-              message = "Error parsing entry: " + match[/* name */0];
+              message = "Error parsing entry: " + match.name;
               break;
           
         }
         break;
     case /* FaviconError */2 :
-        var match$1 = error[0];
+        var match$1 = error._0;
         if (match$1) {
-          switch (match$1[0].tag | 0) {
+          switch (match$1._0.TAG | 0) {
             case /* IsADirectory */5 :
                 message = "Favicon path is a directory";
                 break;
@@ -64,7 +64,7 @@ function printError(error) {
         }
         break;
     case /* UploadsDirectoryError */3 :
-        switch (error[0].tag | 0) {
+        switch (error._0.TAG | 0) {
           case /* NoSuchFileOrDirectory */7 :
               message = "Uploads directory does not exist";
               break;

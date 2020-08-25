@@ -2,7 +2,6 @@
 
 import * as $$Date from "./bindings/Date.bs.js";
 import * as Path from "path";
-import * as Block from "bs-platform/lib/es6/block.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Js_dict from "bs-platform/lib/es6/js_dict.js";
 import * as MimeTypes from "mime-types-bs/src/MimeTypes.bs.js";
@@ -31,33 +30,54 @@ function matchDate(param) {
 
 function parseTimestamp(metadata) {
   return Relude_Result.flatMap((function (match_) {
-                var captures = match_.slice(1).map((function (capture) {
-                        return Curry._2(Relude_Option.flatMap, Relude_Int.fromString, (capture == null) ? undefined : Caml_option.some(capture));
-                      }));
+                var captures = match_.slice(1).map(function (capture) {
+                      return Curry._2(Relude_Option.flatMap, Relude_Int.fromString, (capture == null) ? undefined : Caml_option.some(capture));
+                    });
                 if (captures.length !== 5) {
-                  return /* Error */Block.__(1, [/* Malformed */1]);
+                  return {
+                          TAG: /* Error */1,
+                          _0: /* Malformed */1
+                        };
                 }
                 var year = captures[0];
                 if (year === undefined) {
-                  return /* Error */Block.__(1, [/* Malformed */1]);
+                  return {
+                          TAG: /* Error */1,
+                          _0: /* Malformed */1
+                        };
                 }
                 var month = captures[1];
                 if (month === undefined) {
-                  return /* Error */Block.__(1, [/* Malformed */1]);
+                  return {
+                          TAG: /* Error */1,
+                          _0: /* Malformed */1
+                        };
                 }
                 var day = captures[2];
                 if (day === undefined) {
-                  return /* Error */Block.__(1, [/* Malformed */1]);
+                  return {
+                          TAG: /* Error */1,
+                          _0: /* Malformed */1
+                        };
                 }
                 var hour = captures[3];
                 if (hour === undefined) {
-                  return /* Error */Block.__(1, [/* Malformed */1]);
+                  return {
+                          TAG: /* Error */1,
+                          _0: /* Malformed */1
+                        };
                 }
                 var minute = captures[4];
                 if (minute !== undefined) {
-                  return /* Ok */Block.__(0, [$$Date.make(year, month, day, hour, minute, undefined)]);
+                  return {
+                          TAG: /* Ok */0,
+                          _0: $$Date.make(year, month, day, hour, minute, undefined)
+                        };
                 } else {
-                  return /* Error */Block.__(1, [/* Malformed */1]);
+                  return {
+                          TAG: /* Error */1,
+                          _0: /* Malformed */1
+                        };
                 }
               }), Relude_Result.flatMap((function (date) {
                     return Relude_Result.fromOption(/* Malformed */1, matchDate(date));
@@ -67,9 +87,9 @@ function parseTimestamp(metadata) {
 }
 
 function parseTags(metadata) {
-  return Relude_Option.map(Relude_List.fromArray, Relude_Option.filter((function (array) {
-                      return array.length > 0;
-                    }))(Js_dict.get(metadata, "tags")));
+  return Relude_Option.map(Relude_List.fromArray, Relude_Option.filter(function (array) {
+                    return array.length > 0;
+                  })(Js_dict.get(metadata, "tags")));
 }
 
 function parseEntry(markdown) {
@@ -79,85 +99,122 @@ function parseEntry(markdown) {
   var match$2 = parseTimestamp(metadata);
   var match$3 = parseTags(metadata);
   if (match$1 !== undefined) {
-    if (match$2.tag) {
+    if (match$2.TAG) {
       if (match$3 !== undefined) {
-        return /* Error */Block.__(1, [/* TimestampError */[match$2[0]]]);
+        return {
+                TAG: /* Error */1,
+                _0: /* TimestampError */{
+                  _0: match$2._0
+                }
+              };
       } else {
-        return /* Error */Block.__(1, [/* BadMetadata */2]);
+        return {
+                TAG: /* Error */1,
+                _0: /* BadMetadata */2
+              };
       }
     } else if (match$3 !== undefined) {
-      return /* Ok */Block.__(0, [{
-                  title: match$1,
-                  date: match$2[0],
-                  tags: match$3,
-                  text: match[1]
-                }]);
+      return {
+              TAG: /* Ok */0,
+              _0: {
+                title: match$1,
+                date: match$2._0,
+                tags: match$3,
+                text: match[1]
+              }
+            };
     } else {
-      return /* Error */Block.__(1, [/* TagsMissing */1]);
+      return {
+              TAG: /* Error */1,
+              _0: /* TagsMissing */1
+            };
     }
-  } else if (match$2.tag || match$3 === undefined) {
-    return /* Error */Block.__(1, [/* BadMetadata */2]);
+  } else if (match$2.TAG || match$3 === undefined) {
+    return {
+            TAG: /* Error */1,
+            _0: /* BadMetadata */2
+          };
   } else {
-    return /* Error */Block.__(1, [/* TitleMissing */0]);
+    return {
+            TAG: /* Error */1,
+            _0: /* TitleMissing */0
+          };
   }
 }
 
 function readAndParseEntriesDirectory(directory) {
   return Relude_IO.flatMap((function (entries) {
-                return entries.filter((function (entry) {
-                                  if (entry.name.toLowerCase().endsWith(".md")) {
-                                    return !entry.isDirectory();
-                                  } else {
-                                    return false;
-                                  }
-                                })).map((function (param) {
-                                var name = param.name;
-                                var path = Path.join(directory, name);
-                                return Relude_IO.flatMap((function (text) {
-                                              return Relude_IO.fromResult(Curry._2(Relude_Result.mapError, (function (error) {
-                                                                return /* ParseError */Block.__(2, [
-                                                                          /* name */name,
-                                                                          /* error */error
-                                                                        ]);
-                                                              }), parseEntry(text)));
-                                            }), Curry._2(Relude_IO.mapError, (function (error) {
-                                                  return /* ReadEntryError */Block.__(1, [
-                                                            /* name */name,
-                                                            /* error */error
-                                                          ]);
-                                                }), Relude_IO.flatMap((function (param) {
-                                                      return NodeFS__ReadFile.readText(undefined, path);
-                                                    }), /* Suspend */Block.__(2, [(function (param) {
-                                                          console.log("Reading entry from \"" + (String(path) + "\""));
-                                                          
-                                                        })]))));
-                              })).reduce((function (accumulator, current) {
+                return entries.filter(function (entry) {
+                                if (entry.name.toLowerCase().endsWith(".md")) {
+                                  return !entry.isDirectory();
+                                } else {
+                                  return false;
+                                }
+                              }).map(function (param) {
+                              var name = param.name;
+                              var path = Path.join(directory, name);
+                              return Relude_IO.flatMap((function (text) {
+                                            return Relude_IO.fromResult(Curry._2(Relude_Result.mapError, (function (error) {
+                                                              return {
+                                                                      TAG: /* ParseError */2,
+                                                                      name: name,
+                                                                      error: error
+                                                                    };
+                                                            }), parseEntry(text)));
+                                          }), Curry._2(Relude_IO.mapError, (function (error) {
+                                                return {
+                                                        TAG: /* ReadEntryError */1,
+                                                        name: name,
+                                                        error: error
+                                                      };
+                                              }), Relude_IO.flatMap((function (param) {
+                                                    return NodeFS__ReadFile.readText(undefined, path);
+                                                  }), {
+                                                  TAG: /* Suspend */2,
+                                                  _0: (function (param) {
+                                                      console.log("Reading entry from \"" + path + "\"");
+                                                      
+                                                    })
+                                                })));
+                            }).reduce((function (accumulator, current) {
                               return Relude_IO.flatMap((function (entries) {
                                             return Relude_IO.map((function (entry) {
-                                                          return /* :: */[
-                                                                  entry,
-                                                                  entries
-                                                                ];
+                                                          return {
+                                                                  hd: entry,
+                                                                  tl: entries
+                                                                };
                                                         }), current);
                                           }), accumulator);
-                            }), /* Pure */Block.__(0, [/* [] */0]));
+                            }), {
+                            TAG: /* Pure */0,
+                            _0: /* [] */0
+                          });
               }), Curry._2(Relude_IO.mapError, (function (error) {
-                    return /* ReadDirectoryError */Block.__(0, [error]);
+                    return {
+                            TAG: /* ReadDirectoryError */0,
+                            _0: error
+                          };
                   }), Relude_IO.flatMap((function (param) {
                         return NodeFS__ReadDir.readDir(undefined, directory);
-                      }), /* Suspend */Block.__(2, [(function (param) {
-                            console.log("Reading from entries directory \"" + (String(directory) + "\""));
-                            
-                          })]))));
+                      }), {
+                      TAG: /* Suspend */2,
+                      _0: (function (param) {
+                          console.log("Reading from entries directory \"" + directory + "\"");
+                          
+                        })
+                    })));
 }
 
 function readAndParseAboutPath(path) {
   return Relude_IO.flatMap((function (param) {
                 return NodeFS__ReadFile.readText(undefined, path);
-              }), /* Suspend */Block.__(2, [(function (param) {
-                    console.log("Reading about text from \"" + (String(path) + "\""));
-                    
-                  })]));
+              }), {
+              TAG: /* Suspend */2,
+              _0: (function (param) {
+                  console.log("Reading about text from \"" + path + "\"");
+                  
+                })
+            });
 }
 
 function readAndEncodeFaviconPath(path) {
@@ -165,20 +222,25 @@ function readAndEncodeFaviconPath(path) {
                 return Relude_IO.bimap((function (buffer) {
                               var base64 = buffer.toString("base64");
                               return {
-                                      uri: "data:" + (String(mimeType) + (";base64," + (String(base64) + ""))),
+                                      uri: "data:" + mimeType + ";base64," + base64,
                                       mimeType: mimeType
                                     };
                             }), (function (error) {
-                              return /* ReadError */[error];
+                              return /* ReadError */{
+                                      _0: error
+                                    };
                             }), NodeFS__ReadFile.readBuffer(path));
               }), Relude_IO.flatMap((function (param) {
                     return Relude_IO.fromOption((function (param) {
                                   return /* MimeTypeNotFound */0;
                                 }), MimeTypes.contentType(Path.basename(path)));
-                  }), /* Suspend */Block.__(2, [(function (param) {
-                        console.log("Reading favicon from \"" + (String(path) + "\""));
-                        
-                      })])));
+                  }), {
+                  TAG: /* Suspend */2,
+                  _0: (function (param) {
+                      console.log("Reading favicon from \"" + path + "\"");
+                      
+                    })
+                }));
 }
 
 function checkUploadsDirectoryExistence(path) {
@@ -186,10 +248,13 @@ function checkUploadsDirectoryExistence(path) {
                 
               }), Relude_IO.flatMap((function (param) {
                     return NodeFS__ReadDir.readDir(undefined, path);
-                  }), /* Suspend */Block.__(2, [(function (param) {
-                        console.log("Checking existence of uploads directory \"" + (String(path) + "\""));
-                        
-                      })])));
+                  }), {
+                  TAG: /* Suspend */2,
+                  _0: (function (param) {
+                      console.log("Checking existence of uploads directory \"" + path + "\"");
+                      
+                    })
+                }));
 }
 
 function readAndParseAll(aboutPath, entriesDirectory, faviconPath, uploadsDirectory) {
@@ -197,7 +262,10 @@ function readAndParseAll(aboutPath, entriesDirectory, faviconPath, uploadsDirect
                 return Relude_IO.bimap((function (param) {
                               return parsed;
                             }), (function (error) {
-                              return /* UploadsDirectoryError */Block.__(3, [error]);
+                              return {
+                                      TAG: /* UploadsDirectoryError */3,
+                                      _0: error
+                                    };
                             }), checkUploadsDirectoryExistence(uploadsDirectory));
               }), Relude_IO.flatMap((function (param) {
                     var entries = param[1];
@@ -209,19 +277,28 @@ function readAndParseAll(aboutPath, entriesDirectory, faviconPath, uploadsDirect
                                           favicon: favicon
                                         };
                                 }), (function (error) {
-                                  return /* FaviconError */Block.__(2, [error]);
+                                  return {
+                                          TAG: /* FaviconError */2,
+                                          _0: error
+                                        };
                                 }), readAndEncodeFaviconPath(faviconPath));
                   }), Relude_IO.flatMap((function (entries) {
                         return Relude_IO.bimap((function (about) {
-                                      return /* tuple */[
+                                      return [
                                               about,
                                               entries
                                             ];
                                     }), (function (error) {
-                                      return /* AboutFileError */Block.__(0, [error]);
+                                      return {
+                                              TAG: /* AboutFileError */0,
+                                              _0: error
+                                            };
                                     }), readAndParseAboutPath(aboutPath));
                       }), Curry._2(Relude_IO.mapError, (function (error) {
-                            return /* EntriesDirectoryError */Block.__(1, [error]);
+                            return {
+                                    TAG: /* EntriesDirectoryError */1,
+                                    _0: error
+                                  };
                           }), readAndParseEntriesDirectory(entriesDirectory)))));
 }
 

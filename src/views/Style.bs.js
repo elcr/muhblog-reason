@@ -23,32 +23,32 @@ var textColour = Css.rgb(173, 175, 174);
 
 var linkColour = Css.rgb(222, 226, 230);
 
-var smallCapsClassName = Curry._1(Css.style, /* :: */[
-      Css.fontFamily(/* serif */-97640579),
-      /* :: */[
-        Css.unsafe("fontVariant", "small-caps"),
-        /* [] */0
-      ]
-    ]);
+var smallCapsClassName = Curry._1(Css.style, {
+      hd: Css.fontFamily("serif"),
+      tl: {
+        hd: Css.unsafe("fontVariant", "small-caps"),
+        tl: /* [] */0
+      }
+    });
 
-var centredColumnClassName = Curry._1(Css.style, /* :: */[
-      Css.display(Css.flexBox),
-      /* :: */[
-        Css.width(Css.pct(100.0)),
-        /* :: */[
-          Css.media("(min-width: 37.5rem)", /* :: */[
-                Css.maxWidth(desktopColumnWidth),
-                /* [] */0
-              ]),
-          /* [] */0
-        ]
-      ]
-    ]);
+var centredColumnClassName = Curry._1(Css.style, {
+      hd: Css.display(Css.flexBox),
+      tl: {
+        hd: Css.width(Css.pct(100.0)),
+        tl: {
+          hd: Css.media("(min-width: 37.5rem)", {
+                hd: Css.maxWidth(desktopColumnWidth),
+                tl: /* [] */0
+              }),
+          tl: /* [] */0
+        }
+      }
+    });
 
-var bottomBorderClassName = Curry._1(Css.style, /* :: */[
-      Css.borderBottom(Css.px(1), /* solid */12956715, Css.rgb(40, 40, 40)),
-      /* [] */0
-    ]);
+var bottomBorderClassName = Curry._1(Css.style, {
+      hd: Css.borderBottom(Css.px(1), "solid", Css.rgb(40, 40, 40)),
+      tl: /* [] */0
+    });
 
 function combineClassNames(classNames) {
   return Curry._1(Css.merge, Relude_List.mapOption(Relude_Function.identity, classNames));

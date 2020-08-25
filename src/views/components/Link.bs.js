@@ -5,25 +5,25 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Style from "../Style.bs.js";
 import * as React from "react";
 
-var hoverStyles_000 = Css.textDecoration(Css.none);
+var hoverStyles_0 = Css.textDecoration(Css.none);
 
-var hoverStyles_001 = /* :: */[
-  Css.color(Style.linkHoverColour),
-  /* [] */0
-];
+var hoverStyles_1 = {
+  hd: Css.color(Style.linkHoverColour),
+  tl: /* [] */0
+};
 
-var hoverStyles = /* :: */[
-  hoverStyles_000,
-  hoverStyles_001
-];
+var hoverStyles = {
+  hd: hoverStyles_0,
+  tl: hoverStyles_1
+};
 
-var baseClassName = Curry._1(Css.style, /* :: */[
-      Css.color(Style.linkColour),
-      /* :: */[
-        Css.hover(hoverStyles),
-        /* [] */0
-      ]
-    ]);
+var baseClassName = Curry._1(Css.style, {
+      hd: Css.color(Style.linkColour),
+      tl: {
+        hd: Css.hover(hoverStyles),
+        tl: /* [] */0
+      }
+    });
 
 var activeClassName = Curry._1(Css.style, hoverStyles);
 
@@ -33,16 +33,16 @@ function Link(Props) {
   var className = Props.className;
   var children = Props.children;
   var active = activeOpt !== undefined ? activeOpt : false;
-  var className$1 = Style.combineClassNames(/* :: */[
-        baseClassName,
-        /* :: */[
-          className,
-          /* :: */[
-            active ? activeClassName : undefined,
-            /* [] */0
-          ]
-        ]
-      ]);
+  var className$1 = Style.combineClassNames({
+        hd: baseClassName,
+        tl: {
+          hd: className,
+          tl: {
+            hd: active ? activeClassName : undefined,
+            tl: /* [] */0
+          }
+        }
+      });
   return React.createElement("a", {
               className: className$1,
               href: url

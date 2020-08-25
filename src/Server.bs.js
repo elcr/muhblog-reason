@@ -15,77 +15,77 @@ import * as UploadsController from "./controllers/UploadsController.bs.js";
 import * as TagSearchController from "./controllers/TagSearchController.bs.js";
 
 function splitURLSegments(url) {
-  return url.slice(1).split("/").map((function (segment) {
-                  return decodeURIComponent(segment).trim();
-                })).filter((function (segment) {
-                return segment.length >= 1;
-              }));
+  return url.slice(1).split("/").map(function (segment) {
+                return decodeURIComponent(segment).trim();
+              }).filter(function (segment) {
+              return segment.length >= 1;
+            });
 }
 
 function makeResponse(param, uploadsDirectory, route) {
   var entries = param.entries;
-  switch (route.tag | 0) {
+  switch (route.TAG | 0) {
     case /* Index */0 :
-        return IndexController.makeResponse(entries, route[/* page */0]);
+        return IndexController.makeResponse(entries, route.page);
     case /* TagSearch */1 :
-        return TagSearchController.makeResponse(entries, route[/* slug */0], route[/* page */1]);
+        return TagSearchController.makeResponse(entries, route.slug, route.page);
     case /* About */2 :
         return AboutController.makeResponse(param.about);
     case /* Entry */3 :
-        return EntryController.makeResponse(entries, route[/* year */0], route[/* month */1], route[/* day */2], route[/* slug */3]);
+        return EntryController.makeResponse(entries, route.year, route.month, route.day, route.slug);
     case /* Uploads */4 :
-        return UploadsController.makeResponse(uploadsDirectory, route[/* filename */0]);
+        return UploadsController.makeResponse(uploadsDirectory, route.filename);
     
   }
 }
 
 function make(siteName, uploadsDirectory, data) {
   var favicon = data.favicon;
-  return Http.createServer((function (request, response) {
-                var url = Relude_Option.getOrElse("/", Caml_option.undefined_to_opt(request.url));
-                return Relude_IO.unsafeRunAsync((function (prim) {
-                              
-                            }), Relude_IO.tap((function (res) {
-                                    var startTime = Date.now();
-                                    response.on("close", (function (param) {
-                                            var status = response.statusCode;
-                                            var ms = Date.now() - startTime | 0;
-                                            console.log("" + (String(status) + (" " + (String(url) + (" " + (String(ms) + "ms"))))));
+  return Http.createServer(function (request, response) {
+              var url = Relude_Option.getOrElse("/", Caml_option.undefined_to_opt(request.url));
+              return Relude_IO.unsafeRunAsync((function (prim) {
+                            
+                          }), Relude_IO.tap(function (res) {
+                                var startTime = Date.now();
+                                response.on("close", (function (param) {
+                                        var status = response.statusCode;
+                                        var ms = Date.now() - startTime;
+                                        console.log("" + status + " " + url + " " + ms + "ms");
+                                        
+                                      }));
+                                if (res.TAG) {
+                                  HTTP.$$Response.setStatusCode(200, response);
+                                  HTTP.$$Response.setContentType(Relude_Option.getOrElse("application/octet-stream", res.type_))(response);
+                                  HTTP.$$Response.setContentLength(res.length)(response);
+                                  HTTP.$$Response.setLastModified(res.modified)(response);
+                                  res.stream.pipe(response);
+                                  return ;
+                                }
+                                var body = Render.render(siteName, favicon, res.data);
+                                var length = Buffer.byteLength(body);
+                                HTTP.$$Response.setStatusCode(res.status, response);
+                                HTTP.$$Response.setContentType("text/html; charset=utf-8")(response);
+                                HTTP.$$Response.setContentLength(length)(response);
+                                response.end(body, "utf-8");
+                                
+                              })(Relude_IO.handleError((function (param) {
+                                    return $$Response.notFound;
+                                  }), Relude_IO.flatMap((function (param) {
+                                        return makeResponse(data, uploadsDirectory, param);
+                                      }), Relude_IO.fromOption((function (prim) {
                                             
-                                          }));
-                                    if (res.tag) {
-                                      HTTP.$$Response.setStatusCode(200, response);
-                                      HTTP.$$Response.setContentType(Relude_Option.getOrElse("application/octet-stream", res[/* type_ */1]))(response);
-                                      HTTP.$$Response.setContentLength(res[/* length */2])(response);
-                                      HTTP.$$Response.setLastModified(res[/* modified */3])(response);
-                                      res[/* stream */0].pipe(response);
-                                      return ;
-                                    }
-                                    var body = Render.render(siteName, favicon, res[/* data */0]);
-                                    var length = Buffer.byteLength(body);
-                                    HTTP.$$Response.setStatusCode(res[/* status */1], response);
-                                    HTTP.$$Response.setContentType("text/html; charset=utf-8")(response);
-                                    HTTP.$$Response.setContentLength(length)(response);
-                                    response.end(body, "utf-8");
-                                    
-                                  }))(Relude_IO.handleError((function (param) {
-                                      return $$Response.notFound;
-                                    }), Relude_IO.flatMap((function (param) {
-                                          return makeResponse(data, uploadsDirectory, param);
-                                        }), Relude_IO.fromOption((function (prim) {
-                                              
-                                            }), Router.route(splitURLSegments(url)))))));
-              }));
+                                          }), Router.route(splitURLSegments(url)))))));
+            });
 }
 
 function listen(host, port) {
-  return (function (param) {
-      param.listen(port, host, (function (param) {
-              console.log("Listening on " + (String(host) + (":" + (String(port) + ""))));
-              
-            }));
-      
-    });
+  return function (param) {
+    param.listen(port, host, (function (param) {
+            console.log("Listening on " + host + ":" + port);
+            
+          }));
+    
+  };
 }
 
 export {

@@ -10,13 +10,13 @@ function Heading(Props) {
   var id = Props.id;
   var children = Props.children;
   var level = levelOpt !== undefined ? levelOpt : 1;
-  var className$1 = Style.combineClassNames(/* :: */[
-        Style.smallCapsClassName,
-        /* :: */[
-          className,
-          /* [] */0
-        ]
-      ]);
+  var className$1 = Style.combineClassNames({
+        hd: Style.smallCapsClassName,
+        tl: {
+          hd: className,
+          tl: /* [] */0
+        }
+      });
   var tag = "h" + String(level > 6 ? 6 : level);
   var tmp = {
     className: className$1

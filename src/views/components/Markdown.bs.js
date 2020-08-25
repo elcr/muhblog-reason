@@ -16,19 +16,19 @@ import * as ReactMarkdown from "react-markdown";
 import * as PrismLight from "react-syntax-highlighter/dist/esm/prism-light";
 import * as Tomorrow from "react-syntax-highlighter/dist/esm/styles/prism/tomorrow";
 
-var className = Curry._1(Css.style, /* :: */[
-      Css.backgroundColor(Css.black),
-      /* :: */[
-        Css.color(Css.black),
-        /* :: */[
-          Css.hover(/* :: */[
-                Css.color(Css.white),
-                /* [] */0
-              ]),
-          /* [] */0
-        ]
-      ]
-    ]);
+var className = Curry._1(Css.style, {
+      hd: Css.backgroundColor(Css.black),
+      tl: {
+        hd: Css.color(Css.black),
+        tl: {
+          hd: Css.hover({
+                hd: Css.color(Css.white),
+                tl: /* [] */0
+              }),
+          tl: /* [] */0
+        }
+      }
+    });
 
 function Markdown$SpoilerHTML(Props) {
   var tag = Props.tag;
@@ -47,13 +47,13 @@ var SpoilerHTML = {
   make: Markdown$SpoilerHTML
 };
 
-var className$1 = Curry._1(Css.style, /* :: */[
-      Css.display(Css.none),
-      /* :: */[
-        Css.fontSize(Css.rem(0.8)),
-        /* [] */0
-      ]
-    ]);
+var className$1 = Curry._1(Css.style, {
+      hd: Css.display(Css.none),
+      tl: {
+        hd: Css.fontSize(Css.rem(0.8)),
+        tl: /* [] */0
+      }
+    });
 
 function Markdown$StyledHeading$IDLink(Props) {
   var buildRoute = Props.buildRoute;
@@ -70,62 +70,62 @@ var IDLink = {
   make: Markdown$StyledHeading$IDLink
 };
 
-var baseClassName = Curry._1(Css.style, /* :: */[
-      Css.display(Css.flexBox),
-      /* :: */[
-        Css.justifyContent(Css.spaceBetween),
-        /* :: */[
-          Css.alignItems(Css.center),
-          /* :: */[
-            Css.hover(/* :: */[
-                  Css.child("a")(/* :: */[
-                        Css.display(Css.block),
-                        /* [] */0
-                      ]),
-                  /* [] */0
-                ]),
-            /* [] */0
-          ]
-        ]
-      ]
-    ]);
+var baseClassName = Curry._1(Css.style, {
+      hd: Css.display(Css.flexBox),
+      tl: {
+        hd: Css.justifyContent(Css.spaceBetween),
+        tl: {
+          hd: Css.alignItems(Css.center),
+          tl: {
+            hd: Css.hover({
+                  hd: Css.child("a")({
+                        hd: Css.display(Css.block),
+                        tl: /* [] */0
+                      }),
+                  tl: /* [] */0
+                }),
+            tl: /* [] */0
+          }
+        }
+      }
+    });
 
-var classNameH2 = Curry._1(Css.merge, /* :: */[
-      baseClassName,
-      /* :: */[
-        Style.bottomBorderClassName,
-        /* :: */[
-          Curry._1(Css.style, /* :: */[
-                Css.margin4(Css.rem(1.5), Css.zero, Css.rem(0.6), Css.zero),
-                /* :: */[
-                  Css.fontSize(Css.rem(1.5)),
-                  /* :: */[
-                    Css.firstChild(/* :: */[
-                          Css.marginTop(Css.zero),
-                          /* [] */0
-                        ]),
-                    /* [] */0
-                  ]
-                ]
-              ]),
-          /* [] */0
-        ]
-      ]
-    ]);
+var classNameH2 = Curry._1(Css.merge, {
+      hd: baseClassName,
+      tl: {
+        hd: Style.bottomBorderClassName,
+        tl: {
+          hd: Curry._1(Css.style, {
+                hd: Css.margin4(Css.rem(1.5), Css.zero, Css.rem(0.6), Css.zero),
+                tl: {
+                  hd: Css.fontSize(Css.rem(1.5)),
+                  tl: {
+                    hd: Css.firstChild({
+                          hd: Css.marginTop(Css.zero),
+                          tl: /* [] */0
+                        }),
+                    tl: /* [] */0
+                  }
+                }
+              }),
+          tl: /* [] */0
+        }
+      }
+    });
 
-var classNameH3 = Curry._1(Css.merge, /* :: */[
-      baseClassName,
-      /* :: */[
-        Curry._1(Css.style, /* :: */[
-              Css.margin4(Css.rem(1.25), Css.zero, Css.rem(0.5), Css.zero),
-              /* :: */[
-                Css.fontSize(Css.rem(1.25)),
-                /* [] */0
-              ]
-            ]),
-        /* [] */0
-      ]
-    ]);
+var classNameH3 = Curry._1(Css.merge, {
+      hd: baseClassName,
+      tl: {
+        hd: Curry._1(Css.style, {
+              hd: Css.margin4(Css.rem(1.25), Css.zero, Css.rem(0.5), Css.zero),
+              tl: {
+                hd: Css.fontSize(Css.rem(1.25)),
+                tl: /* [] */0
+              }
+            }),
+        tl: /* [] */0
+      }
+    });
 
 function Markdown$StyledHeading(Props) {
   var buildRoute = Props.buildRoute;
@@ -134,9 +134,9 @@ function Markdown$StyledHeading(Props) {
   var className = level !== 2 ? (
       level !== 3 ? undefined : classNameH3
     ) : classNameH2;
-  var text = Relude_Option.filter((function (child) {
-            return Js_types.test(child, /* String */4);
-          }))(Relude_Option.map((function (child) {
+  var text = Relude_Option.filter(function (child) {
+          return Js_types.test(child, /* String */4);
+        })(Relude_Option.map((function (child) {
               return child.props.children;
             }), Relude_Array.at(0, children)));
   var id = Relude_Option.map(Utils.slug, text);
@@ -178,13 +178,13 @@ var LazyImage = {
   make: Markdown$LazyImage
 };
 
-var className$2 = Curry._1(Css.style, /* :: */[
-      Css.fontSize(Css.rem(0.8)),
-      /* :: */[
-        Css.important(Css.marginBottom(Css.rem(1.0))),
-        /* [] */0
-      ]
-    ]);
+var className$2 = Curry._1(Css.style, {
+      hd: Css.fontSize(Css.rem(0.8)),
+      tl: {
+        hd: Css.important(Css.marginBottom(Css.rem(1.0))),
+        tl: /* [] */0
+      }
+    });
 
 function Markdown$HighlightedCode(Props) {
   var language = Props.language;
