@@ -24,7 +24,7 @@ let makeResponse = (~entries, ~slug, ~page) =>
         |> Option.flatMap(((filteredEntries, tag)) => {
             filteredEntries
                 |> List.sortBy((a: Parse.parsedEntry, b) =>
-                    Int.compare(
+                    Float.compare(
                         Date.toUnixTimestamp(b.date),
                         Date.toUnixTimestamp(a.date)
                     )

@@ -33,7 +33,7 @@ module Language = {
     [@bs.module "react-syntax-highlighter/dist/esm/prism-light"]
     [@bs.scope "default"]
     external register : (
-        [@bs.string] [
+        [
             | `bash
             | `javascript
             | `json

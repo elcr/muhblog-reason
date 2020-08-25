@@ -7,8 +7,8 @@ type _constructorArguments = {
 };
 
 
-[@bs.module "argparse"]
 [@bs.new]
+[@bs.module "argparse"]
 external _make: _constructorArguments => t = "ArgumentParser"
 
 

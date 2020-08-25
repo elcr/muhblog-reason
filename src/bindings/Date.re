@@ -17,15 +17,19 @@ let make = (~year, ~month, ~day, ~hour=0, ~minute=0, ()) =>
 
 [@bs.scope "Date"]
 [@bs.val]
-external unixTimestampNow: unit => int = "now";
+external unixTimestampNow: unit => float = "now";
 
 
 [@bs.send]
-external toUnixTimestamp: t => int = "getTime";
+external toUnixTimestamp: t => float = "getTime";
 
 
 [@bs.new]
-external fromUnixTimestamp: int => t = "Date";
+external fromUnixTimestampInt: int => t = "Date";
+
+
+[@bs.new]
+external fromUnixTimestampFloat: float => t = "Date";
 
 
 [@bs.send]

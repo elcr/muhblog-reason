@@ -31,7 +31,7 @@ let makeResponse = (~entries, ~year, ~month, ~day, ~slug) => {
                     tags: entry.tags,
                     previous: entries
                         |> List.sortBy((a: Parse.parsedEntry, b) =>
-                            Int.compare(
+                            Float.compare(
                                 Date.toUnixTimestamp(b.date),
                                 Date.toUnixTimestamp(a.date)
                             )
@@ -47,7 +47,7 @@ let makeResponse = (~entries, ~year, ~month, ~day, ~slug) => {
                         ),
                     next: entries
                         |> List.sortBy((a: Parse.parsedEntry, b) =>
-                            Int.compare(
+                            Float.compare(
                                 Date.toUnixTimestamp(a.date),
                                 Date.toUnixTimestamp(b.date)
                             )

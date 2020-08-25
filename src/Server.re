@@ -48,7 +48,7 @@ let make = (~siteName, ~uploadsDirectory, ~data as { favicon } as data: Parse.pa
                 Writeable.on(
                     `close(() => {
                         let status = Response.getStatusCode(response);
-                        let ms = Date.unixTimestampNow() - startTime;
+                        let ms = Date.unixTimestampNow() -. startTime;
                         Js.Console.log({j|$status $url $(ms)ms|j})
                     }),
                     output
