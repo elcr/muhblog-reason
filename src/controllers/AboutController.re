@@ -2,9 +2,5 @@ open Relude.Globals;
 
 
 let makeResponse = (~about) =>
-    IO.Pure(
-        Response.Page({
-            status: 200,
-            data: Some(About({ text: about }))
-        })
-    );
+    Response.page(~state=About({ text: about }), ())
+        |. IO.Pure;

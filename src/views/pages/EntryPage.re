@@ -53,10 +53,7 @@ module TagItem = {
 
     [@react.component]
     let make = (~tag) => {
-        let route = Router.TagSearch({
-            slug: Utils.slug(tag),
-            page: 1
-        });
+        let route = Route.tagSearch(~slug=Utils.slug(tag), ());
 
         <li className>
             <RouteLink route>
@@ -117,13 +114,7 @@ module NavigationLink = {
 
     [@react.component]
     let make = (~title, ~date) => {
-        let route = Router.Entry({
-            year: Date.getYear(date),
-            month: Date.getMonth(date),
-            day: Date.getDay(date),
-            slug: Utils.slug(title),
-            id: None
-        });
+        let route = Route.entry(~date, ~title, ());
 
         <RouteLink className route>
             (title |> React.string)
@@ -185,7 +176,7 @@ module Navigation = {
     [@react.component]
     let make = (~previous, ~next) => {
         let previousLink = previous
-            |> Option.map(({ title, date }: PageData.navigationEntry) =>
+            |> Option.map(({ title, date }: State.navigationEntry) =>
                 <NavigationLinkContainer>
                     <Arrow direction=Arrow.Left/>
                     <NavigationLink title date/>
@@ -194,7 +185,7 @@ module Navigation = {
             |> Option.getOrElse(<div/>);
 
         let nextLink = next
-            |> Option.map(({ title, date }: PageData.navigationEntry) =>
+            |> Option.map(({ title, date }: State.navigationEntry) =>
                 <NavigationLinkContainer>
                     <NavigationLink title date/>
                     <Arrow direction=Arrow.Right/>
@@ -246,8 +237,8 @@ module StyledMarkdown = {
 
 
 [@react.component]
-let make = (~data as { title, text, date, tags, previous, next }: PageData.entryData) => {
-    let buildHeadingRoute = Router.buildEntryRoute(~date, ~title);
+let make = (~data as { title, text, date, tags, previous, next }: State.entryData) => {
+    let buildHeadingRoute = Route.entry(~date, ~title);
 
     <article>
         <Header>

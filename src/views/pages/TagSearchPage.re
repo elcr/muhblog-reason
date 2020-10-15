@@ -18,19 +18,16 @@ module Label = {
 
 
 [@react.component]
-let make = (~activeRoute, ~data as { tag, page, total, entries }: PageData.tagSearchData) => {
+let make = (~activeRoute, ~data as { tag, page, total, entries }: State.tagSearchData) => {
     let buildPageRoute = page =>
-        Router.TagSearch({
-            slug: Utils.slug(tag),
-            page
-        });
+        Route.tagSearch(~slug=Utils.slug(tag), ~page, ());
 
-    let plural = total === 1
+    let label = total === 1
         ? "entry"
         : "entries";
     <>
         <Label>
-            ({j|$total $plural tagged "$tag"|j} |> React.string)
+            ({j|$total $label tagged "$tag"|j} |> React.string)
         </Label>
         <EntriesList activeRoute page total entries buildPageRoute/>
     </>;

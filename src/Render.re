@@ -1,12 +1,12 @@
-let render = (~siteName, ~favicon, ~pageData: option(PageData.t)) => {
+let render = (~siteName, ~favicon, ~state: option(State.t)) => {
     Style.registerGlobalStyles();
 
     let renderedApp = ReactDOMServerRe.renderToString(
-        <App siteName pageData/>
+        <App siteName state/>
     );
     let { html, css }: Emotion.critical = Emotion.extractCritical(renderedApp);
 
-    let title = switch (pageData) {
+    let title = switch (state) {
         | Some(Index(_)) => siteName
         | Some(TagSearch({ tag })) => {j|$tag | $siteName|j}
         | Some(About(_)) => {j|About | $siteName|j}

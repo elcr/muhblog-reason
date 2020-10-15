@@ -37,22 +37,22 @@ let makeResponse = (~entries, ~slug, ~page) =>
                 |. Some
                 |> Option.filter(pageEntries => List.length(pageEntries) !== 0)
                 |> Option.map(pageEntries =>
-                    Response.Page({
-                        status: 200,
-                        data: Some(TagSearch({
+                    Response.page(
+                        ~state=TagSearch({
                             tag,
                             page,
                             total: List.length(filteredEntries),
                             entries: List.map(
-                                (entry: Parse.parsedEntry) => PageData.{
+                                (entry: Parse.parsedEntry) => State.{
                                     title: entry.title,
                                     date: entry.date,
                                     text: entry.text
                                 },
                                 pageEntries
                             )
-                        }))
-                    })
+                        }),
+                        ()
+                    )
                 )
         )
         |> IO.fromOption(ignore);

@@ -74,7 +74,7 @@ module HomeLink = {
 
     [@react.component]
     let make = (~children) =>
-        <RouteLink className route=Router.Index({ page: 1 })>
+        <RouteLink className route=Route.index()>
             children
         </RouteLink>;
 };
@@ -121,9 +121,9 @@ module Nav = {
 
 
 [@react.component]
-let make = (~siteName, ~pageData) => {
-    let activeRoute = Option.map(PageData.toRoute, pageData);
-    let page = switch (pageData) {
+let make = (~siteName, ~state) => {
+    let activeRoute = Option.map(State.toRoute, state);
+    let page = switch (state) {
         | Some(Index(data)) => <IndexPage activeRoute data/>
         | Some(TagSearch(data)) => <TagSearchPage activeRoute data/>
         | Some(About(data)) => <AboutPage data/>
@@ -137,7 +137,7 @@ let make = (~siteName, ~pageData) => {
                 <HomeLink>
                     (siteName |> React.string)
                 </HomeLink>
-                <RouteLink activeRoute=?activeRoute route=Router.About({ id: None })>
+                <RouteLink activeRoute=?activeRoute route=Route.about()>
                     ("About" |> React.string)
                 </RouteLink>
             </NavLinks>

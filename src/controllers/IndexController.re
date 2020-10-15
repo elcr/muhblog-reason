@@ -15,21 +15,21 @@ let makeResponse = (~entries, ~page) =>
                 |. Some
                 |> Option.filter(pageEntries => List.length(pageEntries) !== 0)
                 |> Option.map(pageEntries =>
-                    Response.Page({
-                        status: 200,
-                        data: Some(Index({
+                    Response.page(
+                        ~state=Index({
                             page,
                             total: List.length(entries),
                             entries: List.map(
-                                (entry: Parse.parsedEntry) => PageData.{
+                                (entry: Parse.parsedEntry) => State.{
                                     title: entry.title,
                                     date: entry.date,
                                     text: entry.text
                                 },
                                 pageEntries
                             )
-                        }))
-                    })
+                        }),
+                        ()
+                    )
                 )
         )
         |> IO.fromOption(ignore);

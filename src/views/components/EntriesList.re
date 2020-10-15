@@ -248,14 +248,14 @@ module Paragraph = {
 [@react.component]
 let make = (~buildPageRoute, ~activeRoute, ~page, ~total, ~entries) =>
     entries
-        |> List.map((({ title, date, text }): PageData.indexEntry) => {
-            let route = Router.buildEntryRoute(~date, ~title, ~id=None);
+        |> List.map((({ title, date, text }): State.indexEntry) => {
+            let route = Route.entry(~date, ~title, ());
             let preview = Js.Re.exec_([%re {|/^(.+?)\n\n/|}], text)
                 |> Option.map(Js.Re.captures)
                 |> Option.flatMap(Array.at(1))
                 |> Option.flatMap(Js.Nullable.toOption)
                 |> Option.getOrElse(text);
-            let buildHeadingRoute = Router.buildEntryRoute(~date, ~title);
+            let buildHeadingRoute = Route.entry(~date, ~title);
 
             <Article key=(Date.toISOTimestamp(date) ++ title)>
                 <Header>

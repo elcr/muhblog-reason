@@ -9,12 +9,12 @@ let makeResponse = (~directory, ~filename) => {
         |> IO.flatMap(({ size, mtime }: Stat.t) =>
             ReadStream.make(path)
                 |> IO.map(stream =>
-                    Response.Stream({
-                        stream,
-                        length: size,
-                        modified: mtime,
-                        type_: MimeTypes.contentType(sanitisedFilename)
-                    })
+                    Response.stream(
+                        ~stream,
+                        ~type_=?MimeTypes.contentType(sanitisedFilename),
+                        ~length=size,
+                        ~modified=mtime
+                    )
                 )
         )
         |> IO.mapError(ignore)

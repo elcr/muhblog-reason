@@ -1,20 +1,10 @@
 open Relude.Globals;
 
 
-let splitURLSegments = url =>
-    Js.String.sliceToEnd(~from=1, url)
-        |> Js.String.split("/")
-        |> Js.Array.map(segment =>
-            Js.Global.decodeURIComponent(segment)
-                |> Js.String.trim
-        )
-        |> Js.Array.filter(segment => Js.String.length(segment) >= 1);
-
-
 let makeResponse = (
     ~data as { about, entries }: Parse.parsedData,
     ~uploadsDirectory,
-    route: Router.route
+    route: Route.t
 ) =>
     switch (route) {
         | Index({ page }) =>
@@ -34,8 +24,7 @@ let make = (~siteName, ~uploadsDirectory, ~data as { favicon } as data: Parse.pa
     HTTP.Server.make((request, response) => {
         let url = HTTP.Request.getURL(request)
             |> Option.getOrElse("/");
-        splitURLSegments(url)
-            |> Router.route
+        Route.fromURL(url)
             |> IO.fromOption(ignore)
             |> IO.flatMap(makeResponse(~data, ~uploadsDirectory))
             |> IO.handleError(() => Response.notFound)
@@ -55,11 +44,11 @@ let make = (~siteName, ~uploadsDirectory, ~data as { favicon } as data: Parse.pa
                 );
 
                 switch (res) {
-                    | Page({ data, status }) => {
+                    | Page({ state, status }) => {
                         let body = Render.render(
                             ~siteName,
                             ~favicon,
-                            ~pageData=data
+                            ~state
                         );
                         let length = Buffer.byteLength(body);
 

@@ -22,9 +22,8 @@ let makeResponse = (~entries, ~year, ~month, ~day, ~slug) => {
         )
         |> IO.fromOption(ignore)
         |> IO.map((entry: Parse.parsedEntry) =>
-            Response.Page({
-                status: 200,
-                data: Some(Entry({
+            Response.page(
+                ~state=Entry({
                     title: entry.title,
                     date: entry.date,
                     text: entry.text,
@@ -43,7 +42,7 @@ let makeResponse = (~entries, ~year, ~month, ~day, ~slug) => {
                             ({
                                 date: entry.date,
                                 title: entry.title
-                            }: PageData.navigationEntry)
+                            }: State.navigationEntry)
                         ),
                     next: entries
                         |> List.sortBy((a: Parse.parsedEntry, b) =>
@@ -59,9 +58,10 @@ let makeResponse = (~entries, ~year, ~month, ~day, ~slug) => {
                             ({
                                 date: entry.date,
                                 title: entry.title
-                            }: PageData.navigationEntry)
+                            }: State.navigationEntry)
                         )
-                }))
-            })
+                }),
+                ()
+            )
         )
 };

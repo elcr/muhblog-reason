@@ -1,6 +1,6 @@
 type t =
     | Page({
-        data: option(PageData.t),
+        state: option(State.t),
         status: int
     })
     | Stream({
@@ -12,6 +12,12 @@ type t =
 
 
 let notFound = Page({
-    data: None,
+    state: None,
     status: 404
 });
+
+
+let page = (~status=200, ~state=?, ()) =>
+    Page({ state, status });
+let stream = (~type_=?, ~stream, ~length, ~modified) =>
+    Stream({ stream, type_, length, modified });

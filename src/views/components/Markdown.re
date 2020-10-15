@@ -34,7 +34,7 @@ module StyledHeading = {
 
         [@react.component]
         let make = (~buildRoute, ~id) =>
-            <RouteLink className route=buildRoute(~id)>
+            <RouteLink className route=buildRoute(~id=?id, ())>
                 ({j|🔗|j} |> React.string)
             </RouteLink>;
     };
