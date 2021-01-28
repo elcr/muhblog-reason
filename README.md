@@ -1,6 +1,6 @@
 # muhblog-reason
 
-A Reason port of [muhblog](https://github.com/elcr/muhblog/). Used to generate the static pages for my blog, which is ~~still private for now due to a severe lack of quality articles~~ [now live](https://elcr.bitbucket.io/), although articles are still of dubious quality.
+A Reason port of [muhblog](https://github.com/elcr/muhblog/). Used to generate the static pages for my blog, which is still private for now due to a severe lack of quality articles.
 
 Each page is server-rendered `reason-react` with `bs-css` for styling. Entry text is rendered by `react-markdown`, and code blocks are highlighted by `react-syntax-highlighter`. Each page is only a single request, with all styling and even the favicon inlined, and precisely zero JavaScript. As a result, the typical all-text entry page is only around 13kb gzipped. One with syntax highlighting is only a few kb more.
 
